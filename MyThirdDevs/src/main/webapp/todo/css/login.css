@@ -1,0 +1,51 @@
+@charset "UTF-8";
+
+/* body全体を中央に配置 */
+body {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+	margin:0;
+	flex-direction: column;
+	background-color: #f0f0f0; /* 背景色を少し明るくして視認性を向上 */
+}
+
+/* h1を少し上寄りに配置 */
+h1 {
+	margin-bottom: 50px;
+	text-align: center;
+}
+
+/* フォームのスタイル */
+form {
+	background-color: white;
+	padding: 20px;
+	border-radius: 10px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	width: 400px;
+	height:200px;
+	text-align: center;
+}
+
+/* ユーザー名、パスワード入力欄のスタイル */
+.user, .pass {
+	margin-bottom: 30px;
+	font-size:20px;
+}
+
+.user input[type="text"]{
+	width:300px;
+}
+
+.pass input[type="password"]{
+	width:300px;
+}
+
+.required {
+	font-weight: bold;
+}
+
+.error{
+	color:red;
+}
