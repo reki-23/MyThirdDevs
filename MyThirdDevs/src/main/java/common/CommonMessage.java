@@ -18,7 +18,17 @@ public class CommonMessage {
 		/*
 		 * プロパティファイル読み込み失敗時のエラーメッセージ
 		 */
-		commonMessages.put("EM001", "エラーが発生しました。管理者に連絡して下さい。");
+		commonMessages.put("EM001", "ID001:エラーが発生しました。管理者に連絡して下さい。");
+		
+		/*
+		 * IOException時のメッセージ
+		 */
+		commonMessages.put("EM002", "ID002:エラーが発生しました。管理者に連絡して下さい。");
+		
+		/*
+		 * SQLException時のメッセージ
+		 */
+		commonMessages.put("EM003", "ID003:データベースに関するエラーが発生しました。管理者に連絡して下さい。");
 	}
 	
 	

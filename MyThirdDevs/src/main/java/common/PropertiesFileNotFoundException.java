@@ -1,6 +1,8 @@
 package common;
 
-public class PropertiesFileNotFoundException extends Exception{
+import java.io.IOException;
+
+public class PropertiesFileNotFoundException extends IOException{
 	
 	private static final long serialVersionUID = 1L;
 	
