@@ -58,6 +58,38 @@ public class TodoInfo {
 		this.updateDateTime = builder.updateDateTime;
 		this.creator = builder.creator;
 	}
+	
+	public int getId() {
+		return id;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public String getClassification() {
+		return classification;
+	}
+
+	public String getTask() {
+		return task;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public LocalDateTime getCreateDateTime() {
+		return createDateTime;
+	}
+
+	public LocalDateTime getUpdateDateTime() {
+		return updateDateTime;
+	}
+
+	public String getCreator() {
+		return creator;
+	}	
 
 	@Override
 	public String toString() {
@@ -71,7 +103,7 @@ public class TodoInfo {
 	 * 
 	 */
 	public static class Builder{
-		private int id;
+		public int id;
 		public String status;
 		public String classification;
 		public String task;
@@ -79,10 +111,6 @@ public class TodoInfo {
 		public LocalDateTime createDateTime;
 		public LocalDateTime updateDateTime;
 		public String creator;
-		
-		public Builder(int id) {
-			this.id = id;
-		}
 		
 		public Builder with(Consumer<Builder> consumer) {
 			consumer.accept(this);
