@@ -6,6 +6,7 @@
 	<head>
 		<meta charset="UTF-8">
 		<link rel="stylesheet" href="/MyThirdDevs/todo/css/todoList.css" type="text/css">
+		<script src="/MyThirdDevs/todo/js/todoList.js"></script>
 		<title>TODOリスト</title>
 	</head>
 	<body>
@@ -27,12 +28,26 @@
 		
 		<!-- 登録ボタン -->
 			<div class="register-list">
-				<form action="${pageContext.request.contextPath}/TodoRegisterServlet" method="POST">
-					<input type="submit" value="登録する">
-					<input type="hidden" name="registerTodo" id="registerTodo">
-				</form>
+				<button id="register-button">タスクを登録する</button>
 			</div>
 			
+			<!-- タスク登録モーダル -->
+			<form action="${pageContext.request.contextPath}/TodoRegisterServlet" method = "POST">
+		   		<section id = "register_task">
+		   			<h1>登録したいタスクの詳細を入力してください。</h1>
+		   			id:<input type = "text" name = "id"><br>
+		   			ステータス:<input type = "text" name = "status"><br>
+		   			種類:<input type = "text" name = "classification"><br>
+		   			タスク名:<input type = "text" name = "task"><br>
+		   			タスク詳細:<input type = "text" name = "description"><br>
+		   			作成日時:<input type = "text" name = "createDateTime"><br>
+		   			更新日時:<input type = "text" name = "updateDateTime"><br>
+		   			作成者:<input type = "text" name = "creator"><br>
+		   			<input type = "submit" id = "register_cancel" name = "register_cancel" value = "キャンセル">
+					<input type = "submit" id = "register_submit" name = "register_submit" value = "登録する">
+		   		</section>
+			</form>
+			<div id="register_mask"></div>
 			
 		<!-- 削除ボタン -->
 			<div class="delete-bulk-list">
@@ -41,8 +56,7 @@
 					<input type="hidden" name="deleteTodo" id="deleteTodo">
 				</form>
 			</div>
-			
-			
+
 		<!-- 個別削除ボタン -->
 		<!-- 個別削除は、テーブルの右端に削除ボタンを配置し、削除を押下したら共通の削除確認モーダルを表示する -->
 			<div class="delete-each-list">
@@ -68,6 +82,7 @@
 					</tr>
 					<tbody>
 						<tr>
+						<!-- 以下、繰り返し表示 -->
 							<td><a href="${pageContext.request.contextPath}/todo/todoDetail.jsp">1</a></td> <!-- 押下するとそのタスクだけが表示されるタスク詳細画面へ遷移する -->
 							<td>対応中</td>
 							<td>仕事</td>

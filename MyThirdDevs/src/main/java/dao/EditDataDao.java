@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +23,7 @@ public class EditDataDao {
 	
 	
 	//タスク取得
-	public List<TodoInfo> getRegisteredTask() throws ManageException{
+	public static List<TodoInfo> getRegisteredTask() throws ManageException{
 		
 		List<TodoInfo> todoList = new ArrayList<>();
 		try(Connection con = dbc.getConnection();
@@ -59,50 +61,32 @@ public class EditDataDao {
 	}
 	
 	
-	//タスク新規登録
-	public void registerNewTask(List<TodoInfo> newTaskList) throws ManageException{
-		
-		//いま登録するときのJSPが完成していないので、登録のテスト用に仮でここでデータを定義しておく。
-		List<TodoInfo> registeredTaskList = new ArrayList<>();
-		registeredTaskList.add(new TodoInfo.Builder().with(todo -> {
-			todo.id = 100;
-			todo.status = "finish";
-			todo.classification = "work";
-			todo.task = "create an Activity";
-			todo.description = "aaa";
-			todo.createDateTime = LocalDateTime.now();
-			todo.updateDateTime = LocalDateTime.now();
-			todo.creator = "reki";
-		}).build());
+	//タスク新規個別登録
+	public static void registerNewTask(List<TodoInfo> newTaskList) throws ManageException{
 		
 		try(Connection con = dbc.getConnection();
 			PreparedStatement ps = con.prepareStatement(insertSql)){
 			
-			for(TodoInfo todo : newTaskList) {
-				ps.setInt(1, todo.getId());
-				ps.setString(2, todo.getStatus());
-				ps.setString(3, todo.getClassification());
-				ps.setString(4, todo.getTask());
-				ps.setString(5, todo.getDescription());
-				ps.setString(6, String.valueOf(todo.getCreateDateTime()));
-				ps.setString(7, String.valueOf(todo.getUpdateDateTime()));
-				ps.setString(8, todo.getCreator());
-				//上記のパラメータをバッチにセット
-				ps.addBatch();
-			}
-			//一括実行＝一括登録
-			ps.executeBatch();
-		}catch(SQLException e) {
+			//個別登録
+			TodoInfo newTask = newTaskList.get(0);
+			ps.setInt(1, newTask.getId());
+			ps.setString(2, newTask.getStatus());
+			ps.setString(3, newTask.getClassification());
+			ps.setString(4, newTask.getTask());
+			ps.setString(5, newTask.getDescription());
+			ps.setTimestamp(6, Timestamp.valueOf(newTask.getCreateDateTime())); //例外処理必要
+			ps.setTimestamp(7, Timestamp.valueOf(newTask.getUpdateDateTime())); //例外処理必要
+			ps.setString(8, newTask.getCreator());
+			ps.executeUpdate();
 			
+		}catch(SQLException e) {
+			throw new ManageException("", e);
 		}
 	}
 	
 	
-	/*
-	 * 1つずつ消す場合と一括で消す場合で処理を分ける
-	 */
-	//タスク削除＝一括削除
-	public boolean bulkDeleteTask() throws ManageException{
+	//タスク一括削除
+	public static boolean bulkDeleteTask() throws ManageException{
 		
 		try(Connection con = dbc.getConnection();
 			PreparedStatement ps = con.prepareStatement(deleteSql)){
@@ -123,16 +107,27 @@ public class EditDataDao {
 	}
 	
 	
-	//タスク個別削除処理
-	public boolean individualDeleteTask() throws ManageException{
+	//タスク個別削除
+	public static boolean individualDeleteTask(List<Integer> deletedIdList) throws ManageException{
 		
 		try(Connection con = dbc.getConnection();
-			PreparedStatement ps = con.prepareStatement(deleteSql)){
+			PreparedStatement ps = con.prepareStatement(individualDeleteSql)){
 				
 			/*
 			 * 押下されたタスクのIDを受取り削除する処理
 			 */
-			
+			//複数選択、1つ選択の場合、削除
+			for(Integer deletedId : deletedIdList) {
+				ps.setInt(1, deletedId);
+				ps.addBatch();
+			}
+			//一括削除
+			ps.executeBatch();
+			if(ps.executeBatch().length > 0) {
+				return true;
+			}else {
+				return false;
+			}	
 		}catch(SQLException e) {
 			//あとでかく
 			throw new ManageException("", e);

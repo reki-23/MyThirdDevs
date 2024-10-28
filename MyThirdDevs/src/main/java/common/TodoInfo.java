@@ -120,6 +120,5 @@ public class TodoInfo {
 		public TodoInfo build() {
 			return new TodoInfo(this);
 		}
-		
 	}
 }
