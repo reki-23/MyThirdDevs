@@ -1,7 +1,6 @@
 package servlet;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,9 +36,8 @@ public class TodoRegisterServlet extends HttpServlet {
 			String classification = request.getParameter("classification");
 			String task = request.getParameter("task");
 			String description = request.getParameter("description");
-			LocalDateTime createDateTime = LocalDateTime.parse(request.getParameter("createDateTime")); //例外処理必要
-			LocalDateTime updateDateTime = LocalDateTime.parse(request.getParameter("updateDateTime")); //例外処理必要
 			String creator = request.getParameter("creator");
+			
 			
 			//DB登録クラスに取得したパラメータを渡す
 			List<TodoInfo> newTaskList = new ArrayList<TodoInfo>();
@@ -49,13 +47,10 @@ public class TodoRegisterServlet extends HttpServlet {
 				todo.classification = classification;
 				todo.task = task;
 				todo.description = description;
-				todo.createDateTime = createDateTime;
-				todo.updateDateTime = updateDateTime;
 				todo.creator = creator;
 			}).build());
 			//登録処理
 			EditDataDao.registerNewTask(newTaskList);
-			
 			
 			
 		}catch(Exception e) {

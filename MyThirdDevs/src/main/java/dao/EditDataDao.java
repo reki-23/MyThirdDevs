@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -52,6 +51,9 @@ public class EditDataDao {
 				}).build());
 			}
 			
+			//確認用
+			todoList.forEach(System.out::println);
+			
 			return todoList;
 			
 		}catch(SQLException e) {
@@ -61,7 +63,7 @@ public class EditDataDao {
 	}
 	
 	
-	//タスク新規個別登録
+	//タスク個別登録、一括登録＝ここまだ未実装
 	public static void registerNewTask(List<TodoInfo> newTaskList) throws ManageException{
 		
 		try(Connection con = dbc.getConnection();
@@ -74,13 +76,18 @@ public class EditDataDao {
 			ps.setString(3, newTask.getClassification());
 			ps.setString(4, newTask.getTask());
 			ps.setString(5, newTask.getDescription());
-			ps.setTimestamp(6, Timestamp.valueOf(newTask.getCreateDateTime())); //例外処理必要
-			ps.setTimestamp(7, Timestamp.valueOf(newTask.getUpdateDateTime())); //例外処理必要
+			ps.setTimestamp(6, Timestamp.valueOf(LocalDateTime.now()));
+			//これは更新日時なので、登録時点ではなく、タスク詳細画面でタスクを編集し、決定した時間を取得するようにする。
+			//今は仮で、今の時間を取得する
+			ps.setTimestamp(7, Timestamp.valueOf(LocalDateTime.now()));
 			ps.setString(8, newTask.getCreator());
 			ps.executeUpdate();
 			
+			System.out.println("通過確認");
+			
 		}catch(SQLException e) {
-			throw new ManageException("", e);
+//			throw new ManageException("", e);
+			e.printStackTrace();
 		}
 	}
 	

@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    
+<%@ page import="java.util.List" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="common.TodoInfo" %>
+ 
 <!DOCTYPE html>
 <html>
 	<head>
@@ -40,8 +43,6 @@
 		   			種類:<input type = "text" name = "classification"><br>
 		   			タスク名:<input type = "text" name = "task"><br>
 		   			タスク詳細:<input type = "text" name = "description"><br>
-		   			作成日時:<input type = "text" name = "createDateTime"><br>
-		   			更新日時:<input type = "text" name = "updateDateTime"><br>
 		   			作成者:<input type = "text" name = "creator"><br>
 		   			<input type = "submit" id = "register_cancel" name = "register_cancel" value = "キャンセル">
 					<input type = "submit" id = "register_submit" name = "register_submit" value = "登録する">
@@ -83,15 +84,24 @@
 					<tbody>
 						<tr>
 						<!-- 以下、繰り返し表示 -->
-							<td><a href="${pageContext.request.contextPath}/todo/todoDetail.jsp">1</a></td> <!-- 押下するとそのタスクだけが表示されるタスク詳細画面へ遷移する -->
-							<td>対応中</td>
-							<td>仕事</td>
-							<td>Activity作成</td>
-							<td>添付ファイルを削除するActivityを作成する</td>
-							<td>2024/10/25 7:30</td>
-							<td>2024/10/25 13:31</td>
-							<td>reki</td>
-							<td>□</td> <!-- 実際はチェックボックスかラジオボタン -->
+						<% List<TodoInfo> todoList = (List<TodoInfo>)request.getAttribute("todoList");
+							if(todoList != null){
+								for(TodoInfo info : todoList){
+						%>
+								   	<td><a href="${pageContext.request.contextPath}/todo/todoDetail.jsp"><%= info.getId() %></a></td> <!-- 押下するとそのタスクだけが表示されるタスク詳細画面へ遷移する -->
+									<td><%= info.getStatus() %></td>
+									<td><%= info.getClassification() %></td>
+									<td><%= info.getTask() %></td>
+									<td><%= info.getDescription() %></td>
+									<td><%= info.getCreateDateTime() %></td>
+									<td><%= info.getUpdateDateTime() %></td>
+									<td><%= info.getCreator() %></td>
+									<td>□</td> <!-- 実際はチェックボックスかラジオボタン -->
+						<%    
+								}
+						   }
+						%>
+							
 						</tr>
 					</tbody>
 				</thead>

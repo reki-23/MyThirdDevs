@@ -3,6 +3,7 @@ package servlet;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.List;
 import java.util.Properties;
 
 import javax.servlet.RequestDispatcher;
@@ -16,6 +17,8 @@ import javax.servlet.http.HttpSession;
 import common.CommonMessage;
 import common.ManageException;
 import common.PropertiesFileNotFoundException;
+import common.TodoInfo;
+import dao.EditDataDao;
 
 /**
  * Servlet implementation class TodoServlet
