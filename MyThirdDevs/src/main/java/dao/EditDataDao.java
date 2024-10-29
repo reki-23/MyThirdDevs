@@ -15,10 +15,10 @@ import common.TodoInfo;
 public class EditDataDao {
 	
 	private static final DBConnection dbc = new DBConnection();
-	private static final String insertSql = "INSERT INTO todoList VALUES(?,?,?,?,?,?,?,?)";
-	private static final String deleteSql = "DELETE FROM todoList";
-	private static final String getSql = "SELECT * FROM todoList";
-	private static final String individualDeleteSql = "DELETE FROM todoList WHERE id = ?";
+	private static final String insertSql = "INSERT INTO todolist VALUES(?,?,?,?,?,?,?,?)";
+	private static final String deleteSql = "DELETE FROM todolist";
+	private static final String getSql = "SELECT * FROM todolist";
+	private static final String individualDeleteSql = "DELETE FROM todolist WHERE id = ?";
 	
 	
 	//タスク取得
@@ -29,16 +29,18 @@ public class EditDataDao {
 			PreparedStatement ps = con.prepareStatement(getSql);
 			ResultSet rs = ps.executeQuery()){
 			
+			//データ取得
 			while(rs.next()) {
-				int id = rs.getInt(1);
-				String status = rs.getString(2);
-				String classification = rs.getString(3);
-				String task = rs.getString(4);
-				String description = rs.getString(5);
-				LocalDateTime createDateTime = LocalDateTime.parse(rs.getString(6));
-				LocalDateTime updateDateTime = LocalDateTime.parse(rs.getString(7));
-				String creator = rs.getString(8);
+				int id = rs.getInt("id");
+				String status = rs.getString("status");
+				String classification = rs.getString("classification");
+				String task = rs.getString("task");
+				String description = rs.getString("description");
+				LocalDateTime createDateTime = rs.getTimestamp("createDateTime").toLocalDateTime();
+				LocalDateTime updateDateTime = rs.getTimestamp("updateDateTime").toLocalDateTime();
+				String creator = rs.getString("creator");
 				
+				//データを追加
 				todoList.add(new TodoInfo.Builder().with(todo -> {
 					todo.id = id;
 					todo.status = status;
@@ -49,15 +51,12 @@ public class EditDataDao {
 					todo.updateDateTime = updateDateTime;
 					todo.creator = creator;
 				}).build());
+
 			}
-			
-			//確認用
-			todoList.forEach(System.out::println);
 			
 			return todoList;
 			
 		}catch(SQLException e) {
-			//あとでかく
 			throw new ManageException("", e);
 		}
 	}
@@ -83,11 +82,9 @@ public class EditDataDao {
 			ps.setString(8, newTask.getCreator());
 			ps.executeUpdate();
 			
-			System.out.println("通過確認");
-			
 		}catch(SQLException e) {
-//			throw new ManageException("", e);
-			e.printStackTrace();
+			throw new ManageException("", e);
+			
 		}
 	}
 	

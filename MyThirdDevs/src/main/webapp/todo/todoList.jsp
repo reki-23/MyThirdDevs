@@ -29,6 +29,25 @@
 		<main>
 		
 		
+		<% 
+			boolean deleteJudge = false;
+			if(request.getAttribute("deleteJudge") != null){
+				deleteJudge = (boolean)request.getAttribute("deleteJudge");
+			}
+		%>
+		
+		<!-- メッセージ表示箇所 -->
+		<div class="message">
+			<% 
+			if(request.getAttribute("deleteJudge") != null){
+				if((boolean)request.getAttribute("deleteJudge")){%>
+					<h1>正常に削除されました。</h1>
+				<%}else{%>
+				<h1>削除に失敗</h1>
+				<%}
+			}%>	
+		</div>
+		
 		<!-- 登録ボタン -->
 			<div class="register-list">
 				<button id="register-button">タスクを登録する</button>
@@ -50,22 +69,13 @@
 			</form>
 			<div id="register_mask"></div>
 			
-		<!-- 削除ボタン -->
+			<!-- 削除ボタン -->
 			<div class="delete-bulk-list">
 				<form action="${pageContext.request.contextPath}/TodoDeleteServlet" method="POST">
 					<input type="submit" value="一括削除する">
-					<input type="hidden" name="deleteTodo" id="deleteTodo">
 				</form>
 			</div>
-
-		<!-- 個別削除ボタン -->
-		<!-- 個別削除は、テーブルの右端に削除ボタンを配置し、削除を押下したら共通の削除確認モーダルを表示する -->
-			<div class="delete-each-list">
-				<form action="${pageContext.request.contextPath}/TodoDeleteServlet" method="POST">
-					<input type="submit" value="選択して削除する">
-					<input type="hidden" name="deleteTodo" id="deleteTodo">
-				</form>
-			</div>
+			
 			
 			<!-- 一覧表示 -->
 			<table class="todo-list-table">
@@ -82,12 +92,12 @@
 						<th>削除</th>					
 					</tr>
 					<tbody>
-						<tr>
 						<!-- 以下、繰り返し表示 -->
 						<% List<TodoInfo> todoList = (List<TodoInfo>)request.getAttribute("todoList");
 							if(todoList != null){
 								for(TodoInfo info : todoList){
 						%>
+								<tr>
 								   	<td><a href="${pageContext.request.contextPath}/todo/todoDetail.jsp"><%= info.getId() %></a></td> <!-- 押下するとそのタスクだけが表示されるタスク詳細画面へ遷移する -->
 									<td><%= info.getStatus() %></td>
 									<td><%= info.getClassification() %></td>
@@ -97,12 +107,12 @@
 									<td><%= info.getUpdateDateTime() %></td>
 									<td><%= info.getCreator() %></td>
 									<td>□</td> <!-- 実際はチェックボックスかラジオボタン -->
+								</tr>
 						<%    
 								}
 						   }
 						%>
 							
-						</tr>
 					</tbody>
 				</thead>
 			</table>
