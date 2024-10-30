@@ -44,12 +44,24 @@
 			<%}
 		}%>
 		
-		<div class="register-submit-message">
-			<!-- タスク登録完了メッセージ表示 -->
-			<%if(request.getAttribute("registerMessage") != null){%>
+		
+		<!-- タスク登録完了メッセージ表示 -->
+		<%if(request.getAttribute("registerMessage") != null){%>
+			<div class="register-submit-message">
 				<h4><%=request.getAttribute("registerMessage")%></h4>
-			<%}%>
-		</div>
+			</div>
+		<%}%>
+		
+		
+  		<!-- タスク登録失敗メッセージ表示 -->
+		<%if(request.getAttribute("errorMessageList") != null){ %>	
+			<%for(String errMsg : (List<String>)request.getAttribute("errorMessageList")){ %>
+				<div class="register-faliure-message">
+					<h4><%= errMsg %></h4>
+				</div>
+			<%} %>
+		<%} %>
+		
 		
 		<!-- 登録ボタン -->
 			<div class="register-list">

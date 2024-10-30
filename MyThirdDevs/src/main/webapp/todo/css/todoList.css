@@ -1,10 +1,15 @@
 @charset "UTF-8";
 
-/* フッターを画面の下に配置するスタイル */
-body {
+body, html {
     margin: 0;
     padding: 0;
+    height: 100%;
 }
+
+main {
+    flex-grow: 1; /* フッター以外のコンテンツをフレキシブルに */
+}
+
 
 body {
     display: flex;
@@ -70,30 +75,34 @@ h2{
 }
 
 /* 失敗メッセージ用のスタイル */
-.delete-failure{
+.delete-failure, .register-faliure-message{
 	display: flex;
     justify-content: center; /* 水平方向に中央揃え */
     align-items: center; /* 垂直方向に中央揃え */
     background-color: red; /* 背景を赤に */
-    width: 800px; /* 幅を指定 */
+    width: 600px; /* 幅を指定 */
     height: 4vh; /* 高さを指定 */
-    border-radius: 10px; /* 角を丸く */
+    border-radius: 7px; /* 角を丸く */
     margin: 0 auto; /* ページ全体の中央に配置 */
 }
 
-.delete-failure h4 {
-	color: white;
-    font-size: 17px;
-    margin: 0; /* 余白を無くす */
-    text-align: center; /* テキストを中央揃え */
+.register-faliure-message{
+	margin-bottom:10px;
 }
 
+.delete-failure, .register-faliure-message h4 {
+	color: white;
+    font-size: 15px;
+    margin:auto;
+    text-align: center; /* テキストを中央揃え */
+}
 
 .todo-list-table {
     border-collapse: collapse;
     font-family: Arial, sans-serif;
-    margin:0 auto;
-    width:80%;
+    margin:auto;
+    margin-top:20px;
+    width:90%;
 }
 
 .todo-list-table th, .todo-list-table td {
@@ -118,7 +127,7 @@ h2{
 }
 
 .todo-list-table th, .todo-list-table td {
-    padding: 12px 15px;
+    padding: 10px 10px;
 }
 
 .todo-list-table td {
@@ -205,22 +214,23 @@ h2{
     visibility:hidden;
 }
 
-
+/* フッターを画面の下に配置するスタイル */
 footer {
 	background-color:#588cf5;
 	color: #f5f5f5;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	margin-top: 50px;
-	width: 100%;
-	margin-top: auto; /* フッターが最下部に固定されるようにする */
 	text-align: center;
 	padding: 10px;
+	width: 100%;
 }
 
 .footer{
 	margin-top:90px;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* コンテンツとフッターを下に分ける */
 }
 
 .wrapper p{
