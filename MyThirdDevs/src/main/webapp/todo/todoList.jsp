@@ -29,23 +29,26 @@
 		<main>
 		
 		
-		<% 
-			boolean deleteJudge = false;
-			if(request.getAttribute("deleteJudge") != null){
-				deleteJudge = (boolean)request.getAttribute("deleteJudge");
-			}
-		%>
-		
 		<!-- メッセージ表示箇所 -->
-		<div class="message">
-			<% 
-			if(request.getAttribute("deleteJudge") != null){
-				if((boolean)request.getAttribute("deleteJudge")){%>
-					<h1>正常に削除されました。</h1>
-				<%}else{%>
-				<h1>削除に失敗</h1>
-				<%}
-			}%>	
+		<!-- 削除に成功した場合 -->
+		<% 
+		if(request.getAttribute("deleteJudge") != null){
+			if((boolean)request.getAttribute("deleteJudge")){%>
+				<div class="delete-success">
+					<h4>正常に削除されました。</h4>
+				</div>
+			<%}else{%>
+				<div class="delete-failure">
+					<h4>削除に失敗しました。</h4>
+				</div>
+			<%}
+		}%>
+		
+		<div class="register-submit-message">
+			<!-- タスク登録完了メッセージ表示 -->
+			<%if(request.getAttribute("registerMessage") != null){%>
+				<h4><%=request.getAttribute("registerMessage")%></h4>
+			<%}%>
 		</div>
 		
 		<!-- 登録ボタン -->
@@ -75,7 +78,6 @@
 					<input type="submit" value="一括削除する">
 				</form>
 			</div>
-			
 			
 			<!-- 一覧表示 -->
 			<table class="todo-list-table">
@@ -117,7 +119,7 @@
 				</thead>
 			</table>
 		</main>
-		<footer>
+		<footer class="footer">
 			<div class="wrapper">
 				<p><small>&copy; 2024 ToDo-List</small></p>
 			</div>

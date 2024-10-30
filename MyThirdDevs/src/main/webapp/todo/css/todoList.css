@@ -1,10 +1,15 @@
 @charset "UTF-8";
 
+/* フッターを画面の下に配置するスタイル */
+body {
+    margin: 0;
+    padding: 0;
+}
+
 body {
     display: flex;
     flex-direction: column;
     min-height: 100vh; /* 画面全体の高さを確保 */
-    margin: 0;
 }
 
 header {
@@ -42,6 +47,47 @@ nav ul li a:hover {
 h2{
 	text-align:center;
 }
+
+
+
+/* 成功メッセージ用のスタイル */
+.delete-success{
+	display: flex;
+    justify-content: center; /* 水平方向に中央揃え */
+    align-items: center; /* 垂直方向に中央揃え */
+    background-color: #0324ff;
+    width: 800px; /* 幅を指定 */
+    height: 4vh; /* 高さを指定 */
+    border-radius: 10px; /* 角を丸く */
+    margin: 0 auto; /* ページ全体の中央に配置 */
+}
+
+.delete-success h4{
+	color: white;
+    font-size: 17px;
+    margin: 0; /* 余白を無くす */
+    text-align: center; /* テキストを中央揃え */
+}
+
+/* 失敗メッセージ用のスタイル */
+.delete-failure{
+	display: flex;
+    justify-content: center; /* 水平方向に中央揃え */
+    align-items: center; /* 垂直方向に中央揃え */
+    background-color: red; /* 背景を赤に */
+    width: 800px; /* 幅を指定 */
+    height: 4vh; /* 高さを指定 */
+    border-radius: 10px; /* 角を丸く */
+    margin: 0 auto; /* ページ全体の中央に配置 */
+}
+
+.delete-failure h4 {
+	color: white;
+    font-size: 17px;
+    margin: 0; /* 余白を無くす */
+    text-align: center; /* テキストを中央揃え */
+}
+
 
 .todo-list-table {
     border-collapse: collapse;
@@ -161,13 +207,20 @@ h2{
 
 
 footer {
-  background-color:#588cf5;
-  color: #f5f5f5;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 50px;
-  width: 100%;
+	background-color:#588cf5;
+	color: #f5f5f5;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-top: 50px;
+	width: 100%;
+	margin-top: auto; /* フッターが最下部に固定されるようにする */
+	text-align: center;
+	padding: 10px;
+}
+
+.footer{
+	margin-top:90px;
 }
 
 .wrapper p{

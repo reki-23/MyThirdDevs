@@ -32,7 +32,7 @@ public class TodoDeleteServlet extends HttpServlet {
 			//一括削除処理
 			boolean deleteJudge = EditDataDao.bulkDeleteTask();
 			request.setAttribute("deleteJudge", deleteJudge);
-			RequestDispatcher dispatcher = request.getRequestDispatcher("todo/todoList");
+			RequestDispatcher dispatcher = request.getRequestDispatcher("todo/todoList.jsp");
 			dispatcher.forward(request, response);
 		}catch(Exception e) {
 			
