@@ -1,20 +1,23 @@
-/*
-function setFormAction(){
-	var form = document.getElementById('#register_newTask');
-	//var register_cancel = document.getElementById('#register_cancel');
-	//var register_submit = document.getElementById('#register_submit');
-	var clickButton = document.activeElement.name;
-	
-	if(clickButton == 'register_submit'){
-		//タスク登録ボタンを押下した場合
-		alert("おい");
-		form.action = '${pageContext.request.contextPath}/todo/TodoRegisterServlet';
-	}else if(clickButton == 'register_cancel'){
-		//キャンセルボタンを押下した場合＝一覧取得サーブレットに遷移してJSPへフォワードの流れ
-		form.action = 'todoList.jsp';
+//ファイルの選択制御
+function validateFileUpload(){
+	var fileInput = document.getElementById("csvFile");
+	if(fileInput.files.length > 0){
+		var fileName = fileInput.files[0].name;
+		document.getElementById("fileName").value = fileName;
+	}else{
+		document.getElementById("fileName").value = "";		
 	}
 }
-*/
+
+function validateForm(){
+	var fileInput = document.getElementById("csvFile");
+	if(fileInput.files.length == 0){
+		return false;
+	}
+	return true;
+}
+
+
 
 //タスク登録モーダル
 document.addEventListener('DOMContentLoaded', () => {

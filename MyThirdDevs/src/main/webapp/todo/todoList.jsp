@@ -27,46 +27,56 @@
 		</header>
 		
 		<main>
-		
-		
-		<!-- メッセージ表示箇所 -->
-		<!-- 削除に成功した場合 -->
-		<% 
-		if(request.getAttribute("deleteJudge") != null){
-			if((boolean)request.getAttribute("deleteJudge")){%>
-				<div class="delete-success">
-					<h4>正常に削除されました。</h4>
+			
+			<!-- メッセージ表示箇所 -->
+			<!-- 削除に成功した場合 -->
+			<% 
+			if(request.getAttribute("deleteJudge") != null){
+				if((boolean)request.getAttribute("deleteJudge")){%>
+					<div class="delete-success">
+						<h4>正常に削除されました。</h4>
+					</div>
+				<%}else{%>
+					<div class="delete-failure">
+						<h4>削除に失敗しました。</h4>
+					</div>
+				<%}
+			}%>
+			
+			
+			<!-- タスク登録完了メッセージ表示 -->
+			<%if(request.getAttribute("registerMessage") != null){%>
+				<div class="register-submit-message">
+					<h4><%=request.getAttribute("registerMessage")%></h4>
 				</div>
-			<%}else{%>
-				<div class="delete-failure">
-					<h4>削除に失敗しました。</h4>
-				</div>
-			<%}
-		}%>
-		
-		
-		<!-- タスク登録完了メッセージ表示 -->
-		<%if(request.getAttribute("registerMessage") != null){%>
-			<div class="register-submit-message">
-				<h4><%=request.getAttribute("registerMessage")%></h4>
-			</div>
-		<%}%>
-		
-		
-  		<!-- タスク登録失敗メッセージ表示 -->
-		<%if(request.getAttribute("errorMessageList") != null){ %>	
-			<%for(String errMsg : (List<String>)request.getAttribute("errorMessageList")){ %>
-				<div class="register-faliure-message">
-					<h4><%= errMsg %></h4>
-				</div>
+			<%}%>
+			
+			
+	  		<!-- タスク登録失敗メッセージ表示 -->
+			<%if(request.getAttribute("errorMessageList") != null){ %>	
+				<%for(String errMsg : (List<String>)request.getAttribute("errorMessageList")){ %>
+					<div class="register-faliure-message">
+						<h4><%= errMsg %></h4>
+					</div>
+				<%} %>
 			<%} %>
-		<%} %>
-		
-		
-		<!-- 登録ボタン -->
+			
+			
+			<!--　タスク一括登録ボタン -->
+			<form action="${pageContext.request.contextPath}/TodoRegisterServlet" method="POST" enctype="multipart/form-data"　onsubmit="return validateForm();" >
+				<div class="bulk-register-list">
+					<input type="submit" name="bulk_register" value="一括登録する">
+				</div>
+				<input type="file" id ="csvFile" name="csvFile" accept=".csv" onchange="validateFileUpload()">
+				<input type="hidden" id="fileName" name="fileName">
+			</form>
+	
+			
+			<!-- 個別登録ボタン -->
 			<div class="register-list">
 				<button id="register-button">タスクを登録する</button>
 			</div>
+			
 			
 			<!-- タスク登録モーダル -->
 			<form action="${pageContext.request.contextPath}/TodoRegisterServlet" method = "POST">

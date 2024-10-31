@@ -54,26 +54,6 @@ h2{
 }
 
 
-
-/* 成功メッセージ用のスタイル */
-.delete-success{
-	display: flex;
-    justify-content: center; /* 水平方向に中央揃え */
-    align-items: center; /* 垂直方向に中央揃え */
-    background-color: #0324ff;
-    width: 800px; /* 幅を指定 */
-    height: 4vh; /* 高さを指定 */
-    border-radius: 10px; /* 角を丸く */
-    margin: 0 auto; /* ページ全体の中央に配置 */
-}
-
-.delete-success h4{
-	color: white;
-    font-size: 17px;
-    margin: 0; /* 余白を無くす */
-    text-align: center; /* テキストを中央揃え */
-}
-
 /* 失敗メッセージ用のスタイル */
 .delete-failure, .register-faliure-message{
 	display: flex;
@@ -81,7 +61,7 @@ h2{
     align-items: center; /* 垂直方向に中央揃え */
     background-color: red; /* 背景を赤に */
     width: 600px; /* 幅を指定 */
-    height: 4vh; /* 高さを指定 */
+    height: 3.5vh; /* 高さを指定 */
     border-radius: 7px; /* 角を丸く */
     margin: 0 auto; /* ページ全体の中央に配置 */
 }
@@ -90,7 +70,19 @@ h2{
 	margin-bottom:10px;
 }
 
-.delete-failure, .register-faliure-message h4 {
+/*成功メッセージ用のスタイル*/
+.register-submit-message{
+	display: flex;
+    justify-content: center; /* 水平方向に中央揃え */
+    align-items: center; /* 垂直方向に中央揃え */
+    background-color: #0324ff; /* 背景を赤に */
+    width: 600px; /* 幅を指定 */
+    height: 3.5vh; /* 高さを指定 */
+    border-radius: 7px; /* 角を丸く */
+    margin: 0 auto; /* ページ全体の中央に配置 */
+}
+
+.delete-failure, .delete-success, .register-faliure-message h4, .register-submit-message h4 {
 	color: white;
     font-size: 15px;
     margin:auto;
