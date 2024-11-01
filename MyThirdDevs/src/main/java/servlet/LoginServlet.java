@@ -14,8 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import common.CommonMessage;
-import common.ManageException;
-import common.PropertiesFileNotFoundException;
+import exception.ManageException;
+import exception.PropertiesFileNotFoundException;
 
 /**
  * Servlet implementation class TodoServlet

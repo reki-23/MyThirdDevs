@@ -7,8 +7,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
-import common.ManageException;
-import common.PropertiesFileNotFoundException;
+import exception.ManageException;
+import exception.PropertiesFileNotFoundException;
 
 class DBConnection {
 	public Connection getConnection() throws ManageException{

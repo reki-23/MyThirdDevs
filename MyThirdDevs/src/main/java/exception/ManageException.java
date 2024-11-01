@@ -1,4 +1,4 @@
-package common;
+package exception;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -40,6 +40,26 @@ public class ManageException extends Exception{
 		this.errorMessageId = errorMessageId;
 	}
 	
+	/*
+	 * NumberFormatExceptionの情報を管理するクラス
+	 */
+	public ManageException(String errorMessageId, NumberFormatException e) {
+		this.errorMessageId = errorMessageId;
+	}
+	
+	/*
+	 * InvalidDataExistsExceptionの情報を管理する
+	 */
+	public ManageException(String errorMessageId, InvalidDataExistsException e) {
+		this.errorMessageId = errorMessageId;
+	}
+	
+	/*
+	 * RuntimeExceptionの情報を管理する
+	 */
+	public ManageException(String errorMessageId, RuntimeException e) {
+		this.errorMessageId = errorMessageId;
+	}
 	
 	/*
 	 * メッセージIDを返す

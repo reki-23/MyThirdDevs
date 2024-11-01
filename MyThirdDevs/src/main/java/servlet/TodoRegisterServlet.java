@@ -16,17 +16,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
-import common.ManageException;
-import common.PropertiesFileNotFoundException;
 import common.TodoInfo;
 import dao.EditDataDao;
+import exception.ManageException;
+import exception.PropertiesFileNotFoundException;
+import model.ReadFile;
 
 /**
  * タスク登録用サーブレット
  */
 @WebServlet("/TodoRegisterServlet")
 @MultipartConfig
-public class TodoRegisterServlet extends HttpServlet {
+public class TodoRegisterServlet extends HttpServlet{
 	private static final long serialVersionUID = 1L;
    
 	//プロパティファイルから読みこむメッセージ
@@ -100,7 +101,8 @@ public class TodoRegisterServlet extends HttpServlet {
 		String fileName = filePart.getSubmittedFileName();
 		
 		//ファイル名をファイル内容処理用のメソッドの引数に渡して、処理する
-		
+		ReadFile readFile = new ReadFile();
+		readFile.readCsvFile(fileName);
 	}
 	
 	//個別登録
