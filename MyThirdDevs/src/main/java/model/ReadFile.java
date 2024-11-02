@@ -13,9 +13,10 @@ import exception.ManageException;
 /*
  * 一括登録時に渡されるファイルの内容を処理するクラス
  */
+
 public class ReadFile {
 	public List<TodoInfo> readCsvFile(String fileName) throws ManageException{
-		
+
 		//読みこんだ内容を保存するリスト
 		List<TodoInfo> readTodoList = new ArrayList<TodoInfo>();
 		//受けとったファイルをカンマ区切りで読み込み
@@ -26,24 +27,24 @@ public class ReadFile {
 					.map(data -> data.split(","))
 					.map(fields -> {
 						try{
-							separatedTodoInfoWithComma(fields);
+							return separatedTodoInfoWithComma(fields);
 						}catch(ManageException e) {
 							throw new RuntimeException(e.getMessageId());
 						}
-						return new TodoInfo.Builder().build();
 					}).collect(Collectors.toList());
 			
 		}catch(RuntimeException e) {
 			String errorMessageId = e.getMessage();
 			throw new ManageException(errorMessageId, e);
 		}catch(IOException e) {
-			
+			throw new ManageException("", e);
 		}
 		
-		return null;
+		return readTodoList;
 	}
 	
 	
+	//カンマで区切った各データをフィールドに持つインスタンスを返す
 	private TodoInfo separatedTodoInfoWithComma(String[] fields) throws ManageException{
 		
 		//No

@@ -28,6 +28,7 @@ public class TodoDeleteServlet extends HttpServlet {
 
 			request.setCharacterEncoding("UTF-8");
 			response.setCharacterEncoding("UTF-8");
+			response.setContentType("text/html; charset=UTF-8");
 			
 			//一括削除処理
 			boolean deleteJudge = EditDataDao.bulkDeleteTask();

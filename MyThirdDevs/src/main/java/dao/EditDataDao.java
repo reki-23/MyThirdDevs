@@ -62,25 +62,44 @@ public class EditDataDao {
 	}
 	
 	
-	//タスク個別登録、一括登録＝ここまだ未実装
-	public static void registerNewTask(List<TodoInfo> newTaskList) throws ManageException{
+	//タスク個別登録、一括登録
+	public static int registerNewTask(List<TodoInfo> newTaskList, boolean isBulkJudge) throws ManageException{
 		
 		try(Connection con = dbc.getConnection();
 			PreparedStatement ps = con.prepareStatement(insertSql)){
 			
-			//個別登録
-			TodoInfo newTask = newTaskList.get(0);
-			ps.setInt(1, newTask.getId());
-			ps.setString(2, newTask.getStatus());
-			ps.setString(3, newTask.getClassification());
-			ps.setString(4, newTask.getTask());
-			ps.setString(5, newTask.getDescription());
-			ps.setTimestamp(6, Timestamp.valueOf(LocalDateTime.now()));
-			//これは更新日時なので、登録時点ではなく、タスク詳細画面でタスクを編集し、決定した時間を取得するようにする。
-			//今は仮で、今の時間を取得する
-			ps.setTimestamp(7, Timestamp.valueOf(LocalDateTime.now()));
-			ps.setString(8, newTask.getCreator());
-			ps.executeUpdate();
+			if(!isBulkJudge) {
+				//個別登録
+				TodoInfo newTask = newTaskList.get(0);
+				ps.setInt(1, newTask.getId());
+				ps.setString(2, newTask.getStatus());
+				ps.setString(3, newTask.getClassification());
+				ps.setString(4, newTask.getTask());
+				ps.setString(5, newTask.getDescription());
+				ps.setTimestamp(6, Timestamp.valueOf(LocalDateTime.now()));
+				//これは更新日時なので、登録時点ではなく、タスク詳細画面でタスクを編集し、決定した時間を取得するようにする。
+				//今は仮で、今の時間を取得する
+				ps.setTimestamp(7, Timestamp.valueOf(LocalDateTime.now()));
+				ps.setString(8, newTask.getCreator());
+				int registeredCount = ps.executeUpdate();
+				return registeredCount;
+			}else {
+				//一括登録
+				for(TodoInfo newTask : newTaskList) {
+					ps.setInt(1, newTask.getId());
+					ps.setString(2, newTask.getStatus());
+					ps.setString(3, newTask.getClassification());
+					ps.setString(4, newTask.getTask());
+					ps.setString(5, newTask.getDescription());
+					ps.setTimestamp(6, Timestamp.valueOf(LocalDateTime.now()));
+					ps.setTimestamp(7, Timestamp.valueOf(LocalDateTime.now())); //ここは更新日時に変更する
+					ps.setString(8, newTask.getCreator());
+					ps.addBatch();
+				}
+				//一括実行（登録）
+				int[] bulkRegisteredCount =  ps.executeBatch();
+				return bulkRegisteredCount.length;
+			}
 			
 		}catch(SQLException e) {
 			throw new ManageException("", e);

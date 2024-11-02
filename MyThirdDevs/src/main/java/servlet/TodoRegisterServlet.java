@@ -3,6 +3,10 @@ package servlet;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -32,6 +36,10 @@ public class TodoRegisterServlet extends HttpServlet{
    
 	//プロパティファイルから読みこむメッセージ
 	private static String registerMessage;
+	//一括登録かを判定するフラグ
+	private static boolean isBulkJudge;
+	//プロパティファイル
+	private static Properties prop = new Properties();
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
@@ -51,8 +59,7 @@ public class TodoRegisterServlet extends HttpServlet{
 			String registerCancel = request.getParameter("register_cancel");
 			//一括登録ボタン押下で送信される値を取得
 			String bulkRegister = request.getParameter("bulk_register");
-			
-			Properties prop = new Properties();
+		
 			try(InputStream input = getClass().getResourceAsStream("/logging.properties")){
 				if(input == null) {
 					//読み込み失敗時
@@ -92,21 +99,46 @@ public class TodoRegisterServlet extends HttpServlet{
 	}
 	
 	//一括登録
-	private static void bulkRegisterTask(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ManageException{
+	private void bulkRegisterTask(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ManageException{
 		System.out.println("一括登録");
 		
+		isBulkJudge = true;
 		//ファイルの実体を取得
 		Part filePart = request.getPart("csvFile");
 		//ファイル名を取得
-		String fileName = filePart.getSubmittedFileName();
+		String filePartName = filePart.getSubmittedFileName();
+		//ファイルがあるフォルダへのパスを取得
+		String uploadDir = getServletContext().getRealPath("/bulkUploads");
+		Path uploadDirPath = Paths.get(uploadDir);
+		if(!Files.exists(uploadDirPath)) {
+			Files.createDirectory(uploadDirPath);
+		}
 		
-		//ファイル名をファイル内容処理用のメソッドの引数に渡して、処理する
+		//ファイルまでのパス
+		Path filePath = Paths.get(uploadDir, filePartName);
+		String fileName = filePath.toString();
+		
+		//ファイルの保存
+		filePart.write(fileName);
+
+		//ファイルを読み込む
 		ReadFile readFile = new ReadFile();
-		readFile.readCsvFile(fileName);
+		List<TodoInfo> readTodoList = readFile.readCsvFile(fileName);
+		
+		//読みこんだ結果をDBに登録
+		int bulkRegisteredCount = EditDataDao.registerNewTask(readTodoList, isBulkJudge);
+//		request.setAttribute("bulkRegisteredCount", bulkRegisteredCount);
+		
+		//登録した件数をプロパティファイルから読み込んだメッセージとして出力できるようにする
+		registerMessage = MessageFormat.format(prop.getProperty("bulkRegister.submit"), bulkRegisteredCount);
+		request.setAttribute("registerMessage", registerMessage);
+		
+		//一覧表示
+		displayRegisteredTask(request, response);
 	}
 	
 	//個別登録
-	private static void individualRegisterTask(HttpServletRequest request, HttpServletResponse response, Properties prop) throws ServletException, IOException, ManageException{
+	private void individualRegisterTask(HttpServletRequest request, HttpServletResponse response, Properties prop) throws ServletException, IOException, ManageException{
 		System.out.println("個別登録");
 		
 		//タスク登録時のエラーメッセージ
@@ -159,7 +191,7 @@ public class TodoRegisterServlet extends HttpServlet{
 				todo.creator = creator;
 			}).build());
 			//登録処理・登録完了メッセージ
-			EditDataDao.registerNewTask(newTaskList);
+			EditDataDao.registerNewTask(newTaskList, isBulkJudge);
 			registerMessage = prop.getProperty("register.submit");
 			request.setAttribute("registerMessage", registerMessage);
 			

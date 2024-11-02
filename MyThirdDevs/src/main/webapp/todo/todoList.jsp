@@ -30,19 +30,24 @@
 			
 			<!-- メッセージ表示箇所 -->
 			<!-- 削除に成功した場合 -->
-			<% 
-			if(request.getAttribute("deleteJudge") != null){
-				if((boolean)request.getAttribute("deleteJudge")){%>
-					<div class="delete-success">
-						<h4>正常に削除されました。</h4>
-					</div>
-				<%}else{%>
-					<div class="delete-failure">
-						<h4>削除に失敗しました。</h4>
-					</div>
-				<%}
-			}%>
-			
+			<%
+	        Boolean deleteJudge = (Boolean)request.getAttribute("deleteJudge");
+	        %>
+	        <%
+	        if(deleteJudge != null && deleteJudge){
+	        %>
+	        	<div class = "delete-success">
+	         		<h4>正常に削除されました。</h4>	
+	        	</div>
+	    	<%
+	    	}else if(deleteJudge != null && !deleteJudge){
+	    	%>
+		        <div class = "delete-failure">
+		        	<h4>削除するデータがありません。</h4>
+		        </div>
+	        <%
+	        }
+	        %>
 			
 			<!-- タスク登録完了メッセージ表示 -->
 			<%if(request.getAttribute("registerMessage") != null){%>
