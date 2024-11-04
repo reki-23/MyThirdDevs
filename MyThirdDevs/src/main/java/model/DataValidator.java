@@ -9,36 +9,38 @@ import exception.ManageException;
 
 class DataValidator{
 	
-	protected static String getFieldsSafely(String fields[], int index) {
+	//データが欠損している場合例外を投げる
+	protected static String getFieldsSafely(String fields[], int index) throws ManageException{
 		if(fields[index].length() == 0) {
-			
+			throw new ManageException("EM004", new InvalidDataExistsException());
+		}else {
+			return fields[index];
 		}
-		return null;
 	}
 	
 	//タスクNo.が自然数かどうか判定
-	protected static int returnValidId(String[] fields) throws ManageException{
+	protected static int returnValidId(String field) throws ManageException{
 		try {
-			int id = Integer.parseInt(fields[0]);
+			int id = Integer.parseInt(field);
 			if(id < 0) {
 				throw new InvalidDataExistsException();
 			}
 			return id;
 		}catch(NumberFormatException e) {
-			throw new ManageException("", e);
+			throw new ManageException("EM008", e);
 		}catch(InvalidDataExistsException e) {
-			throw new ManageException("", e);
+			throw new ManageException("EM006", e);
 		}
 	}
 	
 	//ステータスがドロップダウンの要素と等しいかどうか
-	protected static String returnValidStatus(String[] fields) throws ManageException{
+	protected static String returnValidStatus(String field) throws ManageException{
 		
-		boolean isValidStatus = fields[1].equals("未着手") || fields[1].equals("対応中") || fields[1].equals("完了") || fields[1].equals("保留") || fields[1].equals("取下げ");
+		boolean isValidStatus = field.equals("未着手") || field.equals("対応中") || field.equals("完了") || field.equals("保留") || field.equals("取下げ");
 		if(!isValidStatus) {
-			throw new ManageException("", new InvalidDataExistsException());
+			throw new ManageException("EM007", new InvalidDataExistsException());
 		}
-		return fields[1];
+		return field;
 	}
 	
 }

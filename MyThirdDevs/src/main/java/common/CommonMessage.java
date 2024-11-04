@@ -29,6 +29,18 @@ public class CommonMessage {
 		 * SQLException時のメッセージ
 		 */
 		commonMessages.put("EM003", "ID003:データベースに関するエラーが発生しました。管理者に連絡して下さい。");
+		
+		/*
+		 * InvalidExistsException時のメッセージ
+		 */
+		commonMessages.put("EM004", "ID004:データの形式が有効ではありません。");
+		commonMessages.put("EM006", "ID006:有効ではないidが含まれています。");
+		commonMessages.put("EM007", "ID007:有効ではないステータスが含まれています。");
+		
+		/*
+		 * NumberFormatException時のメッセージ
+		 */
+		commonMessages.put("EM008", "ID008:idの形式が有効ではありません。");
 	}
 	
 	

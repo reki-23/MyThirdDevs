@@ -67,6 +67,14 @@
 			<%} %>
 			
 			
+			<!-- 共通のエラーメッセージ表示 -->
+			<%if(request.getAttribute("errorMessage") != null){ %>
+				<div class="common-error-message">
+					<h4><%=request.getAttribute("errorMessage")%></h4>
+				</div>
+			<%} %>
+			
+			
 			<!--　タスク一括登録ボタン -->
 			<form action="${pageContext.request.contextPath}/TodoRegisterServlet" method="POST" enctype="multipart/form-data"　onsubmit="return validateForm();" >
 				<div class="bulk-register-list">
@@ -79,7 +87,7 @@
 			
 			<!-- 個別登録ボタン -->
 			<div class="register-list">
-				<button id="register-button">タスクを登録する</button>
+				<button id="register-button">個別登録する</button>
 			</div>
 			
 			
@@ -87,8 +95,14 @@
 			<form action="${pageContext.request.contextPath}/TodoRegisterServlet" method = "POST">
 		   		<section id = "register_task">
 		   			<h1>登録したいタスクの詳細を入力してください。</h1>
-		   			id:<input type = "text" name = "id"><br>
-		   			ステータス:<input type = "text" name = "status"><br>
+		   			id:<input type = "text" name = "id" id="id"><br>
+		   			ステータス:<select id="status" name="status">
+					        <option value="未着手">未着手</option>
+					        <option value="対応中">対応中</option>
+					        <option value="完了">完了</option>
+					        <option value="取下げ">取下げ</option>
+					        <option value="保留">保留</option>
+					    	</select><br>
 		   			種類:<input type = "text" name = "classification"><br>
 		   			タスク名:<input type = "text" name = "task"><br>
 		   			タスク詳細:<input type = "text" name = "description"><br>

@@ -37,7 +37,7 @@ public class ReadFile {
 			String errorMessageId = e.getMessage();
 			throw new ManageException(errorMessageId, e);
 		}catch(IOException e) {
-			throw new ManageException("", e);
+			throw new ManageException("EM002", e);
 		}
 		
 		return readTodoList;
@@ -48,17 +48,17 @@ public class ReadFile {
 	private TodoInfo separatedTodoInfoWithComma(String[] fields) throws ManageException{
 		
 		//No
-		int id = DataValidator.returnValidId(fields);
+		int id = DataValidator.returnValidId(DataValidator.getFieldsSafely(fields, 0));
 		//ステータス
-		String status = DataValidator.returnValidStatus(fields);
+		String status = DataValidator.returnValidStatus(DataValidator.getFieldsSafely(fields, 1));
 		//種別
-		String classification = fields[2];
+		String classification = DataValidator.getFieldsSafely(fields, 2);
 		//タスク名
-		String task = fields[3];
+		String task = DataValidator.getFieldsSafely(fields, 3);
 		//タスク詳細
-		String description = fields[4];
+		String description = DataValidator.getFieldsSafely(fields, 4);
 		//作成者
-		String creator = fields[5];
+		String creator = DataValidator.getFieldsSafely(fields, 5);
 		
 		return new TodoInfo.Builder().with(todo -> {
 					todo.id = id;

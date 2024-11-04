@@ -57,7 +57,7 @@ public class EditDataDao {
 			return todoList;
 			
 		}catch(SQLException e) {
-			throw new ManageException("", e);
+			throw new ManageException("EM003", e);
 		}
 	}
 	
@@ -102,7 +102,7 @@ public class EditDataDao {
 			}
 			
 		}catch(SQLException e) {
-			throw new ManageException("", e);
+			throw new ManageException("EM003", e);
 			
 		}
 	}
@@ -125,7 +125,7 @@ public class EditDataDao {
 			
 		}catch(SQLException e) {
 			//あとでかく
-			throw new ManageException("", e);
+			throw new ManageException("EM003", e);
 		}
 	}
 	
@@ -153,7 +153,7 @@ public class EditDataDao {
 			}	
 		}catch(SQLException e) {
 			//あとでかく
-			throw new ManageException("", e);
+			throw new ManageException("EM003", e);
 		}
 	}
 	
