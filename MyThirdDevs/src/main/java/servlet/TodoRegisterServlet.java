@@ -167,7 +167,6 @@ public class TodoRegisterServlet extends HttpServlet{
 		}
 		int id = tempId;
 		String status = request.getParameter("status");
-		System.out.println("ステータス:" + status);
 		String classification = request.getParameter("classification");
 		String task = request.getParameter("task");
 		String description = request.getParameter("description");
