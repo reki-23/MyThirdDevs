@@ -26,6 +26,7 @@ public class TopPageServlet extends HttpServlet {
 			
 			request.setCharacterEncoding("UTF-8");
 			response.setCharacterEncoding("UTF-8");
+			response.setContentType("text/html; charset=UTF-8");
 			
 			//一覧取得
 			List<TodoInfo> todoList = EditDataDao.getRegisteredTask();

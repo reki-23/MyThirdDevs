@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +21,7 @@ public class EditDataDao {
 	private static final String deleteSql = "DELETE FROM todolist";
 	private static final String getSql = "SELECT * FROM todolist";
 	private static final String individualDeleteSql = "DELETE FROM todolist WHERE id = ?";
+	private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 	
 	
 	//タスク取得
@@ -36,21 +39,29 @@ public class EditDataDao {
 				String classification = rs.getString("classification");
 				String task = rs.getString("task");
 				String description = rs.getString("description");
-				LocalDateTime createDateTime = rs.getTimestamp("createDateTime").toLocalDateTime();
-				LocalDateTime updateDateTime = rs.getTimestamp("updateDateTime").toLocalDateTime();
-				String creator = rs.getString("creator");
+				try {
+					String createDateTimeStr = rs.getTimestamp("createDateTime").toLocalDateTime().format(formatter);
+					System.out.println(createDateTimeStr);
+					LocalDateTime createDateTime = LocalDateTime.parse(createDateTimeStr, formatter); //ここで例外が発生している
+					System.out.println(createDateTime);
+//					LocalDateTime updateDateTime = rs.getTimestamp("updateDateTime").toLocalDateTime();	
+					String creator = rs.getString("creator");
+					
+					//データを追加
+					todoList.add(new TodoInfo.Builder().with(todo -> {
+						todo.id = id;
+						todo.status = status;
+						todo.classification = classification;
+						todo.task = task;
+						todo.description = description;
+						todo.createDateTime = createDateTime;
+//						todo.updateDateTime = updateDateTime;
+						todo.creator = creator;
+					}).build());
+				}catch(DateTimeParseException e) {
+					System.out.println("例外");
+				}
 				
-				//データを追加
-				todoList.add(new TodoInfo.Builder().with(todo -> {
-					todo.id = id;
-					todo.status = status;
-					todo.classification = classification;
-					todo.task = task;
-					todo.description = description;
-					todo.createDateTime = createDateTime;
-					todo.updateDateTime = updateDateTime;
-					todo.creator = creator;
-				}).build());
 
 			}
 			
