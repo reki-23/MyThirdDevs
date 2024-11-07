@@ -26,6 +26,7 @@ import dao.EditDataDao;
 import exception.ManageException;
 import exception.PropertiesFileNotFoundException;
 import model.DataValidator;
+import model.FileAnomalyCheck;
 import model.ReadFile;
 
 /**
@@ -115,6 +116,10 @@ public class TodoRegisterServlet extends HttpServlet{
 		filePart.write(fileName);
 
 		try {
+			//異常検査
+			FileAnomalyCheck fac = new FileAnomalyCheck();
+			fac.anomalyCheck(filePartName, filePath);
+			
 			//ファイルを読み込む
 			ReadFile readFile = new ReadFile();
 			List<TodoInfo> readTodoList = readFile.readCsvFile(fileName);

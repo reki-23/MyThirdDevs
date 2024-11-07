@@ -70,6 +70,27 @@ public class ManageException extends Exception{
 	}
 	
 	/*
+	 * NoElementsOnFileExceptionの情報を管理する
+	 */
+	public ManageException(String errorMessageId, NoElementsOnFileException e) {
+		this.errorMessageId = errorMessageId;
+	}
+	
+	/*
+	 * FileOverSizeExceptionの情報を管理する
+	 */
+	public ManageException(String errorMessageId, FileOverSizeException e) {
+		this.errorMessageId = errorMessageId;
+	}
+	
+	/*
+	 * InappropriateFileExceptionの情報を管理する
+	 */
+	public ManageException(String errorMessageId, InappropriateFileException e) {
+		this.errorMessageId = errorMessageId;
+	}
+	
+	/*
 	 * メッセージIDを返す
 	 */
 	public String getMessageId(){

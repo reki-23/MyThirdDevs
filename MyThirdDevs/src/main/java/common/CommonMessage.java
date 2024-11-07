@@ -48,6 +48,27 @@ public class CommonMessage {
 		 * SQLIntegrityConstraintViolationException時のメッセージ
 		 */
 		commonMessages.put("EM009", "ID009:既に登録されているタスクは登録できません。");
+		
+		/*
+		 * NoElementsOnFileException時のメッセージ
+		 */
+		commonMessages.put("EM010", "ID010:ファイル内にデータが存在しません。ファイルを選択し直してください。");
+		commonMessages.put("EM014", "ID014:ファイルにはヘッダーが必要です。ファイルを選択し直してください。");
+		
+		/*
+		 * FileNotFoundException時のメッセージ
+		 */
+		commonMessages.put("EM011", "ID011:ファイルが見つかりません。ファイルを選択し直してください。");
+		
+		/*
+		 * FileOverSizeException時のメッセージ
+		 */
+		commonMessages.put("EM012", "ID012:ファイルのサイズが大きすぎます。ファイルを選択し直してください。");
+		
+		/*
+		 * InappropriateFileException時のメッセージ
+		 */
+		commonMessages.put("EM013", "ID013:CSVファイルを選択してください。");
 	}
 	
 	

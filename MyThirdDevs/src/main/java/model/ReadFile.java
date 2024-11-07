@@ -15,6 +15,8 @@ import exception.ManageException;
  */
 
 public class ReadFile {
+	
+	//ファイルを読み込む
 	public List<TodoInfo> readCsvFile(String fileName) throws ManageException{
 
 		//読みこんだ内容を保存するリスト
