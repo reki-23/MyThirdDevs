@@ -12,6 +12,8 @@ public class CommonMessage {
 
 	private static Map<String, String> commonMessages = new HashMap<String, String>();
 	
+	private static final String unexpectedError = "ID000:想定外のエラーが発生しました。管理者に連絡してください。";
+	
 
 	public CommonMessage() {
 		
@@ -28,7 +30,7 @@ public class CommonMessage {
 		/*
 		 * SQLException時のメッセージ
 		 */
-		commonMessages.put("EM003", "ID003:データベースに関するエラーが発生しました。管理者に連絡して下さい。");
+		commonMessages.put("EM003", "ID003:エラーが発生しました。管理者に連絡して下さい。");
 		
 		/*
 		 * InvalidExistsException時のメッセージ
@@ -41,6 +43,11 @@ public class CommonMessage {
 		 * NumberFormatException時のメッセージ
 		 */
 		commonMessages.put("EM008", "ID008:idの形式が有効ではありません。");
+		
+		/*
+		 * SQLIntegrityConstraintViolationException時のメッセージ
+		 */
+		commonMessages.put("EM009", "ID009:既に登録されているタスクは登録できません。");
 	}
 	
 	
@@ -50,7 +57,7 @@ public class CommonMessage {
 	public String getCommonMessage(String messageId) {
 		
 		if(!commonMessages.containsKey(messageId)) {
-			return "想定外のエラーです。管理者に連絡して下さい。";
+			return unexpectedError;
 		}else {
 			return commonMessages.get(messageId);
 		}

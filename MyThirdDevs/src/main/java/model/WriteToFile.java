@@ -8,6 +8,7 @@ import java.util.List;
 import common.TodoInfo;
 import exception.ManageException;
 
+
 public class WriteToFile {
 	public void writeToCsv(String downloadFileToPath, List<TodoInfo> registeredTask) throws ManageException{
 		
@@ -21,6 +22,6 @@ public class WriteToFile {
 			bw.flush();
 		}catch(IOException e) {
 			throw new ManageException("EM002", e);
-		}
+		}	
 	}
 }

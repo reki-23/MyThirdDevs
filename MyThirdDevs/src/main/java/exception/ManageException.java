@@ -2,6 +2,7 @@ package exception;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 
 /*
  *
@@ -58,6 +59,13 @@ public class ManageException extends Exception{
 	 * RuntimeExceptionの情報を管理する
 	 */
 	public ManageException(String errorMessageId, RuntimeException e) {
+		this.errorMessageId = errorMessageId;
+	}
+	
+	/*
+	 * SQLIntegrityConstraintViolationExceptionの情報を管理する
+	 */
+	public ManageException(String errorMessageId, SQLIntegrityConstraintViolationException e) {
 		this.errorMessageId = errorMessageId;
 	}
 	

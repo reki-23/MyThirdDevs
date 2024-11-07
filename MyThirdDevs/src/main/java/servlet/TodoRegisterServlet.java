@@ -25,6 +25,7 @@ import common.TodoInfo;
 import dao.EditDataDao;
 import exception.ManageException;
 import exception.PropertiesFileNotFoundException;
+import model.DataValidator;
 import model.ReadFile;
 
 /**
@@ -86,31 +87,14 @@ public class TodoRegisterServlet extends HttpServlet{
 				displayRegisteredTask(request, response);
 			}
 			
-		}catch(Exception e) {
-			
-		}
-	}
-	
-	//タスク一覧取得
-	private static void displayRegisteredTask(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-		try {
-			List<TodoInfo> todoList = EditDataDao.getRegisteredTask();
-			request.setAttribute("todoList", todoList);
-			RequestDispatcher dispatcher = request.getRequestDispatcher("todo/todoList.jsp");
-			dispatcher.forward(request, response);			
 		}catch(ManageException e) {
-			CommonMessage commonMessage = new CommonMessage();
-			String errorMessage = commonMessage.getCommonMessage(e.getMessageId());
-			request.setAttribute("errorMessage", errorMessage);
+			errorHandle(request, response, e);
 		}
-		
-		//エラー専用ページに遷移させ、メッセージ表示
 	}
 	
 	//一括登録
 	private void bulkRegisterTask(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-		System.out.println("一括登録");
-		
+		//一括であることを表す
 		isBulkJudge = true;
 		//ファイルの実体を取得
 		Part filePart = request.getPart("csvFile");
@@ -141,19 +125,14 @@ public class TodoRegisterServlet extends HttpServlet{
 			//登録した件数をプロパティファイルから読み込んだメッセージとして出力できるようにする
 			registerMessage = MessageFormat.format(prop.getProperty("bulkRegister.submit"), bulkRegisteredCount);
 			request.setAttribute("registerMessage", registerMessage);
+			displayRegisteredTask(request, response);
 		}catch(ManageException e) {
-			CommonMessage commonMessage = new CommonMessage();
-			String errorMessage = commonMessage.getCommonMessage(e.getMessageId());
-			request.setAttribute("errorMessage", errorMessage);
-		}
-		displayRegisteredTask(request, response);
-		
+			errorHandle(request, response, e);
+		}		
 	}
 	
 	//個別登録
 	private void individualRegisterTask(HttpServletRequest request, HttpServletResponse response, Properties prop) throws ServletException, IOException{
-		System.out.println("個別登録");
-		
 		//タスク登録時のエラーメッセージ
 		List<String> errorMessageList = new ArrayList<>();
 		
@@ -163,7 +142,11 @@ public class TodoRegisterServlet extends HttpServlet{
 		if(strId == null || strId.isBlank()) {
 			errorMessageList.add(prop.getProperty("id.error"));
 		}else {
-			tempId = Integer.parseInt(strId); //ここ例外処理必要
+			try {
+				tempId = DataValidator.returnValidId(strId);				
+			}catch(ManageException e) {
+				errorHandle(request, response, e);
+			}
 		}
 		int id = tempId;
 		String status = request.getParameter("status");
@@ -192,6 +175,8 @@ public class TodoRegisterServlet extends HttpServlet{
 		//エラーの場合、エラーメッセージとともにtodoList.jspへ
 		if(errorMessageList.size() > 0) {
 			request.setAttribute("errorMessageList", errorMessageList);
+			//一覧表示
+			displayRegisteredTask(request, response);
 		}else {
 			//DB登録クラスに取得したパラメータを渡す
 			List<TodoInfo> newTaskList = new ArrayList<TodoInfo>();
@@ -204,18 +189,38 @@ public class TodoRegisterServlet extends HttpServlet{
 				todo.creator = creator;
 			}).build());
 			try {
-				//登録処理・登録完了メッセージ
+				//登録処理
 				EditDataDao.registerNewTask(newTaskList, isBulkJudge);
+				registerMessage = prop.getProperty("register.submit");
+				request.setAttribute("registerMessage", registerMessage);
+				displayRegisteredTask(request, response);
 			}catch(ManageException e) {
-				CommonMessage commonMessage = new CommonMessage();
-				String errorMessage = commonMessage.getCommonMessage(e.getMessageId());
-				request.setAttribute("errorMessage", errorMessage);
-			}
-			registerMessage = prop.getProperty("register.submit");
-			request.setAttribute("registerMessage", registerMessage);
-			
+				errorHandle(request, response, e);
+			}			
 		}
-		//一覧表示
+	}
+	
+	//タスク一覧取得
+	private static void displayRegisteredTask(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+		try {
+			List<TodoInfo> todoList = EditDataDao.getRegisteredTask();
+			request.setAttribute("todoList", todoList);
+			RequestDispatcher dispatcher = request.getRequestDispatcher("todo/todoList.jsp");
+			dispatcher.forward(request, response);			
+		}catch(ManageException e) {
+			CommonMessage commonMessage = new CommonMessage();
+			String errorMessage = commonMessage.getCommonMessage(e.getMessageId());
+			request.setAttribute("errorMessage", errorMessage);
+		}
+		
+		//エラー専用ページに遷移させ、メッセージ表示
+	}
+	
+	//ManageExceptionがcatchされた場合の処理
+	private static void errorHandle(HttpServletRequest request, HttpServletResponse response, ManageException e) throws ServletException, IOException {
+		CommonMessage commonMessage = new CommonMessage();
+		String errorMessage = commonMessage.getCommonMessage(e.getMessageId());
+		request.setAttribute("errorMessage", errorMessage);
 		displayRegisteredTask(request, response);
 	}
 	
