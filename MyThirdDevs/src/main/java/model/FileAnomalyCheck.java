@@ -2,12 +2,9 @@ package model;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import exception.FileOverSizeException;
 import exception.InappropriateFileException;
@@ -32,7 +29,7 @@ public class FileAnomalyCheck {
 	 * 最大50MBまで読みこめるようにする
 	 */
 	private static final int FILE_MAX_SIZE = 52428800;
-	private static final String header = "No,ステータス,分類,タスク名,タスク概要,作成日時,更新日時,作成者";
+	private static final String header = "No,ステータス,分類,タスク名,タスク概要,作成者";
 	
 	public void anomalyCheck(String fileName, Path importedFile) throws ManageException{
 		
@@ -49,7 +46,7 @@ public class FileAnomalyCheck {
 			
 			//ファイルのサイズが0かどうかを確認
 			if(Files.size(importedFile) == 0) {
-				throw new ManageException("EM010", new NoElementsOnFileException());
+				throw new ManageException("EM014", new NoElementsOnFileException());
 			}
 			
 			//ファイルのサイズが最大サイズを超えていないかを確認
@@ -57,17 +54,18 @@ public class FileAnomalyCheck {
 				throw new ManageException("EM012", new FileOverSizeException());
 			}
 			
-			/*
-			 * ファイル内に何も存在していない場合
-			 * ファイル内にヘッダーしか存在しない場合
-			 */
-			try(BufferedReader br = new BufferedReader(new FileReader(fileName))){
-				List<String> lines = br.lines().collect(Collectors.toList());
-				if(lines == null || lines.isEmpty()) {
-					throw new ManageException("EM014", new NoElementsOnFileException());
-				}
-				if(lines.size() == 1 && lines.get(0).equals(header)) {
+			
+			try(BufferedReader br = Files.newBufferedReader(importedFile)){
+				String firstRow = br.readLine(); //1行目
+				String secondRow = br.readLine(); //2行目
+				//ヘッダーしか存在していない場合
+				if(secondRow == null) {
 					throw new ManageException("EM010", new NoElementsOnFileException());
+				}
+				
+				//ヘッダーが適切ではない場合
+				if(!firstRow.equals(header)) {
+					throw new ManageException("EM014", new InappropriateFileException());
 				}
 			}
 		

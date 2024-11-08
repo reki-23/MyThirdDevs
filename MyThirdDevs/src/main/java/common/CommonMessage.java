@@ -69,6 +69,7 @@ public class CommonMessage {
 		 * InappropriateFileException時のメッセージ
 		 */
 		commonMessages.put("EM013", "ID013:CSVファイルを選択してください。");
+		commonMessages.put("EM015", "ID015:ヘッダーが適切ではありません。");
 	}
 	
 	
