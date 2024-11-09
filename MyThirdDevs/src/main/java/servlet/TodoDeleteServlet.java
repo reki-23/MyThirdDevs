@@ -39,7 +39,7 @@ public class TodoDeleteServlet extends HttpServlet {
 			//一括削除時の値
 			String bulkDel = request.getParameter("bulkDel");
 			//選択されたタスクidを取得=個別削除時
-			String selectedIds = request.getParameter("selectedIds");
+			String[] selectedIds = request.getParameterValues("selectedIds");
 			
 			//一括削除処理
 			if(bulkDel != null) {
@@ -49,10 +49,10 @@ public class TodoDeleteServlet extends HttpServlet {
 			}
 			
 			//個別削除処理
-			if(selectedIds != null && !selectedIds.isEmpty()){
-				String[] selectedId = selectedIds.split(",");
+			if(selectedIds != null && selectedIds.length != 0) {
 				List<Integer> deletedIdList = Arrays
-						.stream(selectedId)
+						.stream(selectedIds)
+						.flatMap(id -> Arrays.stream(id.split(",")))
 						.map(Integer::valueOf)
 						.collect(Collectors.toList());
 				boolean individualDeleteJudge = EditDataDao.individualDeleteTask(deletedIdList);
@@ -76,6 +76,7 @@ public class TodoDeleteServlet extends HttpServlet {
 			CommonMessage commonMessage = new CommonMessage();
 			String errorMessage = commonMessage.getCommonMessage(e.getMessageId());
 			request.setAttribute("errorMessage", errorMessage);
+			e.printStackTrace();
 		}
 		
 		//エラー専用ページに遷移させ、メッセージ表示
