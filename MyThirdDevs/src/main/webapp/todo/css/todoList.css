@@ -110,11 +110,11 @@ input[type="file"]{
 	width:100%;
 }
 
-.delete-bulk-list input[type="submit"]{
+.delete-bulk-list input[type="submit"], .delete-individual-list input[type="submit"]{
 	background-color: red; 
     color: white;              
     padding: 8px 13px;
-    width: 150px;  
+    width: 180px;  
     font-size: 13px;           
     border: none;              
     border-radius: 10px;       
@@ -122,7 +122,7 @@ input[type="file"]{
     margin-right:10px;
 }
 
-.delete-bulk-list input[type="submit"]:hover{
+.delete-bulk-list input[type="submit"]:hover, .delete-individual-list input[type="submit"]:hover{
 	opacity: 0.7;
 }
 
@@ -131,6 +131,13 @@ input[type="file"]{
 	justify-content:flex-end;
 	margin-top: -60px;
 	margin-bottom:20px;
+}
+
+.delete-individual-list{
+	display:flex;
+	justify-content:flex-end;
+	margin-top: -110px;
+	margin-bottom:80px;
 }
 
 /* CSV出力スタイル */

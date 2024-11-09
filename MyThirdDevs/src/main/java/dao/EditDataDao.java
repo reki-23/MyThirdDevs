@@ -137,21 +137,18 @@ public class EditDataDao {
 		try(Connection con = dbc.getConnection();
 			PreparedStatement ps = con.prepareStatement(individualDeleteSql)){
 				
-			/*
-			 * 押下されたタスクのIDを受取り削除する処理
-			 */
-			//複数選択、1つ選択の場合、削除
+			//押下されたタスクのIDを受取り削除する処理
 			for(Integer deletedId : deletedIdList) {
 				ps.setInt(1, deletedId);
 				ps.addBatch();
 			}
 			//一括削除
-			ps.executeBatch();
-			if(ps.executeBatch().length > 0) {
+			int[] indiDelCount = ps.executeBatch();
+			if(indiDelCount.length > 0) {
 				return true;
 			}else {
 				return false;
-			}	
+			}		
 		}catch(SQLException e) {
 			//あとでかく
 			throw new ManageException("EM003", e);

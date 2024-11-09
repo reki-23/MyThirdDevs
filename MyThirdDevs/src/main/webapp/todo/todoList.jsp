@@ -122,10 +122,21 @@
 			</form>
 			<div id="register_mask"></div>
 			
-			<!-- 削除ボタン -->
+			<!-- 個別削除ボタン -->
+			<div class="delete-individual-list">
+				<form action="${pageContext.request.contextPath}/TodoDeleteServlet" method="POST">
+					<input type="submit" id="indi_submit" value="選択したタスクを削除する" disabled>
+					<!-- 選択されたチェックボックスのタスクidをこの削除ボタンが押されたときにサーブレットに送信する -->
+					<input type="hidden" id="selectedIds" name="selectedIds" value="">
+				</form>
+			</div>
+			
+			
+			<!-- 一括削除ボタン -->
 			<div class="delete-bulk-list">
 				<form action="${pageContext.request.contextPath}/TodoDeleteServlet" method="POST">
 					<input type="submit" value="一括削除する">
+					<input type="hidden" name="bulkDel" value="bulkDel">
 				</form>
 			</div>
 			
@@ -158,7 +169,12 @@
 									<td><%= info.getCreateDateTime() %></td>
 									<td><%= info.getUpdateDateTime() %></td>
 									<td><%= info.getCreator() %></td>
-									<td>□</td> <!-- 実際はチェックボックスかラジオボタン -->
+									<td>
+										<!-- 個別削除ボタン＝削除識別子は一意であるタスクNoと同値とする -->
+										<form action="${pageContext.request.contextPath}/TodoDeleteServlet" method="POST">
+											<input type="checkbox" name="individualDeleteId" value="<%= info.getId() %>" onchange="submitFormOnCheck(this)">
+										</form>
+									</td>
 								</tr>
 						<%    
 								}
