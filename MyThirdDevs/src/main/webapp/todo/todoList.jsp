@@ -76,12 +76,12 @@
 			
 			
 			<!--　タスク一括登録ボタン -->
-			<form action="${pageContext.request.contextPath}/TodoRegisterServlet" method="POST" enctype="multipart/form-data"　onsubmit="return validateForm();" >
+			<form action="${pageContext.request.contextPath}/TodoRegisterServlet" method="POST" enctype="multipart/form-data"　onsubmit="validateFileUpload();" >
 				<div class="bulk-register-list">
-					<input type="submit" name="bulk_register" value="一括登録する">
+					<input type="submit" id="bulk_register" name="bulk_register" value="一括登録する" disabled>
 				</div>
-				<input type="file" id ="csvFile" name="csvFile" accept=".csv" onchange="validateFileUpload()">
-				<input type="hidden" id="fileName" name="fileName">
+				<input type="file" id ="csvFile" name="csvFile" accept=".csv" onchange="validateForm()">
+				<input type="hidden" id="fileName" name="fileName" value="">
 			</form>
 	
 			
@@ -98,6 +98,35 @@
 					<input type="hidden" id="export-csv" name="export-csv">
 				</div>
 			</form>
+			
+			
+			<!-- タスクフィルター付きエクスポートボタン -->
+			<div class="export-filter-csv">
+				<button id="export-filter-csv-button">フィルターをかける</button>			
+			</div>
+			
+			
+			<!-- タスクフィルターモーダル -->
+			<form action="${pageContext.request.contextPath}/TodoExportServlet" method = "POST">
+				<section id = "export-csv-filter">
+		   			<h1>フィルターをかけたいデータを入力してください。</h1>
+		   			id:<input type = "text" name = "id" id="id"><br>
+		   			ステータス:<select id="status" name="status">
+					        <option value="未着手">未着手</option>
+					        <option value="対応中">対応中</option>
+					        <option value="完了">完了</option>
+					        <option value="取下げ">取下げ</option>
+					        <option value="保留">保留</option>
+					    	</select><br>
+		   			種類:<input type = "text" name = "classification"><br>
+		   			タスク名:<input type = "text" name = "task"><br>
+		   			タスク詳細:<input type = "text" name = "description"><br>
+		   			作成者:<input type = "text" name = "creator"><br>
+		   			<input type = "submit" id = "filter_submit" name = "filter_submit" value = "CSV出力する">
+					<input type = "submit" id = "filter_cancel" name = "filter_cancel" value = "キャンセル">
+		   		</section>
+			</form>
+			<div id="export-csv-filter-mask"></div>
 			
 			
 			<!-- タスク登録モーダル -->
@@ -121,6 +150,7 @@
 		   		</section>
 			</form>
 			<div id="register_mask"></div>
+			
 			
 			<!-- 個別削除ボタン -->
 			<div class="delete-individual-list">

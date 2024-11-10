@@ -11,19 +11,19 @@ import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import common.TodoInfo;
 import dao.EditDataDao;
+import exception.ManageException;
 import model.WriteToFile;
 
 /**
  * Servlet implementation class TodoExportServlet
  */
 @WebServlet("/TodoExportServlet")
-public class TodoExportServlet extends HttpServlet {
+public class TodoExportServlet extends TodoServlet {
 	private static final long serialVersionUID = 1L;
        
     
@@ -40,8 +40,35 @@ public class TodoExportServlet extends HttpServlet {
 			response.setCharacterEncoding("UTF-8");
 			response.setContentType("text/html; charset=UTF-8");
 			
+			//フィルターなしのときの値を取得
+			String export_csv = request.getParameter("export_csv");
+			//フィルタ―ありのときの値を取得
+			String export_filter_csv = request.getParameter("export-filter-csv");
+			
+			//ファイルへの書き込みクラス
 			WriteToFile writter = new WriteToFile();
 			
+			//フィルターをかけない場合
+			if(export_csv != null) {
+				exportCsvFile(request, response, writter);			
+			}
+			
+			//フィルターをかける場合
+			if(export_filter_csv != null) {
+				exportCsvFileWithFilter(request, response, writter);
+			}
+				
+			
+		}catch(Exception e) {
+			
+		}
+	}
+	
+	
+	//フィルターなしでcsv出力する
+	private void exportCsvFile(HttpServletRequest request, HttpServletResponse response, WriteToFile writter) throws ServletException, IOException{
+		
+		try {
 			//現在登録されているタスクを取得
 			List<TodoInfo> registeredTaskList = EditDataDao.getRegisteredTask();
 			
@@ -66,13 +93,51 @@ public class TodoExportServlet extends HttpServlet {
 				ServletOutputStream out = response.getOutputStream()){
 				in.transferTo(out);
 				out.flush();
-			}
-				
+			}			
+		}catch(ManageException e) {
+			errorHandle(request, response, e);
+		}
+	}
+	
+	
+	//フィルタ―ありでcsv出力する
+	private void exportCsvFileWithFilter(HttpServletRequest request, HttpServletResponse response, WriteToFile writter) throws ServletException, IOException {
+		
+		try {
+			//フィルターの各値を取得
+			String id = request.getParameter("id");
+			String status = request.getParameter("status");
+			String classification = request.getParameter("classification");
+			String task = request.getParameter("task");
+			String description = request.getParameter("description");
+			String creator = request.getParameter("description");
 			
-		}catch(Exception e) {
+			//
+			
+		}catch(EnumConstantNotPresentException e) {
 			
 		}
-		
 	}
-
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

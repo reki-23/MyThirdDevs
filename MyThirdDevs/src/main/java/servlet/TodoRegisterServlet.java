@@ -34,7 +34,7 @@ import model.ReadFile;
  */
 @WebServlet("/TodoRegisterServlet")
 @MultipartConfig
-public class TodoRegisterServlet extends HttpServlet{
+public class TodoRegisterServlet extends TodoServlet{
 	private static final long serialVersionUID = 1L;
    
 	//プロパティファイルから読みこむメッセージ
@@ -204,29 +204,4 @@ public class TodoRegisterServlet extends HttpServlet{
 			}			
 		}
 	}
-	
-	//タスク一覧取得
-	private static void displayRegisteredTask(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-		try {
-			List<TodoInfo> todoList = EditDataDao.getRegisteredTask();
-			request.setAttribute("todoList", todoList);
-			RequestDispatcher dispatcher = request.getRequestDispatcher("todo/todoList.jsp");
-			dispatcher.forward(request, response);			
-		}catch(ManageException e) {
-			CommonMessage commonMessage = new CommonMessage();
-			String errorMessage = commonMessage.getCommonMessage(e.getMessageId());
-			request.setAttribute("errorMessage", errorMessage);
-		}
-		
-		//エラー専用ページに遷移させ、メッセージ表示
-	}
-	
-	//ManageExceptionがcatchされた場合の処理
-	private static void errorHandle(HttpServletRequest request, HttpServletResponse response, ManageException e) throws ServletException, IOException {
-		CommonMessage commonMessage = new CommonMessage();
-		String errorMessage = commonMessage.getCommonMessage(e.getMessageId());
-		request.setAttribute("errorMessage", errorMessage);
-		displayRegisteredTask(request, response);
-	}
-	
 }

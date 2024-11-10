@@ -153,7 +153,23 @@ input[type="file"]{
     margin-left:10px;
 }
 
+.export-filter-csv button{
+	background-color: #3c02a1; 
+    color: white;              
+    padding: 8px 13px;
+    width: 150px;  
+    font-size: 13px;           
+    border: none;              
+    border-radius: 10px;       
+    cursor: pointer;
+    margin-left:10px;
+}
+
 .export-csvfile input[type="submit"]:hover{
+	opacity: 0.7;
+}
+
+.export-filter-csv button:hover{
 	opacity: 0.7;
 }
 
@@ -162,6 +178,12 @@ input[type="file"]{
 	width: 295px;
 	display: inline-block; /* 横並びにする */
     vertical-align: middle; /* 上下中央に揃える */
+}
+
+.export-filter-csv{
+	margin-top:-20px;
+	margin-left:170px;
+	width: 295px;
 }
 
 /* 失敗メッセージ用のスタイル */

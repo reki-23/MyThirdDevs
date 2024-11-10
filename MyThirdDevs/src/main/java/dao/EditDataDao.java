@@ -125,7 +125,6 @@ public class EditDataDao {
 			}
 			
 		}catch(SQLException e) {
-			//あとでかく
 			throw new ManageException("EM003", e);
 		}
 	}
@@ -154,5 +153,13 @@ public class EditDataDao {
 			throw new ManageException("EM003", e);
 		}
 	}
+	
+	
+	//フィルターをかけて一覧取得
+	public static List<TodoInfo> getFilteredTaskList(){
+		
+		return null;
+	}
+	
 	
 }
