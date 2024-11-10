@@ -156,10 +156,58 @@ public class EditDataDao {
 	
 	
 	//フィルターをかけて一覧取得
-	public static List<TodoInfo> getFilteredTaskList(){
+	public static List<TodoInfo> getFilteredTaskList(TodoInfo filteredTask) throws ManageException{
 		
-		return null;
+		//フィルター後のデータを格納するリスト
+		List<TodoInfo> filteredTaskList = new ArrayList<>();
+		try(Connection con = dbc.getConnection();
+			PreparedStatement ps = con.prepareStatement(getSql);
+			ResultSet rs = ps.executeQuery();){
+			
+			boolean isMatchTask = false;
+			
+			int paramId = filteredTask.getId();
+			String paramStatus = filteredTask.getStatus();
+			String paramClassification = filteredTask.getClassification();
+			String paramTask = filteredTask.getTask();
+			String paramDescription = filteredTask.getDescription();
+			LocalDateTime paramCreateDateTime = filteredTask.getCreateDateTime();
+			LocalDateTime paramUpdateDateTime = filteredTask.getUpdateDateTime();
+			String paramCreator = filteredTask.getCreator();
+			
+			while(rs.next()) {
+				int id = rs.getInt("id");
+				String status = rs.getString("status");
+				String classification = rs.getString("classification");
+				String task = rs.getString("task");
+				String description = rs.getString("description");
+				LocalDateTime createDateTime = rs.getTimestamp("createDateTime").toLocalDateTime();
+				LocalDateTime updateDateTime = rs.getTimestamp("updateDateTime").toLocalDateTime();
+				String creator = rs.getString("creator");
+
+				isMatchTask = paramId == id || paramStatus.equals(status) || paramClassification.equals(classification) ||
+							  paramTask.equals(task) || paramDescription.equals(description) || paramCreateDateTime.equals(createDateTime) ||
+							  paramUpdateDateTime.equals(updateDateTime) || paramCreator.equals(creator);
+				
+				if(isMatchTask) {
+					filteredTaskList.add(new TodoInfo.Builder().with(todo -> {
+						todo.id = id;
+						todo.status = status;
+						todo.classification = classification;
+						todo.task = task;
+						todo.description = description;
+						todo.createDateTime = createDateTime;
+						todo.updateDateTime = updateDateTime;
+						todo.creator = creator;
+					}).build());
+				}
+			}
+			
+			return filteredTaskList;
+			
+			
+		}catch(SQLException e) {
+			throw new ManageException("EM003", e);
+		}
 	}
-	
-	
 }

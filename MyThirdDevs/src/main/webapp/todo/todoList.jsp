@@ -121,6 +121,8 @@
 		   			種類:<input type = "text" name = "classification"><br>
 		   			タスク名:<input type = "text" name = "task"><br>
 		   			タスク詳細:<input type = "text" name = "description"><br>
+		   			作成日時:<input type = "text" name = "createDateTime"><br>
+		   			更新日時<input type = "text" name = "updateDateTime"><br>
 		   			作成者:<input type = "text" name = "creator"><br>
 		   			<input type = "submit" id = "filter_submit" name = "filter_submit" value = "CSV出力する">
 					<input type = "submit" id = "filter_cancel" name = "filter_cancel" value = "キャンセル">
