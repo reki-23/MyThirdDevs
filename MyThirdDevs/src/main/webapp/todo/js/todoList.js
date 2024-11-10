@@ -62,6 +62,64 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
+//タスクフィルターモーダル
+document.addEventListener('DOMContentLoaded', () => {
+  const export_filter_csv_button = document.querySelector('#export-filter-csv-button');
+  const filter_cancel = document.querySelector('#filter_cancel');
+  const export_csv_filter = document.querySelector('#export-csv-filter');
+  const export_csv_filter_mask = document.querySelector('#export-csv-filter-mask');
+
+  const showKeyframes = {
+    opacity: [0, 1],
+    visibility: 'visible',
+  };
+  const hideKeyframes = {
+    opacity: [1, 0],
+    visibility: 'hidden',
+  };
+  const options = {
+    duration: 200,
+    easing: 'ease',
+    fill: 'forwards',
+  };
+
+  // モーダルウィンドウを開く
+  export_filter_csv_button.addEventListener('click', () => {
+    export_csv_filter.animate(showKeyframes, options);
+    export_csv_filter_mask.animate(showKeyframes, options);
+  });
+
+  // モーダルウィンドウを閉じる
+  filter_cancel.addEventListener('click', () => {
+    export_csv_filter.animate(hideKeyframes, options);
+    export_csv_filter_mask.animate(hideKeyframes, options);
+  });
+});
+
+
+//CSV出力ボタンを押下したらタスクフィルターモーダルを非表示にする
+function hiddenFilterModal(){
+	const export_csv_filter = document.querySelector('#export-csv-filter');
+	const export_csv_filter_mask = document.querySelector('#export-csv-filter-mask');
+
+  	const hideKeyframes = {
+    	opacity: [1, 0],
+    	visibility: 'hidden',
+  	};
+
+  	const options = {
+    	duration: 200,
+    	easing: 'ease',
+   		fill: 'forwards',
+  	};
+
+  	// モーダルウィンドウを非表示にする
+	export_csv_filter.animate(hideKeyframes, options);
+	export_csv_filter_mask.animate(hideKeyframes, options);
+ 	
+}
+
+
 //タスク個別削除時のチェックボックスの制御
 let selectedTaskIds = [];
 //チェックボックスの状態を切り替え

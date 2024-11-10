@@ -1,5 +1,7 @@
 package model;
 
+import java.time.LocalDateTime;
+
 import exception.InvalidDataExistsException;
 import exception.ManageException;
 
@@ -21,6 +23,10 @@ public class DataValidator{
 	//タスクNo.が自然数かどうか判定
 	public static int returnValidId(String field) throws ManageException{
 		try {
+			//そもそもidがnullやブランクの場合、0を固定で返す
+			if(field == null || field.isBlank()) {
+				return 0;
+			}
 			int id = Integer.parseInt(field);
 			if(id < 0) {
 				throw new InvalidDataExistsException();
@@ -41,6 +47,16 @@ public class DataValidator{
 			throw new ManageException("EM007", new InvalidDataExistsException());
 		}
 		return field;
+	}
+	
+	//日付けのフォーマットチェック＝登録時は使用しないが、フィルターをかけてエクスポートする際に使用する
+	public static LocalDateTime returnValidDateTime(String dateTime) throws ManageException{
+		if(dateTime == null || dateTime.isBlank()) {
+			//dateTimeがnullの場合、適当に遠い過去の時間を設定しておく
+			return LocalDateTime.MIN;
+		}else {
+			return LocalDateTime.parse(dateTime);
+		}
 	}
 	
 }

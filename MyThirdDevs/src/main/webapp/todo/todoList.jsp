@@ -110,8 +110,9 @@
 			<form action="${pageContext.request.contextPath}/TodoExportServlet" method = "POST">
 				<section id = "export-csv-filter">
 		   			<h1>フィルターをかけたいデータを入力してください。</h1>
-		   			id:<input type = "text" name = "id" id="id"><br>
+		   			id:<input type = "text" name = "filter_id" id="filter_id"><br>
 		   			ステータス:<select id="status" name="status">
+		   					<option value=""></option>
 					        <option value="未着手">未着手</option>
 					        <option value="対応中">対応中</option>
 					        <option value="完了">完了</option>
@@ -124,7 +125,7 @@
 		   			作成日時:<input type = "text" name = "createDateTime"><br>
 		   			更新日時<input type = "text" name = "updateDateTime"><br>
 		   			作成者:<input type = "text" name = "creator"><br>
-		   			<input type = "submit" id = "filter_submit" name = "filter_submit" value = "CSV出力する">
+		   			<input type = "submit" id = "filter_submit" name = "filter_submit" value = "CSV出力する" onclick="hiddenFilterModal()">
 					<input type = "submit" id = "filter_cancel" name = "filter_cancel" value = "キャンセル">
 		   		</section>
 			</form>
@@ -137,6 +138,7 @@
 		   			<h1>登録したいタスクの詳細を入力してください。</h1>
 		   			id:<input type = "text" name = "id" id="id"><br>
 		   			ステータス:<select id="status" name="status">
+		   					<option value=""></option>
 					        <option value="未着手">未着手</option>
 					        <option value="対応中">対応中</option>
 					        <option value="完了">完了</option>

@@ -43,9 +43,11 @@ public class TodoExportServlet extends TodoServlet {
 			response.setContentType("text/html; charset=UTF-8");
 			
 			//フィルターなしのときの値を取得
-			String export_csv = request.getParameter("export_csv");
+			String export_csv = request.getParameter("export-csv");
 			//フィルタ―ありのときの値を取得
-			String export_filter_csv = request.getParameter("export-filter-csv");
+			String filter_submit = request.getParameter("filter_submit");
+			//フィルタ―キャンセルの場合の値を取得
+			String filter_cancel = request.getParameter("filter_cancel");
 			
 			//ファイルへの書き込みクラス
 			WriteToFile writter = new WriteToFile();
@@ -62,13 +64,18 @@ public class TodoExportServlet extends TodoServlet {
 			}
 			
 			//フィルターをかける場合
-			if(export_filter_csv != null) {
+			if(filter_submit != null) {
 				exportCsvFileWithFilter(request, response, writter, downloadDir);
+			}
+			
+			//キャンセルの場合
+			if(filter_cancel != null) {
+				displayRegisteredTask(request, response);
 			}
 			
 			
 		}catch(Exception e) {
-			
+			e.printStackTrace();
 		}
 	}
 	
@@ -108,16 +115,19 @@ public class TodoExportServlet extends TodoServlet {
 		
 		try {
 			//フィルターの各値を取得
-			String tmpId = request.getParameter("id");
+			String tmpId = request.getParameter("filter_id");
 			String status = request.getParameter("status");
 			String classification = request.getParameter("classification");
 			String task = request.getParameter("task");
 			String description = request.getParameter("description");
-			LocalDateTime createDateTime = LocalDateTime.parse(request.getParameter("createDateTime"));
-			LocalDateTime updateDateTime = LocalDateTime.parse(request.getParameter("updateDateTime"));
+			String tmpCreateDateTime = request.getParameter("createDateTime");
+			String tmpUpdateDateTime = request.getParameter("updateDateTime");
 			String creator = request.getParameter("creator");
 			
+			//Stringからの型変換チェック
 			int id = DataValidator.returnValidId(tmpId);
+			LocalDateTime createDateTime = DataValidator.returnValidDateTime(tmpCreateDateTime);
+			LocalDateTime updateDateTime = DataValidator.returnValidDateTime(tmpUpdateDateTime);
 			
 			//ダウンロードしたいファイルへのパス
 			String downloadFileToPath = downloadDir.resolve("task_filter.csv").toString();
@@ -137,13 +147,13 @@ public class TodoExportServlet extends TodoServlet {
 			//フィルター後のデータを取得
 			List<TodoInfo> filteredTaskList = EditDataDao.getFilteredTaskList(filteredTask);
 			
-			//フィルター後のデータを書き込みクラスに渡す
+			//フィルター後のデータを書き込むクラスに渡す
 			writter.writeToCsv(downloadFileToPath, filteredTaskList);
 			
 			//レスポンスヘッダーの設定
 			File downloadedFile = new File(downloadFileToPath);
 			response.setContentType("application/csv");
-			response.setHeader("Content-Disposition", "attachment; filename=\"" + "task.csv" + "\"");
+			response.setHeader("Content-Disposition", "attachment; filename=\"" + "task_filter.csv" + "\"");
 			response.setContentLengthLong(downloadedFile.length());
 			//ダウンロードするファイルを読み込み、出力ストリームを生成し一括書き込み後にコミット
 			try(FileInputStream in = new FileInputStream(downloadedFile);

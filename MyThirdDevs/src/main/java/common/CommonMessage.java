@@ -54,6 +54,7 @@ public class CommonMessage {
 		 */
 		commonMessages.put("EM010", "ID010:ファイル内にデータが存在しません。ファイルを選択し直してください。");
 		commonMessages.put("EM014", "ID014:ファイルにはヘッダーが必要です。ファイルを選択し直してください。");
+		commonMessages.put("EM016", "ID016:条件に一致するデータはありません。");
 		
 		/*
 		 * FileNotFoundException時のメッセージ

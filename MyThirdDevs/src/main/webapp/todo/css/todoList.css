@@ -270,8 +270,8 @@ input[type="file"]{
 	text-decoration:underline;
 }
 
-/*タスク登録モーダル*/
-#register_task {
+/*タスク登録モーダル ・　フィルタ―CSV出力モーダル*/
+#register_task, #export-csv-filter {
     position: fixed;
     width: 650px;
     padding: 20px;
@@ -289,18 +289,19 @@ input[type="file"]{
     visibility:hidden;
 }
 
-#register_task h1 {
+#register_task h1, #export-csv-filter h1{
     font-size: 17px;
     color: #333;
     margin-bottom: 15px;
     text-align: center;
 }
 
-#register_task #id{
+#register_task #id, #export-csv-filter #filter_id{
 	width:100px;
 }
 
-#register_task input[type="text"] {
+#register_task input[type="text"],
+#export-csv-filter input[type="text"]{
     width: 100%;
     padding: 8px;
     margin-bottom: 10px;
@@ -309,7 +310,8 @@ input[type="file"]{
     box-sizing: border-box;
 }
 
-#register_task input[type="submit"] {
+#register_task input[type="submit"],
+#export-csv-filter input[type="submit"]{
     width: 100%;
     padding: 8px;
     margin: 5px 1%;
@@ -320,19 +322,22 @@ input[type="file"]{
     cursor: pointer;
 }
 
-#register_task #register_cancel {
+#register_task #register_cancel,
+#export-csv-filter #filter_cancel{
     background-color: #d9534f;
 }
 
-#register_task #register_submit {
+#register_task #register_submit,
+#export-csv-filter #filter_submit{
     background-color: #21aaff;
 }
 
-#register_task input[type="submit"]:hover {
+#register_task input[type="submit"]:hover,
+#export-csv-filter input[type="submit"]:hover{
     opacity: 0.7;
 }
 
-#register_mask{
+#register_mask, #export-csv-filter-mask{
 	position: fixed;
     top: 0;
     left: 0;
@@ -342,6 +347,7 @@ input[type="file"]{
     z-index:10;
     visibility:hidden;
 }
+
 
 /* フッターを画面の下に配置するスタイル */
 footer {

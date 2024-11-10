@@ -12,6 +12,7 @@ import java.util.List;
 
 import common.TodoInfo;
 import exception.ManageException;
+import exception.NoElementsOnFileException;
 
 public class EditDataDao {
 	
@@ -201,6 +202,11 @@ public class EditDataDao {
 						todo.creator = creator;
 					}).build());
 				}
+			}
+			
+			//1つも条件に一致しなかった場合
+			if(filteredTaskList.size() == 0) {
+				throw new ManageException("EM016", new NoElementsOnFileException());
 			}
 			
 			return filteredTaskList;
