@@ -23,9 +23,9 @@ public class DataValidator{
 	//タスクNo.が自然数かどうか判定
 	public static int returnValidId(String field) throws ManageException{
 		try {
-			//そもそもidがnullやブランクの場合、0を固定で返す
+			//そもそもidがnullやブランクの場合、-1を固定で返す
 			if(field == null || field.isBlank()) {
-				return 0;
+				return -1;
 			}
 			int id = Integer.parseInt(field);
 			if(id < 0) {

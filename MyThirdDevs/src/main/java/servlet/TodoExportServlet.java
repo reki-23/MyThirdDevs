@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -124,10 +125,41 @@ public class TodoExportServlet extends TodoServlet {
 			String tmpUpdateDateTime = request.getParameter("updateDateTime");
 			String creator = request.getParameter("creator");
 			
+			//複数のパラメータを受取っている場合は、”または”ではなく”かつ”条件でフィルターをかける
+			List<String> paramsList = new ArrayList<>();
+			if(tmpId != null){
+				paramsList.add(tmpId);
+			}
+			if(status != null){
+				paramsList.add(status);
+			}
+			if(classification != null){
+				paramsList.add(classification);
+			}
+			if(task != null){
+				paramsList.add(task);
+			}
+			if(description != null){
+				paramsList.add(description);
+			}
+			if(tmpCreateDateTime != null){
+				paramsList.add(tmpCreateDateTime);
+			}
+			if(tmpUpdateDateTime != null){
+				paramsList.add(tmpUpdateDateTime);
+			}
+			if(creator != null){
+				paramsList.add(creator);
+			}
+			
 			//Stringからの型変換チェック
 			int id = DataValidator.returnValidId(tmpId);
 			LocalDateTime createDateTime = DataValidator.returnValidDateTime(tmpCreateDateTime);
 			LocalDateTime updateDateTime = DataValidator.returnValidDateTime(tmpUpdateDateTime);
+			
+			String invalidId = "-1";
+			String invalidCreateDateTime = LocalDateTime.MIN.toString();
+			String invalidUpdateDateTime = LocalDateTime.MIN.toString();
 			
 			//ダウンロードしたいファイルへのパス
 			String downloadFileToPath = downloadDir.resolve("task_filter.csv").toString();
@@ -144,8 +176,19 @@ public class TodoExportServlet extends TodoServlet {
 				todo.creator = creator;
 			}).build();
 			
+			//id,日付けがデフォルト値の場合、それらを空文字に置き換えリストを更新
+			if(paramsList.get(0).equals(invalidId)) {
+				paramsList.get(0).replace(invalidId, "");
+			}
+			if(paramsList.get(5).equals(invalidCreateDateTime)) {
+				paramsList.get(5).replace(invalidCreateDateTime, "");
+			}
+			if(paramsList.get(6).equals(invalidUpdateDateTime)) {
+				paramsList.get(6).replace(invalidUpdateDateTime, "");
+			}
+			
 			//フィルター後のデータを取得
-			List<TodoInfo> filteredTaskList = EditDataDao.getFilteredTaskList(filteredTask);
+			List<TodoInfo> filteredTaskList = EditDataDao.getFilteredTaskList(filteredTask, paramsList);
 			
 			//フィルター後のデータを書き込むクラスに渡す
 			writter.writeToCsv(downloadFileToPath, filteredTaskList);
@@ -167,25 +210,3 @@ public class TodoExportServlet extends TodoServlet {
 		}
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
