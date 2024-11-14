@@ -1,7 +1,5 @@
 package dao;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,9 +8,9 @@ import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import common.TodoInfo;
 import exception.ManageException;
@@ -25,9 +23,9 @@ public class EditDataDao {
 	private static final String deleteSql = "DELETE FROM todolist";
 	private static final String getSql = "SELECT * FROM todolist";
 	private static final String individualDeleteSql = "DELETE FROM todolist WHERE id = ?";
-	private static final String invalidId = "-1";
-	private static final String invalidCreateDateTime = LocalDateTime.MIN.toString();
-	private static final String invalidUpdateDateTime = LocalDateTime.MIN.toString();
+//	private static final String invalidId = "-1";
+//	private static final String invalidCreateDateTime = LocalDateTime.MIN.toString();
+//	private static final String invalidUpdateDateTime = LocalDateTime.MIN.toString();
 //	private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 	
 	
@@ -175,55 +173,52 @@ public class EditDataDao {
 			boolean isMatchTask = false;
 			
 			//送られてきた情報をリストに格納
-			List<TodoInfo> infoList = new ArrayList<>();
-			infoList.add(new TodoInfo.Builder().with(info -> {
-				info.id = filteredTask.getId();
-				info.status = filteredTask.getStatus();
-				info.classification = filteredTask.getClassification();
-				info.task = filteredTask.getTask();
-				info.description = filteredTask.getDescription();
-				info.createDateTime = filteredTask.getCreateDateTime();
-				info.updateDateTime = filteredTask.getUpdateDateTime();
-				info.creator = filteredTask.getCreator();
-			}).build());
+//			List<TodoInfo> infoList = new ArrayList<>();
+//			infoList.add(new TodoInfo.Builder().with(info -> {
+//				info.id = filteredTask.getId();
+//				info.status = filteredTask.getStatus();
+//				info.classification = filteredTask.getClassification();
+//				info.task = filteredTask.getTask();
+//				info.description = filteredTask.getDescription();
+//				info.createDateTime = filteredTask.getCreateDateTime();
+//				info.updateDateTime = filteredTask.getUpdateDateTime();
+//				info.creator = filteredTask.getCreator();
+//			}).build());
 			
-			//infoListの中で空ではない要素をMapとして保存する
-			Map<Integer, String> infoMap = new HashMap<>();
+//			infoList.forEach(System.out::println);
+			
+			
+			//paramsListの中で空ではない要素をMapとして保存する
+			Map<Integer, String> infoMap = new TreeMap<>();
 			for(int i = 0; i < paramsList.size(); i++) {
 				if(!paramsList.get(i).isBlank()) {
 					infoMap.put(i, paramsList.get(i));					
 				}
 			}
-//			infoMap.entrySet().stream().forEach(map -> System.out.println(map.getKey() + ", " + map.getValue()));
+//			infoMap.forEach((key, value) -> System.out.println(key + ", " + value));
 			
-			//Mapに保存された値を”かつ条件”として連結した文字列を返す
-			String andConditions = createConditionalExp(infoMap);
-			//文字列をifの条件式に変換する
-			String equals = "equals";
+			//TODO -------------------------------ここから上はOK------------------------------------------------------
 			
-			// TODO　以下ちゃんと直す必要あり
-			/*
-			Class<?> clazz = andConditions.getClass();
-			try {
-				Object obj = clazz.getMethod(equals, Object.class).invoke(andConditions);
-				System.out.println(obj);
-			} catch (IllegalAccessException e) {
-				// TODO 自動生成された catch ブロック
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
-				// TODO 自動生成された catch ブロック
-				e.printStackTrace();
-			} catch (NoSuchMethodException e) {
-				// TODO 自動生成された catch ブロック
-				e.printStackTrace();
-			} catch (SecurityException e) {
-				// TODO 自動生成された catch ブロック
-				e.printStackTrace();
-			}
-			*/
+			//TODO
+//			String methodName = "equals";
+//			String a = "hello";
+//			String b = "world";
+
+			//TODO
+//			try {
+//			    boolean result = (boolean) a.getClass().getMethod(methodName, Object.class).invoke(a, b);
+//			    System.out.println(result); // a.equals(b) の結果が表示されます
+//			} catch (Exception e) {
+//			    e.printStackTrace();
+//			}
+
 			
+			//DBから取得したデータをString型に変換して格納するためのリスト
+			List<String> dbList = new ArrayList<>();
 			
-			
+//			//かつ条件でMapに格納されたキーと同じインデックスの要素を格納する
+			List<String> resultList = new ArrayList<>();
+//			
 			while(rs.next()) {
 				int id = rs.getInt("id");
 				String status = rs.getString("status");
@@ -233,19 +228,43 @@ public class EditDataDao {
 				LocalDateTime createDateTime = rs.getTimestamp("createDateTime").toLocalDateTime();
 				LocalDateTime updateDateTime = rs.getTimestamp("updateDateTime").toLocalDateTime();
 				String creator = rs.getString("creator");
-
 				
-				//要素が1つの場合、”または”条件で取りだす
+				//DBから取得したデータを格納
+				dbList.add(String.valueOf(id));
+				dbList.add(status);
+				dbList.add(classification);
+				dbList.add(task);
+				dbList.add(description);
+				dbList.add(String.valueOf(createDateTime));
+				dbList.add(String.valueOf(updateDateTime));
+				dbList.add(creator);
+				
+				
+				//フィルターの要素が1つの場合、”または”条件で取りだす
 				if(paramsList.size() == 1) {
 					isMatchTask = filteredTask.getId() == id || filteredTask.getStatus().equals(status) || filteredTask.getClassification().equals(classification) ||
 								  filteredTask.getTask().equals(task) || filteredTask.getDescription().equals(description) || filteredTask.getCreateDateTime().equals(createDateTime) ||
-							      filteredTask.getUpdateDateTime().equals(updateDateTime) || filteredTask.getCreator().equals(creator);					
+							      filteredTask.getUpdateDateTime().equals(updateDateTime) || filteredTask.getCreator().equals(creator);		
 				}
 				
-				//要素が複数ある場合、”かつ”条件で取りだす
+				//フィルターの要素が複数ある場合、”かつ”条件で取りだす
+				//infoMapには、フィルターの値がそのインデックス番号とともに送られてきている
 				else if(paramsList.size() > 1) {
-					
-					
+					System.out.println("通過確認");
+					boolean allMatch = true;
+					for(Map.Entry<Integer, String> entry : infoMap.entrySet()) {
+						int index = entry.getKey();
+						String filterValue = entry.getValue();
+						System.out.println(index + ":" + filterValue);
+						System.out.println(dbList.get(index));
+						if(!filterValue.equals(dbList.get(index))) {
+							allMatch = false;
+							break;
+						}
+						//TODO trueが3つ出力された＝正しい挙動
+						System.out.println(allMatch);
+					}
+					isMatchTask = allMatch;
 				}
 				
 				if(isMatchTask) {
@@ -273,23 +292,5 @@ public class EditDataDao {
 		}catch(SQLException e) {
 			throw new ManageException("EM003", e);
 		}
-	}
-	
-	
-	private static String createConditionalExp(Map<Integer, String> infoMap) {
-		int creatingCount = infoMap.size();
-		StringBuilder builder = new StringBuilder();
-		//infoMapの要素番号を管理
-		int index = 0;
-		for(Map.Entry<Integer, String> entry : infoMap.entrySet()) {
-			//infoMapの最後の要素には"&&"を連結しない
-			if(index == creatingCount - 1) {
-				builder.append(entry.getValue());
-			}else {				
-				index++;
-				builder.append(entry.getValue()).append("&&");
-			}
-		}
-		return builder.toString();
 	}
 }
