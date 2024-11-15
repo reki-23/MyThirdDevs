@@ -172,22 +172,6 @@ public class EditDataDao {
 			
 			boolean isMatchTask = false;
 			
-			//送られてきた情報をリストに格納
-//			List<TodoInfo> infoList = new ArrayList<>();
-//			infoList.add(new TodoInfo.Builder().with(info -> {
-//				info.id = filteredTask.getId();
-//				info.status = filteredTask.getStatus();
-//				info.classification = filteredTask.getClassification();
-//				info.task = filteredTask.getTask();
-//				info.description = filteredTask.getDescription();
-//				info.createDateTime = filteredTask.getCreateDateTime();
-//				info.updateDateTime = filteredTask.getUpdateDateTime();
-//				info.creator = filteredTask.getCreator();
-//			}).build());
-			
-//			infoList.forEach(System.out::println);
-			
-			
 			//paramsListの中で空ではない要素をMapとして保存する
 			Map<Integer, String> infoMap = new TreeMap<>();
 			for(int i = 0; i < paramsList.size(); i++) {
@@ -195,30 +179,7 @@ public class EditDataDao {
 					infoMap.put(i, paramsList.get(i));					
 				}
 			}
-//			infoMap.forEach((key, value) -> System.out.println(key + ", " + value));
 			
-			//TODO -------------------------------ここから上はOK------------------------------------------------------
-			
-			//TODO
-//			String methodName = "equals";
-//			String a = "hello";
-//			String b = "world";
-
-			//TODO
-//			try {
-//			    boolean result = (boolean) a.getClass().getMethod(methodName, Object.class).invoke(a, b);
-//			    System.out.println(result); // a.equals(b) の結果が表示されます
-//			} catch (Exception e) {
-//			    e.printStackTrace();
-//			}
-
-			
-			//DBから取得したデータをString型に変換して格納するためのリスト
-			List<String> dbList = new ArrayList<>();
-			
-//			//かつ条件でMapに格納されたキーと同じインデックスの要素を格納する
-			List<String> resultList = new ArrayList<>();
-//			
 			while(rs.next()) {
 				int id = rs.getInt("id");
 				String status = rs.getString("status");
@@ -228,17 +189,6 @@ public class EditDataDao {
 				LocalDateTime createDateTime = rs.getTimestamp("createDateTime").toLocalDateTime();
 				LocalDateTime updateDateTime = rs.getTimestamp("updateDateTime").toLocalDateTime();
 				String creator = rs.getString("creator");
-				
-				//DBから取得したデータを格納
-				dbList.add(String.valueOf(id));
-				dbList.add(status);
-				dbList.add(classification);
-				dbList.add(task);
-				dbList.add(description);
-				dbList.add(String.valueOf(createDateTime));
-				dbList.add(String.valueOf(updateDateTime));
-				dbList.add(creator);
-				
 				
 				//フィルターの要素が1つの場合、”または”条件で取りだす
 				if(paramsList.size() == 1) {
@@ -250,21 +200,57 @@ public class EditDataDao {
 				//フィルターの要素が複数ある場合、”かつ”条件で取りだす
 				//infoMapには、フィルターの値がそのインデックス番号とともに送られてきている
 				else if(paramsList.size() > 1) {
-					System.out.println("通過確認");
-					boolean allMatch = true;
+					isMatchTask = true;
 					for(Map.Entry<Integer, String> entry : infoMap.entrySet()) {
 						int index = entry.getKey();
 						String filterValue = entry.getValue();
-						System.out.println(index + ":" + filterValue);
-						System.out.println(dbList.get(index));
-						if(!filterValue.equals(dbList.get(index))) {
-							allMatch = false;
+						
+						switch(index) {
+							case 0: 
+								if(!String.valueOf(id).equals(filterValue)) {
+									isMatchTask = false;
+								}
+								break;
+							case 1: 
+								if(!status.equals(filterValue)) {
+									isMatchTask = false;
+								}
+								break;
+							case 2: 
+								if(!classification.equals(filterValue)) {
+									isMatchTask = false;
+								}
+								break;
+							case 3: 
+								if(!task.equals(filterValue)) {
+									isMatchTask = false;
+								}
+								break;
+							case 4: 
+								if(!description.equals(filterValue)) {
+									isMatchTask = false;
+								}
+								break;
+							case 5: 
+								if(!String.valueOf(createDateTime).equals(filterValue)) {
+									isMatchTask = false;
+								}
+								break;
+							case 6: 
+								if(!String.valueOf(updateDateTime).equals(filterValue)) {
+									isMatchTask = false;
+								}
+								break;
+							case 7: 
+								if(!creator.equals(filterValue)) {
+									isMatchTask = false;
+								}
+								break;
+						}
+						if(!isMatchTask) {
 							break;
 						}
-						//TODO trueが3つ出力された＝正しい挙動
-						System.out.println(allMatch);
 					}
-					isMatchTask = allMatch;
 				}
 				
 				if(isMatchTask) {
@@ -287,7 +273,6 @@ public class EditDataDao {
 			}
 			
 			return filteredTaskList;
-			
 			
 		}catch(SQLException e) {
 			throw new ManageException("EM003", e);
