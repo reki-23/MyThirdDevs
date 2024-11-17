@@ -102,7 +102,7 @@
 			
 			<!-- タスクフィルター付きエクスポートボタン -->
 			<div class="export-filter-csv">
-				<button id="export-filter-csv-button">フィルターをかける</button>			
+				<button id="export-filter-csv-button">フィルターをかけて出力</button>			
 			</div>
 			
 			

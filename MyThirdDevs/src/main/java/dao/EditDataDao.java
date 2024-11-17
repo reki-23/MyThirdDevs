@@ -9,8 +9,6 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 
 import common.TodoInfo;
 import exception.ManageException;
@@ -23,9 +21,9 @@ public class EditDataDao {
 	private static final String deleteSql = "DELETE FROM todolist";
 	private static final String getSql = "SELECT * FROM todolist";
 	private static final String individualDeleteSql = "DELETE FROM todolist WHERE id = ?";
-//	private static final String invalidId = "-1";
-//	private static final String invalidCreateDateTime = LocalDateTime.MIN.toString();
-//	private static final String invalidUpdateDateTime = LocalDateTime.MIN.toString();
+	private static final int invalidId = -1;
+	private static final LocalDateTime invalidCreateDateTime = LocalDateTime.MIN;
+	private static final LocalDateTime invalidUpdateDateTime = LocalDateTime.MIN;
 //	private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 	
 	
@@ -162,120 +160,103 @@ public class EditDataDao {
 	
 	
 	//フィルターをかけて一覧取得
-	public static List<TodoInfo> getFilteredTaskList(TodoInfo filteredTask, List<String> paramsList) throws ManageException{
+	public static List<TodoInfo> getFilteredTaskList(TodoInfo filteredTask) throws ManageException{
 		
-		//フィルター後のデータを格納するリスト
+		//TODO　ここでは全件取得してからフィルタリングをするのではなく、SQL側でフィルタリングの処理を行ってから取得する
+		//TODO フィルターにかけたい値によってクエリを動的に生成する処理
+		
+		//フィルタ―後のDBから取得したデータを格納するリスト
 		List<TodoInfo> filteredTaskList = new ArrayList<>();
+		//動的クエリの生成準備
+		StringBuilder queryBuilder = new StringBuilder("SELECT * FROM todolist WHERE 1=1");
+		//取得したフィルターデータを格納する
+		List<Object> parameters = new ArrayList<>();
+		
+		//有効な値の場合、フィルターにかけたいデータのみを取り出すクエリを生成する
+		if(filteredTask.getId() != invalidId) {
+			queryBuilder.append(" AND id = ?");
+			parameters.add(filteredTask.getId());
+		}
+		if(filteredTask.getStatus() != null && !filteredTask.getStatus().isBlank()) {
+			queryBuilder.append(" AND status = ?");
+			parameters.add(filteredTask.getStatus());
+		}
+		if(filteredTask.getClassification() != null && !filteredTask.getClassification().isBlank()) {
+			queryBuilder.append(" AND classification = ?");
+			parameters.add(filteredTask.getClassification());
+		}
+		if(filteredTask.getTask() != null && !filteredTask.getTask().isBlank()) {
+			queryBuilder.append(" AND task = ?");
+			parameters.add(filteredTask.getTask());
+		}
+		if(filteredTask.getDescription() != null && !filteredTask.getDescription().isBlank()) {
+			queryBuilder.append(" AND description = ?");
+			parameters.add(filteredTask.getDescription());
+		}
+		if(filteredTask.getCreateDateTime() != null && filteredTask.getCreateDateTime() != invalidCreateDateTime) {
+			queryBuilder.append(" AND createDateTime = ?");
+			parameters.add(filteredTask.getCreateDateTime());
+		}
+		if(filteredTask.getUpdateDateTime() != null && filteredTask.getUpdateDateTime() != invalidUpdateDateTime) {
+			queryBuilder.append(" AND updateDateTime = ?");
+			parameters.add(filteredTask.getUpdateDateTime());
+		}
+		if(filteredTask.getCreator() != null && !filteredTask.getCreator().isBlank()) {
+			queryBuilder.append(" AND creator = ?");
+			parameters.add(filteredTask.getCreator());
+		}
+		
+		//フィルター後の値(=parameters)を検索
 		try(Connection con = dbc.getConnection();
-			PreparedStatement ps = con.prepareStatement(getSql);
-			ResultSet rs = ps.executeQuery();){
+			PreparedStatement ps = con.prepareStatement(queryBuilder.toString())){
 			
-			boolean isMatchTask = false;
-			
-			//paramsListの中で空ではない要素をMapとして保存する
-			Map<Integer, String> infoMap = new TreeMap<>();
-			for(int i = 0; i < paramsList.size(); i++) {
-				if(!paramsList.get(i).isBlank()) {
-					infoMap.put(i, paramsList.get(i));					
-				}
+			//フィルター後の値を上記で生成したクエリにセット
+			for(int i = 0; i < parameters.size(); i++){
+				ps.setObject(i + 1, parameters.get(i));
 			}
 			
-			while(rs.next()) {
-				int id = rs.getInt("id");
-				String status = rs.getString("status");
-				String classification = rs.getString("classification");
-				String task = rs.getString("task");
-				String description = rs.getString("description");
-				LocalDateTime createDateTime = rs.getTimestamp("createDateTime").toLocalDateTime();
-				LocalDateTime updateDateTime = rs.getTimestamp("updateDateTime").toLocalDateTime();
-				String creator = rs.getString("creator");
-				
-				//フィルターの要素が1つの場合、”または”条件で取りだす
-				if(paramsList.size() == 1) {
-					isMatchTask = filteredTask.getId() == id || filteredTask.getStatus().equals(status) || filteredTask.getClassification().equals(classification) ||
-								  filteredTask.getTask().equals(task) || filteredTask.getDescription().equals(description) || filteredTask.getCreateDateTime().equals(createDateTime) ||
-							      filteredTask.getUpdateDateTime().equals(updateDateTime) || filteredTask.getCreator().equals(creator);		
-				}
-				
-				//フィルターの要素が複数ある場合、”かつ”条件で取りだす
-				//infoMapには、フィルターの値がそのインデックス番号とともに送られてきている
-				else if(paramsList.size() > 1) {
-					isMatchTask = true;
-					for(Map.Entry<Integer, String> entry : infoMap.entrySet()) {
-						int index = entry.getKey();
-						String filterValue = entry.getValue();
-						
-						switch(index) {
-							case 0: 
-								if(!String.valueOf(id).equals(filterValue)) {
-									isMatchTask = false;
-								}
-								break;
-							case 1: 
-								if(!status.equals(filterValue)) {
-									isMatchTask = false;
-								}
-								break;
-							case 2: 
-								if(!classification.equals(filterValue)) {
-									isMatchTask = false;
-								}
-								break;
-							case 3: 
-								if(!task.equals(filterValue)) {
-									isMatchTask = false;
-								}
-								break;
-							case 4: 
-								if(!description.equals(filterValue)) {
-									isMatchTask = false;
-								}
-								break;
-							case 5: 
-								if(!String.valueOf(createDateTime).equals(filterValue)) {
-									isMatchTask = false;
-								}
-								break;
-							case 6: 
-								if(!String.valueOf(updateDateTime).equals(filterValue)) {
-									isMatchTask = false;
-								}
-								break;
-							case 7: 
-								if(!creator.equals(filterValue)) {
-									isMatchTask = false;
-								}
-								break;
-						}
-						if(!isMatchTask) {
-							break;
-						}
-					}
-				}
-				
-				if(isMatchTask) {
-					filteredTaskList.add(new TodoInfo.Builder().with(todo -> {
-						todo.id = id;
-						todo.status = status;
-						todo.classification = classification;
-						todo.task = task;
-						todo.description = description;
-						todo.createDateTime = createDateTime;
-						todo.updateDateTime = updateDateTime;
-						todo.creator = creator;
-					}).build());
-				}
+			//生成したクエリ条件でDB内を検索
+			try(ResultSet rs = ps.executeQuery()){
+				while(rs.next()) {
+					filteredTaskList.add(mapResultSetToTodoInfo(rs));
+				}				
 			}
 			
-			//1つも条件に一致しなかった場合
+			//1つも条件を満たさなかった場合例外
 			if(filteredTaskList.size() == 0) {
 				throw new ManageException("EM016", new NoElementsOnFileException());
 			}
 			
-			return filteredTaskList;
-			
+		}catch(RuntimeException e) {
+			String errorMessageId = e.getMessage();
+			throw new ManageException(errorMessageId, e);
 		}catch(SQLException e) {
 			throw new ManageException("EM003", e);
 		}
+		return filteredTaskList;
+	}
+	
+	
+	//DB内を検索し、インスタンスを返す
+	private static TodoInfo mapResultSetToTodoInfo(ResultSet rs) throws RuntimeException{
+		
+		return new TodoInfo.Builder().with(dbData -> {
+			try {
+				dbData.id = rs.getInt("id");
+				dbData.status = rs.getString("status");
+				dbData.classification = rs.getString("classification");
+				dbData.task = rs.getString("task");
+				dbData.description = rs.getString("description");
+				dbData.createDateTime = rs.getTimestamp("createDateTime").toLocalDateTime();
+				dbData.updateDateTime = rs.getTimestamp("updateDateTime").toLocalDateTime();
+				dbData.creator = rs.getString("creator");				
+			}catch(SQLException e){
+				try {
+					throw new ManageException("EM003", e);					
+				}catch(ManageException e2) {
+					throw new RuntimeException(e2.getMessageId());
+				}
+			}
+		}).build();
 	}
 }
