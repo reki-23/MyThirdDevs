@@ -84,8 +84,7 @@ public class EditDataDao {
 				//今は仮で、今の時間を取得する
 				ps.setTimestamp(7, Timestamp.valueOf(LocalDateTime.now()));
 				ps.setString(8, newTask.getCreator());
-				int registeredCount = ps.executeUpdate();
-				return registeredCount;
+				return ps.executeUpdate();
 			}else {
 				//一括登録
 				for(TodoInfo newTask : newTaskList) {
@@ -100,8 +99,7 @@ public class EditDataDao {
 					ps.addBatch();
 				}
 				//一括実行（登録）
-				int[] bulkRegisteredCount =  ps.executeBatch();
-				return bulkRegisteredCount.length;
+				return ps.executeBatch().length;
 			}
 		
 		//整合性制約違反
@@ -154,6 +152,67 @@ public class EditDataDao {
 			}		
 		}catch(SQLException e) {
 			//あとでかく
+			throw new ManageException("EM003", e);
+		}
+	}
+	
+	
+	//タスク検索
+	public static List<TodoInfo> getSearchedTask(String keyWord) throws ManageException{
+		
+		//TODO 検索ワードが"時刻のとき"で分岐する必要がある
+		List<TodoInfo> searchedResultTask = new ArrayList<>();
+		StringBuilder queryBuilder = new StringBuilder("SELECT * FROM todolist WHERE 1=1");
+		
+		//時刻かどうかを判定するフラグ
+		boolean isDateTime = false;
+		//検索ワードが時刻ではないとき＝時刻ではない場合、クエリの時刻パラメータにはなにも渡さないようにする
+		//TODO 以下の条件式微妙
+		if(!keyWord.matches("yyyy/MM/dd")) {
+			isDateTime = false;
+		}else {
+			isDateTime = true;
+		}
+		
+		//時刻が含まれている場合は、時刻を含まないクエリを生成する
+		if(isDateTime) {
+			queryBuilder.append(" OR id = ?")
+						.append(" OR status = ?")
+						.append(" OR classification = ?")
+						.append(" OR task = ?")
+						.append(" OR description = ?")
+						.append(" OR creator = ?");
+		//検索ワードが時刻の場合
+		}else {
+			queryBuilder.append(" OR id = ?")
+						.append(" OR status = ?")
+						.append(" OR classification = ?")
+						.append(" OR task = ?")
+						.append(" OR description = ?")
+						.append(" OR createDateTime = ?")
+						.append(" OR updateDateTime = ?")
+						.append(" OR creator = ?");
+		}
+		
+		try(Connection con = dbc.getConnection();
+			PreparedStatement ps = con.prepareStatement(queryBuilder.toString())){
+			
+			//検索ワードを各パラメータにセット
+			for(int i = 1; i <= 8; i++) {
+				ps.setObject(i, keyWord);
+			}
+			
+			//DBからデータを取得
+			try(ResultSet rs = ps.executeQuery()) {
+				while(rs.next()) {
+					searchedResultTask.add(mapResultSetToTodoInfo(rs));
+				}				
+			}
+			
+			return searchedResultTask;
+
+		}catch(SQLException e) {
+			e.printStackTrace();
 			throw new ManageException("EM003", e);
 		}
 	}

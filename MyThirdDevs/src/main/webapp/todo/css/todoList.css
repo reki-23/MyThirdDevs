@@ -157,7 +157,7 @@ input[type="file"]{
 	background-color: #3c02a1; 
     color: white;              
     padding: 8px 13px;
-    width: 150px;  
+    width: 170px;  
     font-size: 13px;           
     border: none;              
     border-radius: 10px;       
@@ -269,6 +269,33 @@ input[type="file"]{
 	opacity:0.5;
 	text-decoration:underline;
 }
+
+/* タスク検索スタイル */
+.search-task{
+	width: 300px;
+	margin-left:100px;
+}
+
+.search-task input[type="text"]{
+	width: 200px;
+	height: 15px;
+	font-size: 12px;
+}
+
+.search-task input[type="submit"]{
+	background-color: blue;
+	border-radius: 5px;
+	border:none;
+	width:50px;
+	height:23px;
+	color:white;
+	font-size:9px;
+}
+
+.search-task input[type="submit"]:hover{
+	opacity: 0.5;
+}
+
 
 /*タスク登録モーダル ・　フィルタ―CSV出力モーダル*/
 #register_task, #export-csv-filter {

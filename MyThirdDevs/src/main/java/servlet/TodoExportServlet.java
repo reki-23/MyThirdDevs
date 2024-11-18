@@ -72,8 +72,6 @@ public class TodoExportServlet extends TodoServlet {
 			if(filter_cancel != null) {
 				displayRegisteredTask(request, response);
 			}
-			
-			
 		}catch(Exception e) {
 			e.printStackTrace();
 		}

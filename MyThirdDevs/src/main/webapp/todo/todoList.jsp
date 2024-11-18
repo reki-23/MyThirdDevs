@@ -78,7 +78,7 @@
 			<!--　タスク一括登録ボタン -->
 			<form action="${pageContext.request.contextPath}/TodoRegisterServlet" method="POST" enctype="multipart/form-data"　onsubmit="validateFileUpload();" >
 				<div class="bulk-register-list">
-					<input type="submit" id="bulk_register" name="bulk_register" value="一括登録する" disabled>
+					<input type="submit" id="bulk_register" name="bulk_register" value="一括登録" disabled>
 				</div>
 				<input type="file" id ="csvFile" name="csvFile" accept=".csv" onchange="validateForm()">
 				<input type="hidden" id="fileName" name="fileName" value="">
@@ -87,14 +87,14 @@
 			
 			<!-- 個別登録ボタン -->
 			<div class="register-list">
-				<button id="register-button">個別登録する</button>
+				<button id="register-button">個別登録</button>
 			</div>
 			
 			
 			<!-- タスクエクスポートボタン -->
 			<form action="${pageContext.request.contextPath}/TodoExportServlet" method="POST" class="export-file">
 				<div class="export-csvfile">
-					<input type="submit" value="CSV出力する">
+					<input type="submit" value="CSV出力">
 					<input type="hidden" id="export-csv" name="export-csv">
 				</div>
 			</form>
@@ -173,6 +173,16 @@
 					<input type="hidden" name="bulkDel" value="bulkDel">
 				</form>
 			</div>
+			
+			
+			<!-- 検索機能 -->
+			<div class="search-task">
+				<form action="${pageContext.request.contextPath}/TodoSearchServlet" method="POST">
+					<input type="text" name="searchWord">
+					<input type="submit" name="search_button" value="検索">
+				</form>
+			</div>
+			
 			
 			<!-- 一覧表示 -->
 			<table class="todo-list-table">
