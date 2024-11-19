@@ -1,6 +1,7 @@
 package servlet;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -35,8 +36,15 @@ public class TodoSearchServlet extends TodoServlet {
 			
 			//検索ワードを取得
 			String searchWord = request.getParameter("searchWord");
-			//検索に一致したタスクを取得
-			List<TodoInfo> searchedResultTask = EditDataDao.getSearchedTask(searchWord);
+			
+			List<TodoInfo> searchedResultTask = new ArrayList<TodoInfo>();
+			//検索ワードがない場合、全件取得
+			if(searchWord == null || searchWord.isBlank()) {
+				searchedResultTask = EditDataDao.getRegisteredTask();
+			}else {
+				//検索に一致したタスクを取得
+				searchedResultTask = EditDataDao.getSearchedTask(searchWord);				
+			}
 			
 			request.setAttribute("todoList", searchedResultTask);
 			RequestDispatcher dispatcher = request.getRequestDispatcher("todo/todoList.jsp");

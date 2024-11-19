@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,10 +22,11 @@ public class EditDataDao {
 	private static final String deleteSql = "DELETE FROM todolist";
 	private static final String getSql = "SELECT * FROM todolist";
 	private static final String individualDeleteSql = "DELETE FROM todolist WHERE id = ?";
+	private static String dynamicQuery = "SELECT * FROM todolist WHERE 1=1";
 	private static final int invalidId = -1;
 	private static final LocalDateTime invalidCreateDateTime = LocalDateTime.MIN;
 	private static final LocalDateTime invalidUpdateDateTime = LocalDateTime.MIN;
-//	private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+	private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 	
 	
 	//タスク取得
@@ -162,44 +164,43 @@ public class EditDataDao {
 		
 		//TODO 検索ワードが"時刻のとき"で分岐する必要がある
 		List<TodoInfo> searchedResultTask = new ArrayList<>();
-		StringBuilder queryBuilder = new StringBuilder("SELECT * FROM todolist WHERE 1=1");
+		StringBuilder queryBuilder = new StringBuilder(dynamicQuery);
 		
 		//時刻かどうかを判定するフラグ
 		boolean isDateTime = false;
-		//検索ワードが時刻ではないとき＝時刻ではない場合、クエリの時刻パラメータにはなにも渡さないようにする
-		//TODO 以下の条件式微妙
-		if(!keyWord.matches("yyyy/MM/dd")) {
-			isDateTime = false;
-		}else {
+		
+		//検索ワードをformatterの形式に変換できれば、日付けを含んだクエリを生成する
+		try {
+			LocalDateTime.parse(keyWord, formatter);
 			isDateTime = true;
+		}catch(Exception e) {
+			isDateTime = false;
 		}
 		
-		//時刻が含まれている場合は、時刻を含まないクエリを生成する
+		//時刻が含まれている場合は、時刻を含んだクエリを生成する
 		if(isDateTime) {
-			queryBuilder.append(" OR id = ?")
-						.append(" OR status = ?")
-						.append(" OR classification = ?")
-						.append(" OR task = ?")
-						.append(" OR description = ?")
-						.append(" OR creator = ?");
-		//検索ワードが時刻の場合
+			queryBuilder.append(" AND id = ?").append(" OR status = ?").append(" OR classification = ?")
+						.append(" OR task = ?").append(" OR description = ?").append(" OR createDateTime = ?")
+						.append(" OR updateDateTime = ?").append(" OR creator = ?");
+		//検索ワードが時刻出ない場合、時刻は検索対象外
 		}else {
-			queryBuilder.append(" OR id = ?")
-						.append(" OR status = ?")
-						.append(" OR classification = ?")
-						.append(" OR task = ?")
-						.append(" OR description = ?")
-						.append(" OR createDateTime = ?")
-						.append(" OR updateDateTime = ?")
-						.append(" OR creator = ?");
+			queryBuilder.append(" AND id = ?").append(" OR status = ?").append(" OR classification = ?")
+						.append(" OR task = ?").append(" OR description = ?").append(" OR creator = ?");
 		}
+		
 		
 		try(Connection con = dbc.getConnection();
 			PreparedStatement ps = con.prepareStatement(queryBuilder.toString())){
 			
-			//検索ワードを各パラメータにセット
-			for(int i = 1; i <= 8; i++) {
-				ps.setObject(i, keyWord);
+			//検索ワードを各パラメータにセット(クエリ内のパラメータの数だけ繰り返し処理)
+			if(isDateTime) {
+				for(int i = 0; i < 8; i++) {
+					ps.setObject(i + 1, keyWord);
+				}
+			}else {
+				for(int i = 0; i < 6; i++) {
+					ps.setObject(i + 1, keyWord);
+				}
 			}
 			
 			//DBからデータを取得
@@ -208,7 +209,7 @@ public class EditDataDao {
 					searchedResultTask.add(mapResultSetToTodoInfo(rs));
 				}				
 			}
-			
+						
 			return searchedResultTask;
 
 		}catch(SQLException e) {
@@ -221,13 +222,10 @@ public class EditDataDao {
 	//フィルターをかけて一覧取得
 	public static List<TodoInfo> getFilteredTaskList(TodoInfo filteredTask) throws ManageException{
 		
-		//TODO　ここでは全件取得してからフィルタリングをするのではなく、SQL側でフィルタリングの処理を行ってから取得する
-		//TODO フィルターにかけたい値によってクエリを動的に生成する処理
-		
 		//フィルタ―後のDBから取得したデータを格納するリスト
 		List<TodoInfo> filteredTaskList = new ArrayList<>();
 		//動的クエリの生成準備
-		StringBuilder queryBuilder = new StringBuilder("SELECT * FROM todolist WHERE 1=1");
+		StringBuilder queryBuilder = new StringBuilder(dynamicQuery);
 		//取得したフィルターデータを格納する
 		List<Object> parameters = new ArrayList<>();
 		

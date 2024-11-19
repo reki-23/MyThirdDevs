@@ -97,6 +97,38 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
+//削除確認モーダル
+function deleteConfirmModal(){
+  const bulk_submit = document.querySelector('#bulk_submit');
+  const indi_submit = document.querySelector('#indi_submit');
+  const delete_confirm_modal = document.querySelector('#delete_confirm_modal');
+  const del_mask = document.querySelector('#del_mask');
+
+  const showKeyframes = {
+    opacity: [0, 1],
+    visibility: 'visible',
+  };
+  
+  const options = {
+    duration: 200,
+    easing: 'ease',
+    fill: 'forwards',
+  };
+
+  // モーダルウィンドウを開く
+  bulk_submit.addEventListener('click', () => {
+    delete_confirm_modal.animate(showKeyframes, options);
+    del_mask.animate(showKeyframes, options);
+  });
+  
+  // モーダルウィンドウを開く
+  indi_submit.addEventListener('click', () => {
+    delete_confirm_modal.animate(showKeyframes, options);
+    del_mask.animate(showKeyframes, options);
+  });
+}
+
+
 //CSV出力ボタンを押下したらタスクフィルターモーダルを非表示にする
 function hiddenFilterModal(){
 	const export_csv_filter = document.querySelector('#export-csv-filter');
