@@ -32,29 +32,33 @@ public class TodoDeleteServlet extends TodoServlet {
 			response.setCharacterEncoding("UTF-8");
 			response.setContentType("text/html; charset=UTF-8");
 			
-			//一括削除時の値
-			String bulkDel = request.getParameter("bulkDel");
+			//削除タイプを取得
+			String deleteType = request.getParameter("deleteType");
 			//選択されたタスクidを取得=個別削除時
 			String[] selectedIds = request.getParameterValues("selectedIds");
+			//削除確認モーダルの値を取得
+			String delSubmit = request.getParameter("delSubmit");
 			
-			//一括削除処理
-			if(bulkDel != null) {
-				boolean bulkDeleteJudge = EditDataDao.bulkDeleteTask();
-				request.setAttribute("deleteJudge", bulkDeleteJudge);
-				displayRegisteredTask(request, response);
+			//削除確認モーダルで決定するを押下した場合
+			if(delSubmit != null) {
+				//一括削除処理
+				if(deleteType.equals("bulk")) {
+					boolean bulkDeleteJudge = EditDataDao.bulkDeleteTask();
+					request.setAttribute("deleteJudge", bulkDeleteJudge);
+				}
+				
+				//個別削除処理
+				if(deleteType.equals("individual")) {
+					List<Integer> deletedIdList = Arrays
+							.stream(selectedIds)
+							.flatMap(id -> Arrays.stream(id.split(",")))
+							.map(Integer::valueOf)
+							.collect(Collectors.toList());
+					boolean individualDeleteJudge = EditDataDao.individualDeleteTask(deletedIdList);
+					request.setAttribute("deleteJudge", individualDeleteJudge);
+				}				
 			}
-			
-			//個別削除処理
-			if(selectedIds != null && selectedIds.length != 0) {
-				List<Integer> deletedIdList = Arrays
-						.stream(selectedIds)
-						.flatMap(id -> Arrays.stream(id.split(",")))
-						.map(Integer::valueOf)
-						.collect(Collectors.toList());
-				boolean individualDeleteJudge = EditDataDao.individualDeleteTask(deletedIdList);
-				request.setAttribute("deleteJudge", individualDeleteJudge);
-				displayRegisteredTask(request, response);
-			}
+			displayRegisteredTask(request, response);
 			
 		}catch(ManageException e) {
 			errorHandle(request, response, e);		

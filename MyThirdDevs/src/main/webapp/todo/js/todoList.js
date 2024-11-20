@@ -97,35 +97,59 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-//削除確認モーダル
-function deleteConfirmModal(){
-  const bulk_submit = document.querySelector('#bulk_submit');
-  const indi_submit = document.querySelector('#indi_submit');
-  const delete_confirm_modal = document.querySelector('#delete_confirm_modal');
-  const del_mask = document.querySelector('#del_mask');
+//一括削除か個別削除かを共通の削除確認モーダルのhiddenに設定し、モーダルを表示する
+function setDeleteTypeAndModalDisp(type){
+	document.getElementById('deleteType').value = type;
+	//alert('確認');
+	const bulk_submit = document.querySelector('#bulk_submit');
+	const indi_submit = document.querySelector('#indi_submit');
+	const delete_confirm_modal = document.querySelector('#delete_confirm_modal');
+	const del_mask = document.querySelector('#del_mask');
+	
+	const showKeyframes = {
+	    opacity: [0, 1],
+	    visibility: 'visible',
+	  };
+	  
+	  const options = {
+	    duration: 200,
+	    easing: 'ease',
+	    fill: 'forwards',
+	  };
+	
+	  // モーダルウィンドウを開く
+	  bulk_submit.addEventListener('click', () => {
+	    delete_confirm_modal.animate(showKeyframes, options);
+	    del_mask.animate(showKeyframes, options);
+	  });
+	  
+	  // モーダルウィンドウを開く
+	  indi_submit.addEventListener('click', () => {
+	    delete_confirm_modal.animate(showKeyframes, options);
+	    del_mask.animate(showKeyframes, options);
+	  });
+}
 
-  const showKeyframes = {
-    opacity: [0, 1],
-    visibility: 'visible',
-  };
-  
-  const options = {
-    duration: 200,
-    easing: 'ease',
-    fill: 'forwards',
-  };
 
-  // モーダルウィンドウを開く
-  bulk_submit.addEventListener('click', () => {
-    delete_confirm_modal.animate(showKeyframes, options);
-    del_mask.animate(showKeyframes, options);
-  });
-  
-  // モーダルウィンドウを開く
-  indi_submit.addEventListener('click', () => {
-    delete_confirm_modal.animate(showKeyframes, options);
-    del_mask.animate(showKeyframes, options);
-  });
+//削除確認モーダルでキャンセルを押下した場合、モーダルを非表示にする
+function closeModal(){
+	const delete_confirm_modal = document.querySelector('#delete_confirm_modal');
+	const del_mask = document.querySelector('#del_mask');
+
+	const hideKeyframes = {
+	    opacity: [1, 0],
+	    visibility: 'hidden',
+ 	};
+
+	const options = {
+	   	duration: 200,
+	    easing: 'ease',
+	   	fill: 'forwards',
+	};
+
+	// モーダルウィンドウを非表示にする
+	delete_confirm_modal.animate(hideKeyframes, options);
+	del_mask.animate(hideKeyframes, options);
 }
 
 

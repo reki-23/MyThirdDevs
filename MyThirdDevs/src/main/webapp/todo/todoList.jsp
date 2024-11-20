@@ -158,20 +158,13 @@
 			
 			<!-- 個別削除ボタン -->
 			<div class="delete-individual-list">
-				<form action="${pageContext.request.contextPath}/TodoDeleteServlet" method="POST">
-					<input type="submit" id="indi_submit" value="選択したタスクを削除する" onclick="deleteConfirmModal()" disabled>
-					<!-- 選択されたチェックボックスのタスクidをこの削除ボタンが押されたときにサーブレットに送信する -->
-					<input type="hidden" id="selectedIds" name="selectedIds" value="">
-				</form>
+				<input type="submit" id="indi_submit" value="選択したタスクを削除する" onclick="setDeleteTypeAndModalDisp('individual');" disabled>
 			</div>
 			
 			
 			<!-- 一括削除ボタン -->
 			<div class="delete-bulk-list">
-				<form action="${pageContext.request.contextPath}/TodoDeleteServlet" method="POST">
-					<input type="submit" id="bulk_submit" value="一括削除する" onclick="deleteConfirmModal()">
-					<input type="hidden" name="bulkDel" value="bulkDel">
-				</form>
+				<input type="submit" id="bulk_submit" value="一括削除する" onclick="setDeleteTypeAndModalDisp('bulk');">
 			</div>
 			
 			
@@ -179,8 +172,11 @@
 			<form action="${pageContext.request.contextPath}/TodoDeleteServlet" method="POST">
 				<section id="delete_confirm_modal">
 					<h3>削除しますか？</h3>
-					<input type="submit" name="delCancel" value="キャンセル">
-					<input type="submit" name="delSubmit" value="決定">
+					<input type="submit" id="delCancel" name="delCancel" value="キャンセル" onclick="closeModal();">
+					<input type="submit" id="delSubmit" name="delSubmit" value="決定">
+					<input type="hidden" id="deleteType" name="deleteType" value="">
+					<!-- 選択されたチェックボックスのタスクidをこの削除ボタンが押されたときにサーブレットに送信する -->
+					<input type="hidden" id="selectedIds" name="selectedIds" value="">
 				</section>
 			</form>
 			<div id="del_mask"></div>
