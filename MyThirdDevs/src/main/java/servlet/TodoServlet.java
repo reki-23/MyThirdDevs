@@ -1,7 +1,10 @@
 package servlet;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.List;
+import java.util.Properties;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -13,6 +16,7 @@ import common.CommonMessage;
 import common.TodoInfo;
 import dao.EditDataDao;
 import exception.ManageException;
+import exception.PropertiesFileNotFoundException;
 
 /**
  * 
@@ -24,6 +28,23 @@ import exception.ManageException;
 public class TodoServlet extends HttpServlet{
 	
 	private static final long serialVersionUID = 1L;
+	
+	
+	//プロパティファイルを読み込む
+	protected void getPropertiesFileInfo(HttpServletRequest request, HttpServletResponse response, Properties prop) throws ServletException, IOException{
+		try(InputStream input = getClass().getResourceAsStream("/logging.properties")){
+			if(input == null) {
+				//読み込み失敗時
+				throw new ManageException("EM001", new PropertiesFileNotFoundException());
+			}
+			
+			try(InputStreamReader reader = new InputStreamReader(input, "UTF-8")){
+				prop.load(reader);
+			}
+		}catch(ManageException e) {
+			errorHandle(request, response, e);
+		}
+	}
 	
 	//エラーハンドリング処理
 	//ManageExceptionがcatchされた場合の処理

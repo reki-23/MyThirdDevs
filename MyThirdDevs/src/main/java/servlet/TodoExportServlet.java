@@ -127,9 +127,6 @@ public class TodoExportServlet extends TodoServlet {
 			LocalDateTime createDateTime = DataValidator.returnValidDateTime(tmpCreateDateTime);
 			LocalDateTime updateDateTime = DataValidator.returnValidDateTime(tmpUpdateDateTime);
 			
-			//ダウンロードしたいファイルへのパス
-			String downloadFileToPath = downloadDir.resolve("task_filter.csv").toString();
-			
 			//受取ったパラメータをリストに格納
 			TodoInfo filteredTask = new TodoInfo.Builder().with(todo -> {
 				todo.id = id;
@@ -144,6 +141,9 @@ public class TodoExportServlet extends TodoServlet {
 			
 			//フィルター後のデータを取得
 			List<TodoInfo> filteredTaskList = EditDataDao.getFilteredTaskList(filteredTask);
+
+			//ダウンロードしたいファイルへのパス
+			String downloadFileToPath = downloadDir.resolve("task_filter.csv").toString();
 			
 			//フィルター後のデータを書き込むクラスに渡す
 			writter.writeToCsv(downloadFileToPath, filteredTaskList);

@@ -191,6 +191,32 @@
 			</div>
 			
 			
+			<!-- ページネーションを生成する際に必要なページ数やタスク数の情報を取得 -->
+			<% if(){
+				
+				}
+			%>
+			
+			
+			<!-- ページネーション -->
+			<div class="main-wrapper-pagination">
+				<!-- ページ総数が1ページの場合＝常に1ページ目 -->
+				<ul class="whole-pagination">
+					<li><a href="${pageContext.request.contextPath}/TodoSearchServlet" disabled><<&emsp;</a></li>
+					<li><a href="${pageContext.request.contextPath}/TodoSearchServlet" disabled><&emsp;</a></li>
+					<li class="current-page">1</li>
+					<li><a href="${pageContext.request.contextPath}/TodoSearchServlet" disabled>&emsp;></a></li>
+					<li><a href="${pageContext.request.contextPath}/TodoSearchServlet" disabled>&emsp;>></a></li>
+				</ul>
+				<!-- ページ総数がNページの場合で、現在のページが1ページ目 -->
+				
+				<!-- ページ総数がNページの場合で、現在のページがNページ目 -->
+				
+				<!-- ページ総数がNページの場合で、上記以外のページの場合 -->
+				
+			</div>
+			
+			
 			<!-- 一覧表示 -->
 			<table class="todo-list-table">
 				<thead>

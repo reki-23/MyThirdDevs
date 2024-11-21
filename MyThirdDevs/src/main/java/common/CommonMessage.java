@@ -78,7 +78,6 @@ public class CommonMessage {
 	 * IDに対応したメッセージを返す
 	 */
 	public String getCommonMessage(String messageId) {
-		
 		if(!commonMessages.containsKey(messageId)) {
 			return unexpectedError;
 		}else {

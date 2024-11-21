@@ -1,8 +1,6 @@
 package servlet;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -21,7 +19,6 @@ import javax.servlet.http.Part;
 import common.TodoInfo;
 import dao.EditDataDao;
 import exception.ManageException;
-import exception.PropertiesFileNotFoundException;
 import model.DataValidator;
 import model.FileAnomalyCheck;
 import model.ReadFile;
@@ -38,8 +35,6 @@ public class TodoRegisterServlet extends TodoServlet{
 	private static String registerMessage;
 	//一括登録かを判定するフラグ
 	private static boolean isBulkJudge;
-	//プロパティファイル
-	private static Properties prop = new Properties();
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
@@ -60,17 +55,6 @@ public class TodoRegisterServlet extends TodoServlet{
 			//一括登録ボタン押下で送信される値を取得
 			String bulkRegister = request.getParameter("bulk_register");
 		
-			try(InputStream input = getClass().getResourceAsStream("/logging.properties")){
-				if(input == null) {
-					//読み込み失敗時
-					throw new ManageException("EM001", new PropertiesFileNotFoundException());
-				}
-				
-				try(InputStreamReader reader = new InputStreamReader(input, "UTF-8")){
-					prop.load(reader);
-				}
-			}
-			
 			//一括登録
 			if(bulkRegister != null) {
 				bulkRegisterTask(request, response);
@@ -78,15 +62,15 @@ public class TodoRegisterServlet extends TodoServlet{
 			
 			//個別登録
 			else if(registerSubmit != null) {
-				individualRegisterTask(request, response, prop);	
+				individualRegisterTask(request, response);	
 			
 			//キャンセル
 			}else if(registerCancel != null) {
 				displayRegisteredTask(request, response);
 			}
 			
-		}catch(ManageException e) {
-			errorHandle(request, response, e);
+		}catch(Exception e) {
+			
 		}
 	}
 	
@@ -117,6 +101,10 @@ public class TodoRegisterServlet extends TodoServlet{
 			FileAnomalyCheck fac = new FileAnomalyCheck();
 			fac.anomalyCheck(filePartName, filePath);
 			
+			//プロパティファイル読み込み
+			Properties prop = new Properties();
+			getPropertiesFileInfo(request, response, prop);
+			
 			//ファイルを読み込む
 			ReadFile readFile = new ReadFile();
 			List<TodoInfo> readTodoList = readFile.readCsvFile(fileName);
@@ -134,7 +122,11 @@ public class TodoRegisterServlet extends TodoServlet{
 	}
 	
 	//個別登録
-	private void individualRegisterTask(HttpServletRequest request, HttpServletResponse response, Properties prop) throws ServletException, IOException{
+	private void individualRegisterTask(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+		//プロパティファイル読み込み
+		Properties prop = new Properties();
+		getPropertiesFileInfo(request, response, prop);
+		
 		//タスク登録時のエラーメッセージ
 		List<String> errorMessageList = new ArrayList<>();
 		

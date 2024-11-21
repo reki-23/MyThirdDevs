@@ -112,7 +112,7 @@ function setDeleteTypeAndModalDisp(type){
 	  };
 	  
 	  const options = {
-	    duration: 200,
+	    duration: 100,
 	    easing: 'ease',
 	    fill: 'forwards',
 	  };
@@ -142,7 +142,7 @@ function closeModal(){
  	};
 
 	const options = {
-	   	duration: 200,
+	   	duration: 100,
 	    easing: 'ease',
 	   	fill: 'forwards',
 	};
@@ -164,7 +164,7 @@ function hiddenFilterModal(){
   	};
 
   	const options = {
-    	duration: 200,
+    	duration: 100,
     	easing: 'ease',
    		fill: 'forwards',
   	};
