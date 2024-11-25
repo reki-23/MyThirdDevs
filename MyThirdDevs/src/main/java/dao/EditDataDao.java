@@ -22,6 +22,7 @@ public class EditDataDao {
 	private static final String deleteSql = "DELETE FROM todolist";
 	private static final String getSql = "SELECT * FROM todolist";
 	private static final String individualDeleteSql = "DELETE FROM todolist WHERE id = ?";
+	private static final String getLimitOffsetQuery = "SELECT * FROM todolist LIMIT 50 OFFSET ?";
 	private static String dynamicQuery = "SELECT * FROM todolist WHERE 1=1";
 	private static final int invalidId = -1;
 	private static final LocalDateTime invalidCreateDateTime = LocalDateTime.MIN;
@@ -315,5 +316,31 @@ public class EditDataDao {
 				}
 			}
 		}).build();
+	}
+	
+	
+	//ページネーション処理で使用するデータの取得
+	public static List<TodoInfo> getSpecifyColumnTask(int pageNum, int solidTaskCount) throws ManageException{
+		
+		//そのページに表示する最初の行番号を取得
+		int startPage = (pageNum - 1) * solidTaskCount;
+		
+		//ページごとに表示するタスクを格納したリスト
+		List<TodoInfo> pageByPageTaskList = new ArrayList<>();
+		try(Connection con = dbc.getConnection();
+			PreparedStatement ps = con.prepareStatement(getLimitOffsetQuery)){
+			
+			ps.setInt(1, startPage);
+			try(ResultSet rs = ps.executeQuery()){
+				while(rs.next()) {
+					pageByPageTaskList.add(mapResultSetToTodoInfo(rs));
+				}				
+			}
+		
+		}catch(SQLException e) {
+			throw new ManageException("EM003", e);
+		}
+		
+		return pageByPageTaskList;
 	}
 }

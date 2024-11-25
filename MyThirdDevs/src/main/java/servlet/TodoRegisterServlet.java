@@ -37,7 +37,7 @@ public class TodoRegisterServlet extends TodoServlet{
 	private static boolean isBulkJudge;
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+//		pagingHandleOfAllTask(request, response);
 	}
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

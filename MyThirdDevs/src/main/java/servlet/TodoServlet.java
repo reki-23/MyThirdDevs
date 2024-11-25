@@ -3,6 +3,7 @@ package servlet;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
@@ -67,6 +68,43 @@ public class TodoServlet extends HttpServlet{
 			CommonMessage commonMessage = new CommonMessage();
 			String errorMessage = commonMessage.getCommonMessage(e.getMessageId());
 			request.setAttribute("errorMessage", errorMessage);
+			//TODO エラー専用画面にこのメッセージを出力する
+		}
+	}
+	
+	
+	//ページネーションを生成する＝doGet()で呼びだされる
+	protected void pagingHandleOfAllTask(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+		
+		try {
+			//ページごとに表示するタスクを格納したリスト
+			List<TodoInfo> pageByPageTaskList = new ArrayList<>();
+			//1ページに表示するタスク数
+			final int solidTaskCount = 50;
+			//デフォルトのページ番号
+			int pageNum = 1;
+			//現在のページ番号を取得
+			String tmpPageNum = request.getParameter("pageNum");				
+			if(tmpPageNum != null){
+				pageNum = Integer.parseInt(tmpPageNum); //あとで例外処理を追加
+			}
+			
+			//現在のページ・タスク総数・必要なページ数を初期化
+			int totalTaskCount = 0;
+			int totalPageCount = 1;
+			
+			//タスク件数・ページ数計算
+			totalTaskCount = EditDataDao.getRegisteredTask().size();
+			totalPageCount = totalTaskCount / solidTaskCount + 1;
+			
+			pageByPageTaskList = EditDataDao.getSpecifyColumnTask(pageNum, solidTaskCount);
+			request.setAttribute("todoList", pageByPageTaskList);
+			request.setAttribute("totalPageCount", totalPageCount);
+			RequestDispatcher dispatcher = request.getRequestDispatcher("todo/todoList.jsp");
+			dispatcher.forward(request, response);
+		
+		}catch(ManageException e) {
+			errorHandle(request, response, e);
 		}
 	}
 }
