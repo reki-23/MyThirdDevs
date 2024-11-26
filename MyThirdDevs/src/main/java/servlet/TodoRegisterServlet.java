@@ -37,7 +37,7 @@ public class TodoRegisterServlet extends TodoServlet{
 	private static boolean isBulkJudge;
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//		pagingHandleOfAllTask(request, response);
+		pagingHandleOfAllTask(request, response);
 	}
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -47,6 +47,7 @@ public class TodoRegisterServlet extends TodoServlet{
 			response.setCharacterEncoding("UTF-8");
 			response.setContentType("text/html; charset=UTF-8");
 			request.setCharacterEncoding("UTF-8");
+			
 
 			//登録するボタン押下で送信される値を取得
 			String registerSubmit = request.getParameter("register_submit");
@@ -66,7 +67,7 @@ public class TodoRegisterServlet extends TodoServlet{
 			
 			//キャンセル
 			}else if(registerCancel != null) {
-				displayRegisteredTask(request, response);
+				pagingHandleOfAllTask(request, response);
 			}
 			
 		}catch(Exception e) {
@@ -115,7 +116,7 @@ public class TodoRegisterServlet extends TodoServlet{
 			//登録した件数をプロパティファイルから読み込んだメッセージとして出力できるようにする
 			registerMessage = MessageFormat.format(prop.getProperty("bulkRegister.submit"), bulkRegisteredCount);
 			request.setAttribute("registerMessage", registerMessage);
-			displayRegisteredTask(request, response);
+			pagingHandleOfAllTask(request, response);
 		}catch(ManageException e) {
 			errorHandle(request, response, e);
 		}		
@@ -170,7 +171,7 @@ public class TodoRegisterServlet extends TodoServlet{
 		if(errorMessageList.size() > 0) {
 			request.setAttribute("errorMessageList", errorMessageList);
 			//一覧表示
-			displayRegisteredTask(request, response);
+			pagingHandleOfAllTask(request, response);
 		}else {
 			//DB登録クラスに取得したパラメータを渡す
 			List<TodoInfo> newTaskList = new ArrayList<TodoInfo>();
@@ -187,7 +188,7 @@ public class TodoRegisterServlet extends TodoServlet{
 				EditDataDao.registerNewTask(newTaskList, isBulkJudge);
 				registerMessage = prop.getProperty("register.submit");
 				request.setAttribute("registerMessage", registerMessage);
-				displayRegisteredTask(request, response);
+				pagingHandleOfAllTask(request, response);
 			}catch(ManageException e) {
 				errorHandle(request, response, e);
 			}			

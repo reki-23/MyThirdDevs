@@ -193,7 +193,7 @@
 			
 			<!-- ページネーションを生成する際に必要なページ数やタスク数の情報を取得 -->
 			<% 
-				//現在のページ番号
+				//URLパラメータに付加するページ番号
 				int pageNum = 1;
 			
 				//ページ総数
@@ -204,6 +204,13 @@
 					totalPageCount = (int)request.getAttribute("totalPageCount");
 				}
 				
+				//現在のページ番号初期化
+				int currentPage = 1;
+				
+				//現在のページ番号を取得
+				if(request.getAttribute("currentPage") != null){
+					currentPage = (int)request.getAttribute("currentPage");
+				}
 			%>
 			
 			
@@ -212,48 +219,44 @@
 				<!-- ページ総数が1ページの場合＝常に1ページ目 -->
 				<% if(totalPageCount == 1){ %>
 				<%System.out.println("通過確認1"); %>
-					<ul class="whole-pagination">
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=1" disabled><<&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=1" disabled><&emsp;</a></li>
+					<ul>
+						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=1" class="disabled"><<&emsp;</a></li>
+						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=1" class="disabled"><&emsp;</a></li>
 						<li class="current-page">1</li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=1" disabled>&emsp;></a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=1" disabled>&emsp;>></a></li>
+						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=1" class="disabled">&emsp;></a></li>
+						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=1" class="disabled">&emsp;>></a></li>
 					</ul>
 				<% }
 				//ページ総数がNページの場合で、現在のページが1ページ目 -->
-				else if(totalPageCount > 1){ %>
+				else if(totalPageCount > 1 && currentPage == 1){ %>
 					<%System.out.println("通過確認2"); %>
-					<% if(pageNum == 1){ %>
-						<ul class="whole-pagination">
-							<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=1" disabled><<&emsp;</a></li>
-							<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=1" disabled><&emsp;</a></li>
-							<li class="current-page"><%=pageNum %></li>
-							<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=pageNum+1%>">&emsp;></a></li>
-							<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=totalPageCount%>">&emsp;>></a></li>
-						</ul>
-					<%} %>
+					<ul>
+						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=1" class="disabled"><<&emsp;</a></li>
+						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=1" class="disabled"><&emsp;</a></li>
+						<li class="current-page"><%=currentPage %></li>
+						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage+1%>">&emsp;></a></li>
+						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=totalPageCount%>">&emsp;>></a></li>
+					</ul>
 				<% }
 				//ページ総数がNページの場合で、現在のページがNページ目
-				else if(totalPageCount > 1){ %>
+				else if(totalPageCount > 1 && currentPage == totalPageCount){ %>
 				<%System.out.println("通過確認3"); %>
-					<% if(pageNum == totalPageCount){ %>
-						<ul class="whole-pagination">
-							<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=1"><<&emsp;</a></li>
-							<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=pageNum-1%>"><&emsp;</a></li>
-							<li class="current-page"><%=pageNum %></li>
-							<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=totalPageCount %>" disabled>&emsp;></a></li>
-							<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=totalPageCount %>" disabled>&emsp;>></a></li>
-						</ul>
-					<%} %>
+					<ul>
+						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=1"><<&emsp;</a></li>
+						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage-1%>"><&emsp;</a></li>
+						<li class="current-page"><%=currentPage %></li>
+						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=totalPageCount %>" class="disabled">&emsp;></a></li>
+						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=totalPageCount %>" class="disabled">&emsp;>></a></li>
+					</ul>
 				<% }
 				//ページ総数がNページの場合で、上記以外のページの場合
 				else{ %>
 				<%System.out.println("通過確認4"); %>
-					<ul class="whole-pagination">
+					<ul>
 						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=1"><<&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=pageNum-1%>"><&emsp;</a></li>
-						<li class="current-page"><%=pageNum %></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=pageNum+1 %>">&emsp;></a></li>
+						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage-1%>"><&emsp;</a></li>
+						<li class="current-page"><%=currentPage %></li>
+						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage+1 %>">&emsp;></a></li>
 						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=totalPageCount %>">&emsp;>></a></li>
 					</ul>
 				<% }%>
@@ -304,6 +307,9 @@
 					</tbody>
 				</thead>
 			</table>
+			
+			
+			
 		</main>
 		<footer class="footer">
 			<div class="wrapper">

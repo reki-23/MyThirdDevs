@@ -58,7 +58,7 @@ public class TodoDeleteServlet extends TodoServlet {
 					request.setAttribute("deleteJudge", individualDeleteJudge);
 				}				
 			}
-			displayRegisteredTask(request, response);
+			pagingHandleOfAllTask(request, response);
 			
 		}catch(ManageException e) {
 			errorHandle(request, response, e);		

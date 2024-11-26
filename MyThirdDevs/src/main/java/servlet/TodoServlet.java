@@ -53,28 +53,12 @@ public class TodoServlet extends HttpServlet{
 		CommonMessage commonMessage = new CommonMessage();
 		String errorMessage = commonMessage.getCommonMessage(e.getMessageId());
 		request.setAttribute("errorMessage", errorMessage);
-		displayRegisteredTask(request, response);
-	}
-	
-	
-	//タスク一覧取得
-	protected static void displayRegisteredTask(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-		try {
-			List<TodoInfo> todoList = EditDataDao.getRegisteredTask();
-			request.setAttribute("todoList", todoList);
-			RequestDispatcher dispatcher = request.getRequestDispatcher("todo/todoList.jsp");
-			dispatcher.forward(request, response);			
-		}catch(ManageException e) {
-			CommonMessage commonMessage = new CommonMessage();
-			String errorMessage = commonMessage.getCommonMessage(e.getMessageId());
-			request.setAttribute("errorMessage", errorMessage);
-			//TODO エラー専用画面にこのメッセージを出力する
-		}
+		pagingHandleOfAllTask(request, response);
 	}
 	
 	
 	//ページネーションを生成する＝doGet()で呼びだされる
-	protected void pagingHandleOfAllTask(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+	protected static void pagingHandleOfAllTask(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 		
 		try {
 			//ページごとに表示するタスクを格納したリスト
@@ -90,16 +74,19 @@ public class TodoServlet extends HttpServlet{
 			}
 			
 			//現在のページ・タスク総数・必要なページ数を初期化
+			int currentPage = 1;
 			int totalTaskCount = 0;
 			int totalPageCount = 1;
 			
 			//タスク件数・ページ数計算
+			currentPage = pageNum;
 			totalTaskCount = EditDataDao.getRegisteredTask().size();
-			totalPageCount = totalTaskCount / solidTaskCount + 1;
+			totalPageCount = (totalTaskCount - 1) / solidTaskCount + 1;
 			
 			pageByPageTaskList = EditDataDao.getSpecifyColumnTask(pageNum, solidTaskCount);
 			request.setAttribute("todoList", pageByPageTaskList);
 			request.setAttribute("totalPageCount", totalPageCount);
+			request.setAttribute("currentPage", currentPage);			
 			RequestDispatcher dispatcher = request.getRequestDispatcher("todo/todoList.jsp");
 			dispatcher.forward(request, response);
 		

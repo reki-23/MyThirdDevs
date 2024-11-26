@@ -480,7 +480,7 @@ input[type="file"]{
 
 .main-wrapper-pagination a {
     display: block;
-    padding: 5px 5px;
+    padding: 3px 3px;
     text-decoration: none;
     background-color: #f0f0f0;
     color: #333;
@@ -490,17 +490,22 @@ input[type="file"]{
 }
 
 .main-wrapper-pagination a:hover {
-    background-color: #06ba33;
+    background-color: #028be6;
     color: white;
 }
 
 .main-wrapper-pagination li.current-page {
-    padding: 5px 10px;
-    background-color: #06ba33;
+    padding: 5px 12px;
+    background-color:#028be6;
     color: white;
     border: 1px solid #007bff;
     border-radius: 5px;
     pointer-events: none;
+    font-size:12px;
+}
+
+.main-wrapper-pagination li a {
+    font-size:13px;
 }
 
 .main-wrapper-pagination a.disabled {
