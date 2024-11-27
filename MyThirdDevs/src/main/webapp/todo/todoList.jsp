@@ -199,6 +199,9 @@
 				//ページ総数
 				int totalPageCount = 1;
 				
+				//検索語の初期化
+				String searchWord = "";
+				
 				//全ページ数
 				if(request.getAttribute("totalPageCount") != null){
 					totalPageCount = (int)request.getAttribute("totalPageCount");
@@ -211,6 +214,11 @@
 				if(request.getAttribute("currentPage") != null){
 					currentPage = (int)request.getAttribute("currentPage");
 				}
+				
+				//検索語を取得
+				if(request.getAttribute("searchWord") != null){
+					searchWord = (String)request.getAttribute("searchWord");
+				}
 			%>
 			
 			
@@ -218,46 +226,46 @@
 			<div class="main-wrapper-pagination">
 				<!-- ページ総数が1ページの場合＝常に1ページ目 -->
 				<% if(totalPageCount == 1){ %>
-				<%System.out.println("通過確認1"); %>
+				<%//System.out.println("通過確認1"); %>
 					<ul>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=1" class="disabled"><<&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=1" class="disabled"><&emsp;</a></li>
+						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=1&searchWord=<%=searchWord %>>" class="disabled"><<&emsp;</a></li>
+						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=1&searchWord=<%=searchWord %>" class="disabled"><&emsp;</a></li>
 						<li class="current-page">1</li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=1" class="disabled">&emsp;></a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=1" class="disabled">&emsp;>></a></li>
+						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=1&searchWord=<%=searchWord %>" class="disabled">&emsp;></a></li>
+						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=1&searchWord=<%=searchWord %>" class="disabled">&emsp;>></a></li>
 					</ul>
 				<% }
 				//ページ総数がNページの場合で、現在のページが1ページ目 -->
 				else if(totalPageCount > 1 && currentPage == 1){ %>
-					<%System.out.println("通過確認2"); %>
+					<%//System.out.println("通過確認2"); %>
 					<ul>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=1" class="disabled"><<&emsp;</a></li>
+						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=1&searchWord=<%=searchWord %>" class="disabled"><<&emsp;</a></li>
 						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=1" class="disabled"><&emsp;</a></li>
 						<li class="current-page"><%=currentPage %></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage+1%>">&emsp;></a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=totalPageCount%>">&emsp;>></a></li>
+						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage+1%>&searchWord=<%=searchWord %>">&emsp;></a></li>
+						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=totalPageCount%>&searchWord=<%=searchWord %>">&emsp;>></a></li>
 					</ul>
 				<% }
 				//ページ総数がNページの場合で、現在のページがNページ目
 				else if(totalPageCount > 1 && currentPage == totalPageCount){ %>
-				<%System.out.println("通過確認3"); %>
+				<%//System.out.println("通過確認3"); %>
 					<ul>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=1"><<&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage-1%>"><&emsp;</a></li>
+						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=1&searchWord=<%=searchWord %>"><<&emsp;</a></li>
+						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage-1%>&searchWord=<%=searchWord %>"><&emsp;</a></li>
 						<li class="current-page"><%=currentPage %></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=totalPageCount %>" class="disabled">&emsp;></a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=totalPageCount %>" class="disabled">&emsp;>></a></li>
+						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=totalPageCount %>&searchWord=<%=searchWord %>" class="disabled">&emsp;></a></li>
+						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=totalPageCount %>&searchWord=<%=searchWord %>" class="disabled">&emsp;>></a></li>
 					</ul>
 				<% }
 				//ページ総数がNページの場合で、上記以外のページの場合
 				else{ %>
-				<%System.out.println("通過確認4"); %>
+				<%//System.out.println("通過確認4"); %>
 					<ul>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=1"><<&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage-1%>"><&emsp;</a></li>
+						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=1&searchWord=<%=searchWord %>"><<&emsp;</a></li>
+						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage-1%>&searchWord=<%=searchWord %>"><&emsp;</a></li>
 						<li class="current-page"><%=currentPage %></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage+1 %>">&emsp;></a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=totalPageCount %>">&emsp;>></a></li>
+						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage+1 %>&searchWord=<%=searchWord %>">&emsp;></a></li>
+						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=totalPageCount %>&searchWord=<%=searchWord %>">&emsp;>></a></li>
 					</ul>
 				<% }%>
 			</div>

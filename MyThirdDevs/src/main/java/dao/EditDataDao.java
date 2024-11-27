@@ -319,7 +319,7 @@ public class EditDataDao {
 	}
 	
 	
-	//ページネーション処理で使用するデータの取得
+	//ページネーション処理で全件データを取得する際に使用する
 	public static List<TodoInfo> getSpecifyColumnTask(int pageNum, int solidTaskCount) throws ManageException{
 		
 		//そのページに表示する最初の行番号を取得
@@ -336,11 +336,9 @@ public class EditDataDao {
 					pageByPageTaskList.add(mapResultSetToTodoInfo(rs));
 				}				
 			}
-		
 		}catch(SQLException e) {
 			throw new ManageException("EM003", e);
 		}
-		
 		return pageByPageTaskList;
 	}
 }
