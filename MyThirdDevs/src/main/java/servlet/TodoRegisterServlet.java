@@ -59,15 +59,18 @@ public class TodoRegisterServlet extends TodoServlet{
 			//一括登録
 			if(bulkRegister != null) {
 				bulkRegisterTask(request, response);
+				forwardToTodoList(request, response);
 			}
 			
 			//個別登録
 			else if(registerSubmit != null) {
 				individualRegisterTask(request, response);	
+				forwardToTodoList(request, response);
 			
 			//キャンセル
 			}else if(registerCancel != null) {
 				pagingHandleOfAllTask(request, response);
+				forwardToTodoList(request, response);
 			}
 			
 		}catch(Exception e) {

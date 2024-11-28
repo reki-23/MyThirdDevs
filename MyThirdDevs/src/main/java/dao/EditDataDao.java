@@ -321,7 +321,6 @@ public class EditDataDao {
 	
 	//ページネーション処理で全件データを取得する際に使用する
 	public static List<TodoInfo> getSpecifyColumnTask(int pageNum, int solidTaskCount) throws ManageException{
-		
 		//そのページに表示する最初の行番号を取得
 		int startPage = (pageNum - 1) * solidTaskCount;
 		
@@ -329,7 +328,6 @@ public class EditDataDao {
 		List<TodoInfo> pageByPageTaskList = new ArrayList<>();
 		try(Connection con = dbc.getConnection();
 			PreparedStatement ps = con.prepareStatement(getLimitOffsetQuery)){
-			
 			ps.setInt(1, startPage);
 			try(ResultSet rs = ps.executeQuery()){
 				while(rs.next()) {

@@ -196,19 +196,19 @@
 				//URLパラメータに付加するページ番号
 				int pageNum = 1;
 			
-				//ページ総数
+				//ページ総数初期化
 				int totalPageCount = 1;
 				
 				//検索語の初期化
 				String searchWord = "";
 				
+				//現在のページ番号初期化
+				int currentPage = 1;
+				
 				//全ページ数
 				if(request.getAttribute("totalPageCount") != null){
 					totalPageCount = (int)request.getAttribute("totalPageCount");
 				}
-				
-				//現在のページ番号初期化
-				int currentPage = 1;
 				
 				//現在のページ番号を取得
 				if(request.getAttribute("currentPage") != null){
@@ -220,7 +220,6 @@
 					searchWord = (String)request.getAttribute("searchWord");
 				}
 			%>
-			
 			
 			<!-- ページネーション -->
 			<div class="main-wrapper-pagination">

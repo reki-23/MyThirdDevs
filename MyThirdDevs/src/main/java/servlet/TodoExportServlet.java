@@ -28,14 +28,12 @@ import model.WriteToFile;
 public class TodoExportServlet extends TodoServlet {
 	private static final long serialVersionUID = 1L;
        
-    
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 	}
 
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
 		try {
 			
 			request.setCharacterEncoding("UTF-8");
@@ -60,7 +58,7 @@ public class TodoExportServlet extends TodoServlet {
 			
 			//フィルターをかけない場合
 			if(export_csv != null) {
-				exportCsvFile(request, response, writter, downloadDir);			
+				exportCsvFile(request, response, writter, downloadDir);
 			}
 			
 			//フィルターをかける場合
@@ -101,7 +99,7 @@ public class TodoExportServlet extends TodoServlet {
 				ServletOutputStream out = response.getOutputStream()){
 				in.transferTo(out);
 				out.flush();
-			}			
+			}
 		}catch(ManageException e) {
 			errorHandle(request, response, e);
 		}
@@ -159,7 +157,6 @@ public class TodoExportServlet extends TodoServlet {
 				in.transferTo(out);
 				out.flush();
 			}
-			
 		}catch(ManageException e) {
 			errorHandle(request, response, e);
 		}

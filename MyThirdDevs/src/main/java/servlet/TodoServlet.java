@@ -27,9 +27,7 @@ import exception.PropertiesFileNotFoundException;
  */
 
 public class TodoServlet extends HttpServlet{
-	
 	private static final long serialVersionUID = 1L;
-	
 	
 	//プロパティファイルを読み込む
 	protected void getPropertiesFileInfo(HttpServletRequest request, HttpServletResponse response, Properties prop) throws ServletException, IOException{
@@ -46,6 +44,7 @@ public class TodoServlet extends HttpServlet{
 			errorHandle(request, response, e);
 		}
 	}
+	
 	
 	//エラーハンドリング処理
 	//ManageExceptionがcatchされた場合の処理
@@ -86,12 +85,16 @@ public class TodoServlet extends HttpServlet{
 			pageByPageTaskList = EditDataDao.getSpecifyColumnTask(pageNum, solidTaskCount);
 			request.setAttribute("todoList", pageByPageTaskList);
 			request.setAttribute("totalPageCount", totalPageCount);
-			request.setAttribute("currentPage", currentPage);			
-			RequestDispatcher dispatcher = request.getRequestDispatcher("todo/todoList.jsp");
-			dispatcher.forward(request, response);
-		
+			request.setAttribute("currentPage", currentPage);
 		}catch(ManageException e) {
 			errorHandle(request, response, e);
 		}
+	}
+	
+	
+	//フォワード
+	protected static void forwardToTodoList(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+		RequestDispatcher dispatcher = request.getRequestDispatcher("todo/todoList.jsp");
+		dispatcher.forward(request, response);
 	}
 }

@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -28,7 +27,6 @@ public class TodoSearchServlet extends TodoServlet {
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		searchHandleTask(request, response);
-		
 	}
 	
 	protected void searchHandleTask(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
@@ -47,6 +45,7 @@ public class TodoSearchServlet extends TodoServlet {
 			//検索ワードがない場合、全件取得
 			if(searchWord == null || searchWord.isBlank()) {
 				pagingHandleOfAllTask(request, response);
+				forwardToTodoList(request, response);
 			}else {
 				// TODO　検索の場合、検索結果に該当するリストを取得した後にページング処理を行う必要がある
 				List<TodoInfo> searchedResultTask = new ArrayList<TodoInfo>();
@@ -60,10 +59,8 @@ public class TodoSearchServlet extends TodoServlet {
 				}
 				pagingHandleOnlyMatchTask(request, response, searchedResultTask);
 				request.setAttribute("searchWord", searchWord);
-				RequestDispatcher dispatcher = request.getRequestDispatcher("todo/todoList.jsp");
-				dispatcher.forward(request, response);
+				forwardToTodoList(request, response);
 			}
-			
 		}catch(ManageException e) {
 			errorHandle(request, response, e);
 		}
@@ -72,7 +69,6 @@ public class TodoSearchServlet extends TodoServlet {
 	
 	//検索結果を一覧に表示した際のページネーション生成
 	protected static void pagingHandleOnlyMatchTask(HttpServletRequest request, HttpServletResponse response, List<TodoInfo> searchedResultTask) throws ServletException, IOException{
-		
 		//ページごとに表示するタスクを格納したリスト
 		List<TodoInfo> pageByPageTaskList = new ArrayList<>();
 		//1ページに表示するタスク数
@@ -104,12 +100,10 @@ public class TodoSearchServlet extends TodoServlet {
 		int end = Math.min(pageNum * solidTaskCount - 1, searchedResultTask.size());
 		
 		//検索結果が保存されているリストを取得
-		//TODO これだともしデータが120件とかの場合、存在しないインデックス151まで返そうとするので例外がスローされる
 		pageByPageTaskList = searchedResultTask.subList(start, end);
 		
 		request.setAttribute("todoList", pageByPageTaskList);
 		request.setAttribute("totalPageCount", totalPageCount);
 		request.setAttribute("currentPage", currentPage);
-		
 	}
 }
