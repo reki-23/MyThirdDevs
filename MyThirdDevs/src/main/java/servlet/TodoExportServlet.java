@@ -69,6 +69,7 @@ public class TodoExportServlet extends TodoServlet {
 			//キャンセルの場合
 			if(filter_cancel != null) {
 				pagingHandleOfAllTask(request, response);
+				forwardToTodoList(request, response);
 			}
 		}catch(Exception e) {
 			e.printStackTrace();
