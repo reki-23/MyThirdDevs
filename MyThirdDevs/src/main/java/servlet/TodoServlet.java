@@ -3,6 +3,7 @@ package servlet;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -12,6 +13,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.ConnectionEvent;
 
 import common.CommonMessage;
 import common.TodoInfo;
@@ -94,7 +96,15 @@ public class TodoServlet extends HttpServlet{
 	
 	//フォワード
 	protected static void forwardToTodoList(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-		RequestDispatcher dispatcher = request.getRequestDispatcher("todo/todoList.jsp");
-		dispatcher.forward(request, response);
+		//TODO ここでお気に入りタスクが登録されているテーブル内を検索し、そのタスクidに一致したタスクをタスク一覧ではお気に入りの星マークを黄色で表示する
+		//TODO まず、お気に入りテーブル内を検索し、タスクidを取得
+		try {
+			List<Integer> favoriteTaskIdList = EditDataDao.getFavoriteTaskId();
+			favoriteTaskIdList.forEach(System.out::println);
+			RequestDispatcher dispatcher = request.getRequestDispatcher("todo/todoList.jsp");
+			dispatcher.forward(request, response);			
+		}catch(ManageException e) {
+			errorHandle(request, response, e);
+		}
 	}
 }

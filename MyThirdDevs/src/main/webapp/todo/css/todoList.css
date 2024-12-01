@@ -110,19 +110,6 @@ input[type="file"]{
 	width:100%;
 }
 
-/*
-.delete-bulk-list input[type="submit"], .delete-individual-list input[type="submit"]{
-	background-color: red; 
-    color: white;              
-    padding: 8px 13px;
-    width: 180px;  
-    font-size: 13px;           
-    border: none;              
-    border-radius: 10px;       
-    cursor: pointer;
-    margin-right:10px;
-}
-*/
 
 .delete-bulk-list #bulk_submit, .delete-individual-list #indi_submit{
 	background-color: red; 
@@ -154,6 +141,32 @@ input[type="file"]{
 	margin-bottom:80px;
 }
 
+.favorite-checkbox {
+   -webkit-appearance: none; /* Safari/Chrome */
+   appearance: none; /* 標準的な外観をリセット */
+   width: 20px;
+   height: 20px;
+   background-color: #ddd;
+   border: 2px solid #aaa;
+   clip-path: polygon(
+     50% 0%,
+     61% 35%,
+     98% 35%,
+     68% 57%,
+     79% 91%,
+     50% 70%,
+     21% 91%,
+     32% 57%,
+     2% 35%,
+     39% 35%
+   ); /* 星の形を定義 */
+   cursor: pointer;
+}
+
+.favorite-checkbox:checked {
+    background-color: gold; /* チェック時の色 */
+    border-color: #f90;
+}
 
 /*　削除確認モーダルのスタイル　*/
 #delete_confirm_modal {

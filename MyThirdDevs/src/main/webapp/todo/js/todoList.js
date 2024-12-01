@@ -198,3 +198,20 @@ function submitFormOnCheck(checkbox){
 		document.getElementById("indi_submit").disabled = false;
 	}
 }
+
+
+//タスク個別削除時のチェックボックスの制御
+let selectedTaskIdsOfFavorite = 0;
+//チェックボックスの状態を切り替え
+function submitFormOnCheckOfFavorite(checkbox){
+	const taskId = checkbox.value;
+	//チェックされたとき、そのタスクNoを保持
+	if(checkbox.checked){
+		selectedTaskIdsOfFavorite = taskId;
+	}else{
+		selectedTaskIdsOfFavorite = taskId;
+	}
+	//hiddenに選択されたタスクNoをvalueにセット
+	document.getElementById("selectedFavIds").value = selectedTaskIdsOfFavorite;
+	document.getElementById("selectedFavIds").form.submit();
+}
