@@ -25,12 +25,11 @@ public class TodoFavoriteTaskRegisterServlet extends TodoServlet{
 	}
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
 		try {
 			request.setCharacterEncoding("UTF-8");
 			response.setCharacterEncoding("UTF-8");
 			response.setContentType("text/html; charset=UTF-8");
-					
+			
 			//プロパティファイル読み込み
 			Properties prop = new Properties();
 			getPropertiesFileInfo(request, response, prop);
@@ -49,7 +48,6 @@ public class TodoFavoriteTaskRegisterServlet extends TodoServlet{
 				pagingHandleOfAllTask(request, response);
 				forwardToTodoList(request, response);
 			}
-			
 		}catch(ManageException e) {
 			errorHandle(request, response, e);
 		}

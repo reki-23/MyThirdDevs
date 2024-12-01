@@ -22,6 +22,7 @@ public class EditDataDao {
 	private static final String insertFavSql = "INSERT INTO todofavlist VALUES(?,?,?,?,?,?,?,?)";
 	private static final String selectIdSql = "SELECT * FROM todolist WHERE id = ?";
 	private static final String selectFavIdSql = "SELECT * FROM todofavlist WHERE id = ?";
+	private static final String selectFavSql = "SELECT * FROM todofavlist";
 	private static final String deleteSql = "DELETE FROM todolist";
 	private static final String deleteFavSql = "DELETE FROM todofavlist WHERE id = ?";
 	private static final String getSql = "SELECT * FROM todolist";
@@ -182,16 +183,17 @@ public class EditDataDao {
 	//お気に入りのタスクidを取得
 	public static List<Integer> getFavoriteTaskId() throws ManageException{
 		
+		//お気に入りのタスクidを保持するリスト
 		List<Integer> favoriteTaskIdList = new ArrayList<>();
 		try(Connection con = dbc.getConnection();
-			PreparedStatement ps = con.prepareStatement(selectFavIdSql);
+			PreparedStatement ps = con.prepareStatement(selectFavSql);
 			ResultSet rs = ps.executeQuery()){
 		
 			while(rs.next()) {
 				int favTaskId = rs.getInt("id");
 				favoriteTaskIdList.add(favTaskId);
 			}
-			
+						
 		}catch(SQLException e) {
 			throw new ManageException("EM003", e);
 		}

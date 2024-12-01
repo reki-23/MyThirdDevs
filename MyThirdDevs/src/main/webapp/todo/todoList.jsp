@@ -405,7 +405,7 @@
 					<%} %>
 				<%} %>
 			</div>
-			
+
 			
 			<!-- 一覧表示 -->
 			<table class="todo-list-table">
@@ -452,13 +452,25 @@
 										</form>
 									</td>
 								</tr>
-						<%    
+						<%
 								}
 						   }
 						%>
 					</tbody>
 				</thead>
 			</table>
+			
+			
+			<!-- お気に入りタスクのタスクidを取得 -->
+			<%
+			//このリストの中身をJavaScriptに送信して、CSSを適用させたい。
+				List<Integer> favoriteTaskIdList = new ArrayList<>();
+				if(request.getAttribute("favoriteTaskIdList") != null){
+					favoriteTaskIdList = (List<Integer>)request.getAttribute("favoriteTaskIdList");
+				}
+				favoriteTaskIdList.forEach(System.out::println);
+				
+			%>
 			
 			<!-- ページネーション -->
 			<div class="main-wrapper-pagination">
@@ -628,8 +640,6 @@
 					<%} %>
 				<%} %>
 			</div>
-			
-			
 		</main>
 		<footer class="footer">
 			<div class="wrapper">
