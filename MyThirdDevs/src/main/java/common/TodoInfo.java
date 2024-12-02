@@ -44,6 +44,7 @@ public class TodoInfo {
 	private LocalDateTime createDateTime;
 	private LocalDateTime updateDateTime;
 	private String creator;
+	private boolean isFavorite;
 	
 	/*
 	 * Builder型のパラメータを受け取るので、
@@ -57,6 +58,7 @@ public class TodoInfo {
 		this.createDateTime = builder.createDateTime;
 		this.updateDateTime = builder.updateDateTime;
 		this.creator = builder.creator;
+		this.isFavorite = builder.isFavorite;
 	}
 	
 	public int getId() {
@@ -89,7 +91,11 @@ public class TodoInfo {
 
 	public String getCreator() {
 		return creator;
-	}	
+	}
+	
+	public boolean getIsFavorite() {
+		return isFavorite;
+	}
 
 	@Override
 	public String toString() {
@@ -111,6 +117,7 @@ public class TodoInfo {
 		public LocalDateTime createDateTime;
 		public LocalDateTime updateDateTime;
 		public String creator;
+		public boolean isFavorite;
 		
 		public Builder with(Consumer<Builder> consumer) {
 			consumer.accept(this);

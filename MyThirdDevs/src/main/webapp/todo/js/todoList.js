@@ -200,11 +200,12 @@ function submitFormOnCheck(checkbox){
 }
 
 
-//タスク個別削除時のチェックボックスの制御
+/* タスクお気に入り登録時 */
 let selectedTaskIdsOfFavorite = 0;
 //チェックボックスの状態を切り替え
 function submitFormOnCheckOfFavorite(checkbox){
 	const taskId = checkbox.value;
+	alert(taskId);
 	//チェックされたとき、そのタスクNoを保持
 	if(checkbox.checked){
 		selectedTaskIdsOfFavorite = taskId;

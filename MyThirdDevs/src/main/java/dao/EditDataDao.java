@@ -26,6 +26,7 @@ public class EditDataDao {
 	private static final String deleteSql = "DELETE FROM todolist";
 	private static final String deleteFavSql = "DELETE FROM todofavlist WHERE id = ?";
 	private static final String getSql = "SELECT * FROM todolist";
+	private static final String updateFavFlgSql = "UPDATE todolist SET isFavorite = ? WHERE id = ?";
 	private static final String individualDeleteSql = "DELETE FROM todolist WHERE id = ?";
 	private static final String getLimitOffsetQuery = "SELECT * FROM todolist LIMIT 50 OFFSET ?";
 	private static String dynamicQuery = "SELECT * FROM todolist WHERE 1=1";
@@ -124,25 +125,36 @@ public class EditDataDao {
 		try(Connection con = dbc.getConnection();
 			PreparedStatement selectTodoListPs = con.prepareStatement(selectIdSql);
 			PreparedStatement insertPs = con.prepareStatement(insertFavSql);
-			PreparedStatement selectFavTodoListPs = con.prepareStatement(selectFavIdSql)){
+			PreparedStatement selectFavTodoListPs = con.prepareStatement(selectFavIdSql);
+			PreparedStatement updateFavFlgPs = con.prepareStatement(updateFavFlgSql)){
+			
+			System.out.println("通過確認");
 			
 			//そのタスクidがすでに存在しているなら登録処理ではなく削除処理
-			boolean isExists = true;
+			boolean isNotExists = true;
 			selectFavTodoListPs.setInt(1, favoriteTaskId);
 			try(ResultSet rs = selectFavTodoListPs.executeQuery()){
+				System.out.println("通過確認２");
 				while(rs.next()) {
 					if(rs.getInt("id") == favoriteTaskId) {
-						isExists = false;
+						isNotExists = false;
 						break;
 					}
 				}
 			}
 			
-			if(isExists) {
-				//選択されたidをパラメータにセット
+			//お気に入りボタンが押されたことによって送信されるタスクidがお気に入りテーブル内に存在してない場合登録
+			if(isNotExists) {
+				System.out.println("通過確認３");
+				//選択されたidをパラメータにセットし、そのidのタスクのお気に入りフラグをtrueに更新
 				selectTodoListPs.setInt(1, favoriteTaskId);
+				updateFavFlgPs.setBoolean(1, true);
+				updateFavFlgPs.setInt(2, favoriteTaskId);
+				updateFavFlgPs.executeUpdate();
+				System.out.println(updateFavFlgPs.toString());
 				
-				//そのidのタスクを検索してtodofavlistに登録
+				
+				//そのidのタスクを検索
 				TodoInfo todoInfo = null;
 				try(ResultSet rs = selectTodoListPs.executeQuery()){
 					while(rs.next()) {
@@ -150,7 +162,7 @@ public class EditDataDao {
 					}
 				}
 				
-				//検索したタスクの各データをセット
+				//検索したタスクの各データをtodofavlistに登録
 				insertPs.setInt(1, todoInfo.getId());
 				insertPs.setString(2, todoInfo.getStatus());
 				insertPs.setString(3, todoInfo.getClassification());
@@ -163,8 +175,15 @@ public class EditDataDao {
 				//お気に入り登録に成功した場合
 				if(insertPs.executeUpdate() > 0) {
 					return true;
-				}				
+				}
+			//お気に入りボタンが押されたことによって送信されるタスクidがすでにお気に入りテーブル内に存在している場合削除
 			}else {
+				System.out.println("通過確認４");
+				//すでにあるタスクidのお気に入りフラグをfalseに更新
+				updateFavFlgPs.setBoolean(1, false);
+				updateFavFlgPs.setInt(2, favoriteTaskId);
+				updateFavFlgPs.executeUpdate();
+				System.out.println(updateFavFlgPs.toString());
 				try(PreparedStatement delSql = con.prepareStatement(deleteFavSql)){
 					delSql.setInt(1, favoriteTaskId);
 					if(delSql.executeUpdate() > 0) {
@@ -193,7 +212,7 @@ public class EditDataDao {
 				int favTaskId = rs.getInt("id");
 				favoriteTaskIdList.add(favTaskId);
 			}
-						
+			
 		}catch(SQLException e) {
 			throw new ManageException("EM003", e);
 		}

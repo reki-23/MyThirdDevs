@@ -36,6 +36,7 @@ public class TodoFavoriteTaskRegisterServlet extends TodoServlet{
 			
 			//選択されたタスクidを取得=個別削除時
 			String selectedFavIds = request.getParameter("selectedFavIds");
+			System.out.println(selectedFavIds);
 			
 			//お気に入り登録処理
 			if(selectedFavIds != null && !selectedFavIds.isBlank()) {

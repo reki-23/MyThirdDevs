@@ -447,7 +447,7 @@
 										<!-- お気に入り登録機能 -->
 										<form action="${pageContext.request.contextPath}/TodoFavoriteTaskRegisterServlet" method="POST">
 										<!-- あとで星マークに装飾 -->
-											<input type="checkbox" class="favorite-checkbox" name="favoriteTaskId" value="<%= info.getId() %>" onclick="submitFormOnCheckOfFavorite(this)">
+											<input type="checkbox" class="favorite-checkbox" name="favoriteTaskId" value="<%= info.getId() %>" <%=info.getIsFavorite() ? "checked" : "" %>　onclick="submitFormOnCheckOfFavorite(this)">
 											<input type="hidden" id="selectedFavIds" name="selectedFavIds" value="">
 										</form>
 									</td>
@@ -460,18 +460,7 @@
 				</thead>
 			</table>
 			
-			
-			<!-- お気に入りタスクのタスクidを取得 -->
-			<%
-			//このリストの中身をJavaScriptに送信して、CSSを適用させたい。
-				List<Integer> favoriteTaskIdList = new ArrayList<>();
-				if(request.getAttribute("favoriteTaskIdList") != null){
-					favoriteTaskIdList = (List<Integer>)request.getAttribute("favoriteTaskIdList");
-				}
-				favoriteTaskIdList.forEach(System.out::println);
-				
-			%>
-			
+
 			<!-- ページネーション -->
 			<div class="main-wrapper-pagination">
 				<!-- ページ総数が3以下の場合 -->
