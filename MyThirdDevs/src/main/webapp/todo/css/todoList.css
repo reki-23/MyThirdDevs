@@ -144,8 +144,9 @@ input[type="file"]{
 .favorite-checkbox {
    -webkit-appearance: none; /* Safari/Chrome */
    appearance: none; /* 標準的な外観をリセット */
-   width: 20px;
-   height: 20px;
+   width: 25px;
+   height: 25px;
+   color:gray;
    background-color: #ddd;
    border: 2px solid #aaa;
    clip-path: polygon(
@@ -163,10 +164,11 @@ input[type="file"]{
    cursor: pointer;
 }
 
-.favorite-checkbox:checked {
-    background-color: gold; /* チェック時の色 */
-    border-color: #f90;
+.favorite{
+	background-color: #e3c709; /* チェック時の色 */
+	border-color:#f5e890;
 }
+
 
 /*　削除確認モーダルのスタイル　*/
 #delete_confirm_modal {

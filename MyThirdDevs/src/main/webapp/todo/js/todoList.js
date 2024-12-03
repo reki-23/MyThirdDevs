@@ -205,10 +205,10 @@ let selectedTaskIdsOfFavorite = 0;
 //チェックボックスの状態を切り替え
 function submitFormOnCheckOfFavorite(checkbox){
 	const taskId = checkbox.value;
-	alert(taskId);
 	//チェックされたとき、そのタスクNoを保持
 	if(checkbox.checked){
 		selectedTaskIdsOfFavorite = taskId;
+		
 	}else{
 		selectedTaskIdsOfFavorite = taskId;
 	}
@@ -216,3 +216,21 @@ function submitFormOnCheckOfFavorite(checkbox){
 	document.getElementById("selectedFavIds").value = selectedTaskIdsOfFavorite;
 	document.getElementById("selectedFavIds").form.submit();
 }
+
+
+//画面読み込み時にお気に入りタスクのidをJSON形式で取得
+document.addEventListener("DOMContentLoaded", function(){
+	const favoriteTaskIdListJson = document.getElementById('favoriteTaskData');
+		if(favoriteTaskIdListJson){
+			const favoriteTaskIdList = JSON.parse(favoriteTaskIdListJson.dataset.tasks);
+			//上記で取得したidに対して、CSSを適用する
+			favoriteTaskIdList.forEach(taskId => {
+				const checkbox = document.querySelector(`.favorite-checkbox[data-task-id="${taskId}"]`);
+				if(checkbox){
+					checkbox.classList.add('favorite');
+				}
+			});
+		}	
+});
+
+

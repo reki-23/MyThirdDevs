@@ -9,7 +9,9 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import common.TodoInfo;
 import exception.ManageException;
@@ -19,12 +21,10 @@ public class EditDataDao {
 	
 	private static final DBConnection dbc = new DBConnection();
 	private static final String insertSql = "INSERT INTO todolist VALUES(?,?,?,?,?,?,?,?)";
-	private static final String insertFavSql = "INSERT INTO todofavlist VALUES(?,?,?,?,?,?,?,?)";
 	private static final String selectIdSql = "SELECT * FROM todolist WHERE id = ?";
-	private static final String selectFavIdSql = "SELECT * FROM todofavlist WHERE id = ?";
-	private static final String selectFavSql = "SELECT * FROM todofavlist";
+	private static final String selectFavIdSql = "SELECT isFavorite FROM todolist WHERE id = ?";
+	private static final String selectFavSql = "SELECT * FROM todolist WHERE isFavorite = 1";
 	private static final String deleteSql = "DELETE FROM todolist";
-	private static final String deleteFavSql = "DELETE FROM todofavlist WHERE id = ?";
 	private static final String getSql = "SELECT * FROM todolist";
 	private static final String updateFavFlgSql = "UPDATE todolist SET isFavorite = ? WHERE id = ?";
 	private static final String individualDeleteSql = "DELETE FROM todolist WHERE id = ?";
@@ -121,22 +121,19 @@ public class EditDataDao {
 	
 	
 	//お気に入りタスク登録
-	public static boolean registerFavoriteTask(int favoriteTaskId) throws ManageException{
+	public static Map<Integer, Boolean> registerFavoriteTask(int favoriteTaskId) throws ManageException{
+		Map<Integer, Boolean> favoriteMap = new HashMap<>();
 		try(Connection con = dbc.getConnection();
 			PreparedStatement selectTodoListPs = con.prepareStatement(selectIdSql);
-			PreparedStatement insertPs = con.prepareStatement(insertFavSql);
 			PreparedStatement selectFavTodoListPs = con.prepareStatement(selectFavIdSql);
 			PreparedStatement updateFavFlgPs = con.prepareStatement(updateFavFlgSql)){
 			
-			System.out.println("通過確認");
-			
-			//そのタスクidがすでに存在しているなら登録処理ではなく削除処理
+			//そのタスクidがすでにお気に入り登録されている場合、登録処理ではなく削除処理
 			boolean isNotExists = true;
 			selectFavTodoListPs.setInt(1, favoriteTaskId);
 			try(ResultSet rs = selectFavTodoListPs.executeQuery()){
-				System.out.println("通過確認２");
 				while(rs.next()) {
-					if(rs.getInt("id") == favoriteTaskId) {
+					if(rs.getBoolean("isFavorite") == true) {
 						isNotExists = false;
 						break;
 					}
@@ -145,63 +142,35 @@ public class EditDataDao {
 			
 			//お気に入りボタンが押されたことによって送信されるタスクidがお気に入りテーブル内に存在してない場合登録
 			if(isNotExists) {
-				System.out.println("通過確認３");
 				//選択されたidをパラメータにセットし、そのidのタスクのお気に入りフラグをtrueに更新
 				selectTodoListPs.setInt(1, favoriteTaskId);
 				updateFavFlgPs.setBoolean(1, true);
 				updateFavFlgPs.setInt(2, favoriteTaskId);
-				updateFavFlgPs.executeUpdate();
-				System.out.println(updateFavFlgPs.toString());
-				
-				
-				//そのidのタスクを検索
-				TodoInfo todoInfo = null;
-				try(ResultSet rs = selectTodoListPs.executeQuery()){
-					while(rs.next()) {
-						todoInfo = mapResultSetToTodoInfo(rs);
-					}
-				}
-				
-				//検索したタスクの各データをtodofavlistに登録
-				insertPs.setInt(1, todoInfo.getId());
-				insertPs.setString(2, todoInfo.getStatus());
-				insertPs.setString(3, todoInfo.getClassification());
-				insertPs.setString(4, todoInfo.getTask());
-				insertPs.setString(5, todoInfo.getDescription());
-				insertPs.setTimestamp(6, Timestamp.valueOf(todoInfo.getCreateDateTime()));
-				insertPs.setTimestamp(7, Timestamp.valueOf(todoInfo.getUpdateDateTime()));
-				insertPs.setString(8, todoInfo.getCreator());
-				
-				//お気に入り登録に成功した場合
-				if(insertPs.executeUpdate() > 0) {
-					return true;
+				if(updateFavFlgPs.executeUpdate() > 0) {
+					favoriteMap.put(favoriteTaskId, true);
+					return favoriteMap;
 				}
 			//お気に入りボタンが押されたことによって送信されるタスクidがすでにお気に入りテーブル内に存在している場合削除
 			}else {
-				System.out.println("通過確認４");
 				//すでにあるタスクidのお気に入りフラグをfalseに更新
 				updateFavFlgPs.setBoolean(1, false);
 				updateFavFlgPs.setInt(2, favoriteTaskId);
-				updateFavFlgPs.executeUpdate();
-				System.out.println(updateFavFlgPs.toString());
-				try(PreparedStatement delSql = con.prepareStatement(deleteFavSql)){
-					delSql.setInt(1, favoriteTaskId);
-					if(delSql.executeUpdate() > 0) {
-						return false;
-					}
+				if(updateFavFlgPs.executeUpdate() > 0) {
+					favoriteMap.put(favoriteTaskId, false);
+					return favoriteMap;
 				}
 			}
+			
 		}catch(SQLException e) {
 			e.printStackTrace();
 			throw new ManageException("EM003", e);
 		}
-		return false;
+		return favoriteMap;
 	}
 	
 	
 	//お気に入りのタスクidを取得
 	public static List<Integer> getFavoriteTaskId() throws ManageException{
-		
 		//お気に入りのタスクidを保持するリスト
 		List<Integer> favoriteTaskIdList = new ArrayList<>();
 		try(Connection con = dbc.getConnection();
@@ -216,7 +185,6 @@ public class EditDataDao {
 		}catch(SQLException e) {
 			throw new ManageException("EM003", e);
 		}
-		
 		return favoriteTaskIdList;
 	}
 	

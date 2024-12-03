@@ -1,8 +1,10 @@
+<%@page import="javax.swing.text.html.FormSubmitEvent"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="common.TodoInfo" %>
+<%@ page import="java.lang.StringBuilder" %>
  
 <!DOCTYPE html>
 <html>
@@ -447,7 +449,7 @@
 										<!-- お気に入り登録機能 -->
 										<form action="${pageContext.request.contextPath}/TodoFavoriteTaskRegisterServlet" method="POST">
 										<!-- あとで星マークに装飾 -->
-											<input type="checkbox" class="favorite-checkbox" name="favoriteTaskId" value="<%= info.getId() %>" <%=info.getIsFavorite() ? "checked" : "" %>　onclick="submitFormOnCheckOfFavorite(this)">
+											<input type="checkbox" class="favorite-checkbox" data-task-id="<%=info.getId() %>" name="favoriteTaskId" value="<%= info.getId() %>" onclick="submitFormOnCheckOfFavorite(this)">
 											<input type="hidden" id="selectedFavIds" name="selectedFavIds" value="">
 										</form>
 									</td>
@@ -456,6 +458,22 @@
 								}
 						   }
 						%>
+						<%
+							//取得したidをJSON形式で、JavaScriptに渡す
+							if(request.getAttribute("favoriteTaskIdList") != null){
+								StringBuilder jsonBuilder = new StringBuilder("[");
+								List<Integer> favoriteTaskIdList = (List<Integer>)request.getAttribute("favoriteTaskIdList");
+							    for (int i = 0; i < favoriteTaskIdList.size(); i++) {
+							        jsonBuilder.append(favoriteTaskIdList.get(i));
+							        if (i < favoriteTaskIdList.size() - 1) {
+							            jsonBuilder.append(",");
+							        }
+							    }
+							    jsonBuilder.append("]");
+							    String favoriteTaskIdListJson = jsonBuilder.toString();
+						 %>
+								<div id="favoriteTaskData" data-tasks="<%= favoriteTaskIdListJson%>"></div>
+						<%} %>
 					</tbody>
 				</thead>
 			</table>

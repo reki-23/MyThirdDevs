@@ -94,8 +94,6 @@ public class TodoServlet extends HttpServlet{
 	
 	//フォワード
 	protected static void forwardToTodoList(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-		//TODO ここでお気に入りタスクが登録されているテーブル内を検索し、そのタスクidに一致したタスクをタスク一覧ではお気に入りの星マークを黄色で表示する
-		//TODO まず、お気に入りテーブル内を検索し、タスクidを取得
 		try {
 			List<Integer> favoriteTaskIdList = EditDataDao.getFavoriteTaskId();
 			request.setAttribute("favoriteTaskIdList", favoriteTaskIdList);
