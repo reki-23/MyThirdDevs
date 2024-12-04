@@ -1,5 +1,6 @@
 package dao;
 
+import java.sql.BatchUpdateException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -9,9 +10,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import common.TodoInfo;
 import exception.ManageException;
@@ -20,7 +19,7 @@ import exception.NoElementsOnFileException;
 public class EditDataDao {
 	
 	private static final DBConnection dbc = new DBConnection();
-	private static final String insertSql = "INSERT INTO todolist VALUES(?,?,?,?,?,?,?,?)";
+	private static final String insertSql = "INSERT INTO todolist VALUES(?,?,?,?,?,?,?,?,?)";
 	private static final String selectIdSql = "SELECT * FROM todolist WHERE id = ?";
 	private static final String selectFavIdSql = "SELECT isFavorite FROM todolist WHERE id = ?";
 	private static final String selectFavSql = "SELECT * FROM todolist WHERE isFavorite = 1";
@@ -54,6 +53,7 @@ public class EditDataDao {
 				LocalDateTime createDateTime = rs.getTimestamp("createDateTime").toLocalDateTime();
 				LocalDateTime updateDateTime = rs.getTimestamp("updateDateTime").toLocalDateTime();
 				String creator = rs.getString("creator");
+				boolean isFavorite = rs.getBoolean("isFavorite");
 				
 				//データを追加
 				todoList.add(new TodoInfo.Builder().with(todo -> {
@@ -65,6 +65,7 @@ public class EditDataDao {
 					todo.createDateTime = createDateTime;
 					todo.updateDateTime = updateDateTime;
 					todo.creator = creator;
+					todo.isFavorite = isFavorite;
 				}).build());
 			}
 			return todoList;
@@ -93,6 +94,7 @@ public class EditDataDao {
 				//今は仮で、今の時間を取得する
 				ps.setTimestamp(7, Timestamp.valueOf(LocalDateTime.now()));
 				ps.setString(8, newTask.getCreator());
+				ps.setBoolean(9, false);
 				return ps.executeUpdate();
 			}else {
 				//一括登録
@@ -105,24 +107,25 @@ public class EditDataDao {
 					ps.setTimestamp(6, Timestamp.valueOf(LocalDateTime.now()));
 					ps.setTimestamp(7, Timestamp.valueOf(LocalDateTime.now())); //ここは更新日時に変更する
 					ps.setString(8, newTask.getCreator());
+					ps.setBoolean(9, false);
 					ps.addBatch();
 				}
 				//一括実行（登録）
-				return ps.executeBatch().length;
+					return ps.executeBatch().length;					
 			}
 		
 		//整合性制約違反
-		}catch(SQLIntegrityConstraintViolationException e) {
+		}catch(SQLIntegrityConstraintViolationException | BatchUpdateException e) {
 			throw new ManageException("EM009", e);
 		}catch(SQLException e) {
+			e.printStackTrace();
 			throw new ManageException("EM003", e);
 		}
 	}
 	
 	
 	//お気に入りタスク登録
-	public static Map<Integer, Boolean> registerFavoriteTask(int favoriteTaskId) throws ManageException{
-		Map<Integer, Boolean> favoriteMap = new HashMap<>();
+	public static boolean registerFavoriteTask(int favoriteTaskId) throws ManageException{
 		try(Connection con = dbc.getConnection();
 			PreparedStatement selectTodoListPs = con.prepareStatement(selectIdSql);
 			PreparedStatement selectFavTodoListPs = con.prepareStatement(selectFavIdSql);
@@ -133,7 +136,7 @@ public class EditDataDao {
 			selectFavTodoListPs.setInt(1, favoriteTaskId);
 			try(ResultSet rs = selectFavTodoListPs.executeQuery()){
 				while(rs.next()) {
-					if(rs.getBoolean("isFavorite") == true) {
+					if(rs.getBoolean("isFavorite")) {
 						isNotExists = false;
 						break;
 					}
@@ -147,8 +150,7 @@ public class EditDataDao {
 				updateFavFlgPs.setBoolean(1, true);
 				updateFavFlgPs.setInt(2, favoriteTaskId);
 				if(updateFavFlgPs.executeUpdate() > 0) {
-					favoriteMap.put(favoriteTaskId, true);
-					return favoriteMap;
+					return true;
 				}
 			//お気に入りボタンが押されたことによって送信されるタスクidがすでにお気に入りテーブル内に存在している場合削除
 			}else {
@@ -156,8 +158,7 @@ public class EditDataDao {
 				updateFavFlgPs.setBoolean(1, false);
 				updateFavFlgPs.setInt(2, favoriteTaskId);
 				if(updateFavFlgPs.executeUpdate() > 0) {
-					favoriteMap.put(favoriteTaskId, false);
-					return favoriteMap;
+					return false;
 				}
 			}
 			
@@ -165,7 +166,7 @@ public class EditDataDao {
 			e.printStackTrace();
 			throw new ManageException("EM003", e);
 		}
-		return favoriteMap;
+		return false;
 	}
 	
 	
@@ -338,6 +339,10 @@ public class EditDataDao {
 			queryBuilder.append(" AND creator = ?");
 			parameters.add(filteredTask.getCreator());
 		}
+		if(filteredTask.getIsFavorite()) {
+			queryBuilder.append(" AND isFavorite = ?");
+			parameters.add(filteredTask.getIsFavorite());
+		}
 		
 		//フィルター後の値(=parameters)を検索
 		try(Connection con = dbc.getConnection();
@@ -382,7 +387,8 @@ public class EditDataDao {
 				dbData.description = rs.getString("description");
 				dbData.createDateTime = rs.getTimestamp("createDateTime").toLocalDateTime();
 				dbData.updateDateTime = rs.getTimestamp("updateDateTime").toLocalDateTime();
-				dbData.creator = rs.getString("creator");				
+				dbData.creator = rs.getString("creator");
+				dbData.isFavorite = rs.getBoolean("isFavorite");
 			}catch(SQLException e){
 				try {
 					throw new ManageException("EM003", e);					
@@ -398,7 +404,6 @@ public class EditDataDao {
 	public static List<TodoInfo> getSpecifyColumnTask(int pageNum, int solidTaskCount) throws ManageException{
 		//そのページに表示する最初の行番号を取得
 		int startPage = (pageNum - 1) * solidTaskCount;
-		
 		//ページごとに表示するタスクを格納したリスト
 		List<TodoInfo> pageByPageTaskList = new ArrayList<>();
 		try(Connection con = dbc.getConnection();

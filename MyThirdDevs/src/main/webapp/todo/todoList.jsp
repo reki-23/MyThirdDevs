@@ -143,6 +143,7 @@
 		   			作成日時:<input type = "text" name = "createDateTime"><br>
 		   			更新日時<input type = "text" name = "updateDateTime"><br>
 		   			作成者:<input type = "text" name = "creator"><br>
+		   			お気に入り:<input type= "checkbox" name = "isFavorite"><br>
 		   			<input type = "submit" id = "filter_submit" name = "filter_submit" value = "CSV出力する" onclick="hiddenFilterModal()">
 					<input type = "submit" id = "filter_cancel" name = "filter_cancel" value = "キャンセル">
 		   		</section>

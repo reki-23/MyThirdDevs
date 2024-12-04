@@ -41,7 +41,6 @@ public class DataValidator{
 	
 	//ステータスがドロップダウンの要素と等しいかどうか
 	public static String returnValidStatus(String field) throws ManageException{
-		
 		boolean isValidStatus = field.equals("未着手") || field.equals("対応中") || field.equals("完了") || field.equals("保留") || field.equals("取下げ");
 		if(!isValidStatus) {
 			throw new ManageException("EM007", new InvalidDataExistsException());
@@ -57,6 +56,14 @@ public class DataValidator{
 		}else {
 			return LocalDateTime.parse(dateTime);
 		}
+	}
+	
+	//お気に入りの型チェック
+	public static boolean returnValidFavoriteFlg(String tmpIsFavorite) throws ManageException{
+		if(tmpIsFavorite != null) {
+			return true;
+		}
+		return false;
 	}
 	
 }

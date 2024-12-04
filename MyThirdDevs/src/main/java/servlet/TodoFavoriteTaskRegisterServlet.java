@@ -1,7 +1,7 @@
 package servlet;
 
 import java.io.IOException;
-import java.util.Map;
+import java.text.MessageFormat;
 import java.util.Properties;
 
 import javax.servlet.ServletException;
@@ -41,11 +41,10 @@ public class TodoFavoriteTaskRegisterServlet extends TodoServlet{
 			//お気に入り登録処理
 			if(selectedFavIds != null && !selectedFavIds.isBlank()) {
 				int favoriteTaskId = Integer.valueOf(selectedFavIds);
-				Map<Integer, Boolean> favoriteMap = EditDataDao.registerFavoriteTask(favoriteTaskId);
-				if(favoriteMap.containsValue(true)) {
-					request.setAttribute("favoriteSubmitMessage", prop.getProperty("task.favorite.submit"));
+				if(EditDataDao.registerFavoriteTask(favoriteTaskId)) {
+					request.setAttribute("favoriteSubmitMessage",MessageFormat.format(prop.getProperty("task.favorite.submit"), favoriteTaskId));
 				}else {
-					request.setAttribute("favoriteCancelMessage", prop.getProperty("task.favorite.cancel"));					
+					request.setAttribute("favoriteCancelMessage", MessageFormat.format(prop.getProperty("task.favorite.cancel"), favoriteTaskId));					
 				}
 				pagingHandleOfAllTask(request, response);
 				forwardToTodoList(request, response);

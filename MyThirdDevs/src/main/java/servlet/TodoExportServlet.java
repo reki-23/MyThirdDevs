@@ -120,11 +120,13 @@ public class TodoExportServlet extends TodoServlet {
 			String tmpCreateDateTime = request.getParameter("createDateTime");
 			String tmpUpdateDateTime = request.getParameter("updateDateTime");
 			String creator = request.getParameter("creator");
-			
+			String tmpIsFavorite = request.getParameter("isFavorite");
+		
 			//Stringからの型変換チェック
 			int id = DataValidator.returnValidId(tmpId);
 			LocalDateTime createDateTime = DataValidator.returnValidDateTime(tmpCreateDateTime);
 			LocalDateTime updateDateTime = DataValidator.returnValidDateTime(tmpUpdateDateTime);
+			boolean isFavorite = DataValidator.returnValidFavoriteFlg(tmpIsFavorite);
 			
 			//受取ったパラメータをリストに格納
 			TodoInfo filteredTask = new TodoInfo.Builder().with(todo -> {
@@ -136,6 +138,7 @@ public class TodoExportServlet extends TodoServlet {
 				todo.createDateTime = createDateTime;
 				todo.updateDateTime = updateDateTime;
 				todo.creator = creator;
+				todo.isFavorite = isFavorite;
 			}).build();
 			
 			//フィルター後のデータを取得
