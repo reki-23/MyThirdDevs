@@ -228,7 +228,7 @@ public class EditDataDao {
 				return true;
 			}else {
 				return false;
-			}		
+			}
 		}catch(SQLException e) {
 			//あとでかく
 			throw new ManageException("EM003", e);
@@ -418,5 +418,45 @@ public class EditDataDao {
 			throw new ManageException("EM003", e);
 		}
 		return pageByPageTaskList;
+	}
+	
+	
+	
+	//並べかえ処理
+	public static List<TodoInfo> getListOrderByParameters(String tHeaderParameter, int pushedCount) throws ManageException{
+		
+		List<TodoInfo> orderedTaskList = new ArrayList<TodoInfo>();
+		try(Connection con = dbc.getConnection()){
+			String queryBuilder;
+			
+			//偶数回の場合は昇順、奇数回の場合は降順
+			if(pushedCount == 0) {
+				queryBuilder = "SELECT * FROM todolist ORDER BY " + tHeaderParameter + " ASC";
+				//TODO ここメソッド化する
+				try(PreparedStatement ps = con.prepareStatement(queryBuilder)){
+					try(ResultSet rs = ps.executeQuery()){			
+						while(rs.next()) {
+							orderedTaskList.add(mapResultSetToTodoInfo(rs));
+						}
+					}
+				}
+			}else {
+				queryBuilder = "SELECT * FROM todolist ORDER BY " + tHeaderParameter + " DESC";
+				//TODO ここメソッド化する
+				try(PreparedStatement ps = con.prepareStatement(queryBuilder)){
+					try(ResultSet rs = ps.executeQuery()){			
+						while(rs.next()) {
+							orderedTaskList.add(mapResultSetToTodoInfo(rs));
+						}
+					}
+				}
+				pushedCount = 0;
+			}
+			return orderedTaskList;
+			
+		}catch(SQLException e) {
+			e.printStackTrace();
+			throw new ManageException("EM003", e);
+		}
 	}
 }

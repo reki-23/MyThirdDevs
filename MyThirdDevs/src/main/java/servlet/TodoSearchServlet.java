@@ -22,7 +22,7 @@ public class TodoSearchServlet extends TodoServlet {
 	private static final long serialVersionUID = 1L;
     
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		searchHandleTask(request, response);
+		searchHandleTask(request, response);			
 	}
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -41,10 +41,12 @@ public class TodoSearchServlet extends TodoServlet {
 			
 			//検索ワードを取得
 			String searchWord = request.getParameter("searchWord");
+			//並べかえの項目を取得
+			String tHeaderParameter = request.getParameter("tHeaderParameter");
 			
 			//検索ワードがない場合、全件取得
 			if(searchWord == null || searchWord.isBlank()) {
-				pagingHandleOfAllTask(request, response);
+				TodoOrderingServlet.getOrderedHandleTask(request, response, tHeaderParameter);
 				forwardToTodoList(request, response);
 			}else {
 				// TODO　検索の場合、検索結果に該当するリストを取得した後にページング処理を行う必要がある
@@ -68,7 +70,8 @@ public class TodoSearchServlet extends TodoServlet {
 	
 	
 	//検索結果を一覧に表示した際のページネーション生成
-	protected static void pagingHandleOnlyMatchTask(HttpServletRequest request, HttpServletResponse response, List<TodoInfo> searchedResultTask) throws ServletException, IOException{
+	protected static void pagingHandleOnlyMatchTask(HttpServletRequest request, HttpServletResponse response, List<TodoInfo> resultTask) throws ServletException, IOException{
+		
 		//ページごとに表示するタスクを格納したリスト
 		List<TodoInfo> pageByPageTaskList = new ArrayList<>();
 		//1ページに表示するタスク数
@@ -88,7 +91,7 @@ public class TodoSearchServlet extends TodoServlet {
 		
 		//タスク件数・ページ数計算
 		currentPage = pageNum;
-		totalTaskCount = searchedResultTask.size();
+		totalTaskCount = resultTask.size();
 		totalPageCount = (totalTaskCount - 1) / solidTaskCount + 1;
 		
 		//そのページに表示する最初の行番号を取得
@@ -97,10 +100,10 @@ public class TodoSearchServlet extends TodoServlet {
 		//この2つのうち最小のほうがそのページに表示するリストの数となる
 		//第一引数はそのページの要素数に限らず、+51ずつの値となるが、第二引数はそのページに表示するデータの要素数を表す
 		//例えば、120件取得した場合、第一引数は151、第二引数は120を取得する
-		int end = Math.min(pageNum * solidTaskCount - 1, searchedResultTask.size());
+		int end = Math.min(pageNum * solidTaskCount - 1, resultTask.size());
 		
 		//検索結果が保存されているリストを取得
-		pageByPageTaskList = searchedResultTask.subList(start, end);
+		pageByPageTaskList = resultTask.subList(start, end);
 		
 		request.setAttribute("todoList", pageByPageTaskList);
 		request.setAttribute("totalPageCount", totalPageCount);

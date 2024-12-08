@@ -355,6 +355,16 @@ input[type="file"]{
     padding: 10px 10px;
 }
 
+.todo-list-table th a {
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    padding: 20px 20px;
+    text-decoration:none;
+    line-height: 2em;
+  }
+
+
 .todo-list-table td {
     color: #555;
     font-size:13px;

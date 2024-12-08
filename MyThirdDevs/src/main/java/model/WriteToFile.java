@@ -13,7 +13,7 @@ public class WriteToFile {
 	public void writeToCsv(String downloadFileToPath, List<TodoInfo> registeredTask) throws ManageException{
 		
 		try(BufferedWriter bw = new BufferedWriter(new FileWriter(downloadFileToPath))){
-			String header = "No,ステータス,分類,タスク名,タスク概要,作成日時,更新日時,作成者,お気に入り";
+			String header = "No,ステータス,分類,タスク名,タスク概要,作成日時,更新日時,作成者";
 			bw.write(header);
 			for(TodoInfo info : registeredTask) {
 				bw.newLine();
