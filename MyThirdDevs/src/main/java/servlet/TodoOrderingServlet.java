@@ -18,7 +18,7 @@ import exception.ManageException;
 @WebServlet("/TodoOrderingServlet")
 public class TodoOrderingServlet extends TodoServlet {
 	private static final long serialVersionUID = 1L;
-   
+	private static int pushedCounta = 0;
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String tHeaderParameter = request.getParameter("tHeaderParameter");
 		getOrderedHandleTask(request, response, tHeaderParameter);
@@ -32,24 +32,29 @@ public class TodoOrderingServlet extends TodoServlet {
 	
 	protected static void getOrderedHandleTask(HttpServletRequest request, HttpServletResponse response, String tHeaderParameter) throws ServletException, IOException{
 		
-		try {	
+		try {
 			request.setCharacterEncoding("UTF-8");
 			response.setCharacterEncoding("UTF-8");
 			response.setContentType("text/html; charset=UTF-8");
 			
-			request.setAttribute("tHeaderParameter", tHeaderParameter);
-			int pushedCount = 0;
 			//並べかえの処理を行わない場合
 			if(tHeaderParameter == null || tHeaderParameter.isBlank()) {
 				pagingHandleOfAllTask(request, response);
 				return;
 			}
+
+			String tmpPushedCounta = request.getParameter("pushedCounta");
+			System.out.println(tmpPushedCounta);
+			if(tmpPushedCounta != null) {
+				pushedCounta = Integer.valueOf(tmpPushedCounta);
+			}
+			request.setAttribute("pushedCounta", pushedCounta);
+			request.setAttribute("tHeaderParameter", tHeaderParameter);
 			//ページごとに表示するタスクを格納したリスト
 			//TODO 2つ目の引数である数字をどう表現するか
-			pushedCount++;
-			List<TodoInfo> orderedTaskList = EditDataDao.getListOrderByParameters(tHeaderParameter, pushedCount);
+			List<TodoInfo> orderedTaskList = EditDataDao.getListOrderByParameters(tHeaderParameter, pushedCounta);
 			TodoSearchServlet.pagingHandleOnlyMatchTask(request, response, orderedTaskList);
-			pushedCount--;
+			
 		}catch(ManageException e) {
 			errorHandle(request, response, e);
 		}

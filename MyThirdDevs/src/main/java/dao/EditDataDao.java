@@ -423,39 +423,36 @@ public class EditDataDao {
 	
 	
 	//並べかえ処理
-	public static List<TodoInfo> getListOrderByParameters(String tHeaderParameter, int pushedCount) throws ManageException{
-		
+	public static List<TodoInfo> getListOrderByParameters(String tHeaderParameter, int pushedCounta) throws ManageException{
+		//並べ替え後のデータを保持するリスト
 		List<TodoInfo> orderedTaskList = new ArrayList<TodoInfo>();
 		try(Connection con = dbc.getConnection()){
 			String queryBuilder;
-			
 			//偶数回の場合は昇順、奇数回の場合は降順
-			if(pushedCount == 0) {
+			if(pushedCounta % 2 == 0) {
 				queryBuilder = "SELECT * FROM todolist ORDER BY " + tHeaderParameter + " ASC";
-				//TODO ここメソッド化する
-				try(PreparedStatement ps = con.prepareStatement(queryBuilder)){
-					try(ResultSet rs = ps.executeQuery()){			
-						while(rs.next()) {
-							orderedTaskList.add(mapResultSetToTodoInfo(rs));
-						}
-					}
-				}
+				buildQuery(queryBuilder, con, orderedTaskList);
 			}else {
 				queryBuilder = "SELECT * FROM todolist ORDER BY " + tHeaderParameter + " DESC";
-				//TODO ここメソッド化する
-				try(PreparedStatement ps = con.prepareStatement(queryBuilder)){
-					try(ResultSet rs = ps.executeQuery()){			
-						while(rs.next()) {
-							orderedTaskList.add(mapResultSetToTodoInfo(rs));
-						}
-					}
-				}
-				pushedCount = 0;
+				buildQuery(queryBuilder, con, orderedTaskList);
 			}
 			return orderedTaskList;
-			
 		}catch(SQLException e) {
-			e.printStackTrace();
+			throw new ManageException("EM003", e);
+		}
+	}
+	
+	
+	//並べかえのクエリを生成する処理
+	private static void buildQuery(String queryBuilder, Connection con, List<TodoInfo> orderedTaskList) throws ManageException{
+		//TODO ここメソッド化する
+		try(PreparedStatement ps = con.prepareStatement(queryBuilder)){
+			try(ResultSet rs = ps.executeQuery()){			
+				while(rs.next()) {
+					orderedTaskList.add(mapResultSetToTodoInfo(rs));
+				}
+			}
+		}catch(SQLException e) {
 			throw new ManageException("EM003", e);
 		}
 	}

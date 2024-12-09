@@ -247,6 +247,13 @@
 				if(request.getAttribute("tHeaderParameter") != null){
 					tHeaderParameter = (String)request.getAttribute("tHeaderParameter");
 				}
+				
+				int pushedCounta = 1;
+				if(request.getAttribute("pushedCounta") != null){
+					if((int)request.getAttribute("pushedCounta") == 1){
+						pushedCounta = 0;						
+					}
+				}
 			%>
 			
 			<!-- ページネーション -->
@@ -423,7 +430,7 @@
 			<table class="todo-list-table">
 				<thead>
 					<tr>
-						<th><a href="${pageContext.request.contextPath}/TodoOrderingServlet?tHeaderParameter=id">No</a></th>
+						<th><a href="${pageContext.request.contextPath}/TodoOrderingServlet?tHeaderParameter=id&pushedCounta=<%=pushedCounta%>">No</a></th>
 						<th><a href="${pageContext.request.contextPath}/TodoOrderingServlet?tHeaderParameter=status">ステータス</a></th>
 						<th><a href="${pageContext.request.contextPath}/TodoOrderingServlet?tHeaderParameter=classification">分類</a></th>
 						<th><a href="${pageContext.request.contextPath}/TodoOrderingServlet?tHeaderParameter=task">タスク名</a></th>
