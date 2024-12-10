@@ -243,17 +243,92 @@
 			<!-- 並べかえの項目を取得 -->
 			<%
 				//並べかえ項目
-				String tHeaderParameter = null;
+				String tHeaderParameter = "";
 				if(request.getAttribute("tHeaderParameter") != null){
 					tHeaderParameter = (String)request.getAttribute("tHeaderParameter");
 				}
 				
-				int pushedCounta = 1;
-				if(request.getAttribute("pushedCounta") != null){
-					if((int)request.getAttribute("pushedCounta") == 1){
-						pushedCounta = 0;						
+				//並べかえようのカウンタ
+				int any_pushedCounta = 1;
+				if(request.getAttribute("any_pushedCounta") != null){
+					if((int)request.getAttribute("any_pushedCounta") == 1){
+						any_pushedCounta = 0;						
 					}
 				}
+				
+				//idの並べかえのカウンタ
+				/*
+				int id_pushedCounta = 1;
+				if(request.getAttribute("id_pushedCounta") != null){
+					if((int)request.getAttribute("id_pushedCounta") == 1){
+						id_pushedCounta = 0;						
+					}
+				}
+				
+				//ステータスのカウンタ
+				int status_pushedCounta = 1;
+				if(request.getAttribute("status_pushedCounta") != null){
+					if((int)request.getAttribute("status_pushedCounta") == 1){
+						status_pushedCounta = 0;						
+					}
+				}
+				
+				//分類のカウンタ
+				int classification_pushedCounta = 1;
+				if(request.getAttribute("classification_pushedCounta") != null){
+					if((int)request.getAttribute("classification_pushedCounta") == 1){
+						classification_pushedCounta = 0;						
+					}
+				}
+				
+				//タスク名のカウンタ
+				int task_pushedCounta = 1;
+				if(request.getAttribute("task_pushedCounta") != null){
+					if((int)request.getAttribute("task_pushedCounta") == 1){
+						task_pushedCounta = 0;						
+					}
+				}
+				
+				//タスク概要のカウンタ
+				int description_pushedCounta = 1;
+				if(request.getAttribute("description_pushedCounta") != null){
+					if((int)request.getAttribute("description_pushedCounta") == 1){
+						description_pushedCounta = 0;						
+					}
+				}
+				
+				//作成日時のカウンタ
+				int createDateTime_pushedCounta = 1;
+				if(request.getAttribute("createDateTime_pushedCounta") != null){
+					if((int)request.getAttribute("createDateTime_pushedCounta") == 1){
+						createDateTime_pushedCounta = 0;						
+					}
+				}
+				
+				//更新日時のカウンタ
+				int updateDateTime_pushedCounta = 1;
+				if(request.getAttribute("updateDateTime_pushedCounta") != null){
+					if((int)request.getAttribute("updateDateTime_pushedCounta") == 1){
+						updateDateTime_pushedCounta = 0;						
+					}
+				}
+				
+				//作成者のカウンタ
+				int creator_pushedCounta = 1;
+				if(request.getAttribute("creator_pushedCounta") != null){
+					if((int)request.getAttribute("creator_pushedCounta") == 1){
+						creator_pushedCounta = 0;						
+					}
+				}
+				
+				//お気に入りのカウンタ
+				int isFavorite_pushedCounta = 1;
+				if(request.getAttribute("isFavorite_pushedCounta") != null){
+					if((int)request.getAttribute("isFavorite_pushedCounta") == 1){
+						isFavorite_pushedCounta = 0;						
+					}
+				}
+				*/
 			%>
 			
 			<!-- ページネーション -->
@@ -430,16 +505,16 @@
 			<table class="todo-list-table">
 				<thead>
 					<tr>
-						<th><a href="${pageContext.request.contextPath}/TodoOrderingServlet?tHeaderParameter=id&pushedCounta=<%=pushedCounta%>">No</a></th>
-						<th><a href="${pageContext.request.contextPath}/TodoOrderingServlet?tHeaderParameter=status">ステータス</a></th>
-						<th><a href="${pageContext.request.contextPath}/TodoOrderingServlet?tHeaderParameter=classification">分類</a></th>
-						<th><a href="${pageContext.request.contextPath}/TodoOrderingServlet?tHeaderParameter=task">タスク名</a></th>
-						<th><a href="${pageContext.request.contextPath}/TodoOrderingServlet?tHeaderParameter=description">タスク概要</a></th>
-						<th><a href="${pageContext.request.contextPath}/TodoOrderingServlet?tHeaderParameter=createDateTime">作成日時</a></th>
-						<th><a href="${pageContext.request.contextPath}/TodoOrderingServlet?tHeaderParameter=updateDateTime">更新日時</a></th>
-						<th><a href="${pageContext.request.contextPath}/TodoOrderingServlet?tHeaderParameter=creator">作成者</a></th>
+						<th><a href="${pageContext.request.contextPath}/TodoOrderingServlet?tHeaderParameter=id&any_pushedCounta=<%=any_pushedCounta%>">No<%if(any_pushedCounta==1 && tHeaderParameter.equals("id")){%><span class="sort-arrow">↑</span><%}else if(any_pushedCounta==0 && tHeaderParameter.equals("id")){%><span class="sort-arrow">↓</span><%} %></a></th>
+						<th><a href="${pageContext.request.contextPath}/TodoOrderingServlet?tHeaderParameter=status&any_pushedCounta=<%=any_pushedCounta%>">ステータス<%if(any_pushedCounta==1 && tHeaderParameter.equals("status")){%><span class="sort-arrow">↑</span><%}else if(any_pushedCounta==0 && tHeaderParameter.equals("status")){%><span class="sort-arrow">↓</span><%} %></a></th>
+						<th><a href="${pageContext.request.contextPath}/TodoOrderingServlet?tHeaderParameter=classification&any_pushedCounta=<%=any_pushedCounta%>">分類<%if(any_pushedCounta==1 && tHeaderParameter.equals("classification")){%><span class="sort-arrow">↑</span><%}else if(any_pushedCounta==0 && tHeaderParameter.equals("classification")){%><span class="sort-arrow">↓</span><%} %></a></th>
+						<th><a href="${pageContext.request.contextPath}/TodoOrderingServlet?tHeaderParameter=task&any_pushedCounta=<%=any_pushedCounta%>">タスク名<%if(any_pushedCounta==1 && tHeaderParameter.equals("task")){%><span class="sort-arrow">↑</span><%}else if(any_pushedCounta==0 && tHeaderParameter.equals("task")){%><span class="sort-arrow">↓</span><%} %></a></th>
+						<th><a href="${pageContext.request.contextPath}/TodoOrderingServlet?tHeaderParameter=description&any_pushedCounta=<%=any_pushedCounta%>">タスク概要<%if(any_pushedCounta==1 && tHeaderParameter.equals("description")){%><span class="sort-arrow">↑</span><%}else if(any_pushedCounta==0 && tHeaderParameter.equals("description")){%><span class="sort-arrow">↓</span><%} %></a></th>
+						<th><a href="${pageContext.request.contextPath}/TodoOrderingServlet?tHeaderParameter=createDateTime&any_pushedCounta=<%=any_pushedCounta%>">作成日時<%if(any_pushedCounta==1 && tHeaderParameter.equals("createDateTime")){%><span class="sort-arrow">↑</span><%}else if(any_pushedCounta==0 && tHeaderParameter.equals("createDateTime")){%><span class="sort-arrow">↓</span><%} %></a></th>
+						<th><a href="${pageContext.request.contextPath}/TodoOrderingServlet?tHeaderParameter=updateDateTime&any_pushedCounta=<%=any_pushedCounta%>">更新日時<%if(any_pushedCounta==1 && tHeaderParameter.equals("updateDateTime")){%><span class="sort-arrow">↑</span><%}else if(any_pushedCounta==0 && tHeaderParameter.equals("updateDateTime")){%><span class="sort-arrow">↓</span><%} %></a></th>
+						<th><a href="${pageContext.request.contextPath}/TodoOrderingServlet?tHeaderParameter=creator&any_pushedCounta=<%=any_pushedCounta%>">作成者<%if(any_pushedCounta==1 && tHeaderParameter.equals("creator")){%><span class="sort-arrow">↑</span><%}else if(any_pushedCounta==0 && tHeaderParameter.equals("creator")){%><span class="sort-arrow">↓</span><%} %></a></th>
 						<th>削除</th>		
-						<th><a href="${pageContext.request.contextPath}/TodoOrderingServlet?tHeaderParameter=isFavorite">お気に入り</a></th>		
+						<th><a href="${pageContext.request.contextPath}/TodoOrderingServlet?tHeaderParameter=isFavorite&any_pushedCounta=<%=any_pushedCounta%>">お気に入り<%if(any_pushedCounta==1 && tHeaderParameter.equals("isFavorite")){%><span class="sort-arrow">↑</span><%}else if(any_pushedCounta==0 && tHeaderParameter.equals("isFavorite")){%><span class="sort-arrow">↓</span><%} %></a></th>		
 					</tr>
 					<tbody>
 						<!-- 以下、繰り返し表示 -->

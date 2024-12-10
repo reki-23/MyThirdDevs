@@ -380,6 +380,13 @@ input[type="file"]{
 	text-decoration:underline;
 }
 
+/* ソート時の矢印のスタイル */
+.sort-arrow{
+	font-size: medium;
+ 	padding:2px;
+ 	
+}
+
 /* タスク検索スタイル */
 .search-task{
 	width: 300px;

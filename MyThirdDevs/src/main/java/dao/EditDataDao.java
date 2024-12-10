@@ -423,19 +423,18 @@ public class EditDataDao {
 	
 	
 	//並べかえ処理
-	public static List<TodoInfo> getListOrderByParameters(String tHeaderParameter, int pushedCounta) throws ManageException{
+	public static List<TodoInfo> getListOrderByParameters(String tHeaderParameter, int any_pushedCounta) throws ManageException{
 		//並べ替え後のデータを保持するリスト
 		List<TodoInfo> orderedTaskList = new ArrayList<TodoInfo>();
 		try(Connection con = dbc.getConnection()){
 			String queryBuilder;
 			//偶数回の場合は昇順、奇数回の場合は降順
-			if(pushedCounta % 2 == 0) {
+			if(any_pushedCounta % 2 == 0) {
 				queryBuilder = "SELECT * FROM todolist ORDER BY " + tHeaderParameter + " ASC";
-				buildQuery(queryBuilder, con, orderedTaskList);
 			}else {
 				queryBuilder = "SELECT * FROM todolist ORDER BY " + tHeaderParameter + " DESC";
-				buildQuery(queryBuilder, con, orderedTaskList);
 			}
+			buildQuery(queryBuilder, con, orderedTaskList);
 			return orderedTaskList;
 		}catch(SQLException e) {
 			throw new ManageException("EM003", e);
