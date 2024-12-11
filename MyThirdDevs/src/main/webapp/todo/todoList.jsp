@@ -110,7 +110,7 @@
 			
 			
 			<!-- タスクエクスポートボタン -->
-			<form action="${pageContext.request.contextPath}/TodoExportServlet" method="POST" class="export-file">
+			<form action="${pageContext.request.contextPath}/TodoExportServlet" method="POST">
 				<div class="export-csvfile">
 					<input type="submit" value="CSV出力">
 					<input type="hidden" id="export-csv" name="export-csv">
@@ -255,80 +255,6 @@
 						any_pushedCounta = 0;						
 					}
 				}
-				
-				//idの並べかえのカウンタ
-				/*
-				int id_pushedCounta = 1;
-				if(request.getAttribute("id_pushedCounta") != null){
-					if((int)request.getAttribute("id_pushedCounta") == 1){
-						id_pushedCounta = 0;						
-					}
-				}
-				
-				//ステータスのカウンタ
-				int status_pushedCounta = 1;
-				if(request.getAttribute("status_pushedCounta") != null){
-					if((int)request.getAttribute("status_pushedCounta") == 1){
-						status_pushedCounta = 0;						
-					}
-				}
-				
-				//分類のカウンタ
-				int classification_pushedCounta = 1;
-				if(request.getAttribute("classification_pushedCounta") != null){
-					if((int)request.getAttribute("classification_pushedCounta") == 1){
-						classification_pushedCounta = 0;						
-					}
-				}
-				
-				//タスク名のカウンタ
-				int task_pushedCounta = 1;
-				if(request.getAttribute("task_pushedCounta") != null){
-					if((int)request.getAttribute("task_pushedCounta") == 1){
-						task_pushedCounta = 0;						
-					}
-				}
-				
-				//タスク概要のカウンタ
-				int description_pushedCounta = 1;
-				if(request.getAttribute("description_pushedCounta") != null){
-					if((int)request.getAttribute("description_pushedCounta") == 1){
-						description_pushedCounta = 0;						
-					}
-				}
-				
-				//作成日時のカウンタ
-				int createDateTime_pushedCounta = 1;
-				if(request.getAttribute("createDateTime_pushedCounta") != null){
-					if((int)request.getAttribute("createDateTime_pushedCounta") == 1){
-						createDateTime_pushedCounta = 0;						
-					}
-				}
-				
-				//更新日時のカウンタ
-				int updateDateTime_pushedCounta = 1;
-				if(request.getAttribute("updateDateTime_pushedCounta") != null){
-					if((int)request.getAttribute("updateDateTime_pushedCounta") == 1){
-						updateDateTime_pushedCounta = 0;						
-					}
-				}
-				
-				//作成者のカウンタ
-				int creator_pushedCounta = 1;
-				if(request.getAttribute("creator_pushedCounta") != null){
-					if((int)request.getAttribute("creator_pushedCounta") == 1){
-						creator_pushedCounta = 0;						
-					}
-				}
-				
-				//お気に入りのカウンタ
-				int isFavorite_pushedCounta = 1;
-				if(request.getAttribute("isFavorite_pushedCounta") != null){
-					if((int)request.getAttribute("isFavorite_pushedCounta") == 1){
-						isFavorite_pushedCounta = 0;						
-					}
-				}
-				*/
 			%>
 			
 			<!-- ページネーション -->
@@ -498,8 +424,16 @@
 					</ul>
 					<%} %>
 				<%} %>
+				<!-- お気に入りで絞るモーダル -->
 			</div>
 
+				<form action="${pageContext.request.contextPath}/TodoSearchServlet" method="POST">
+					<section id="filtering-favoriteTask-modal">
+						<h5>お気に入りで絞る</h5>
+						<input type="checkbox" name="filteringFavorite">
+					</section>
+				</form>
+				<div id="filtering-favoriteTask-modal-mask"></div>
 			
 			<!-- 一覧表示 -->
 			<table class="todo-list-table">
@@ -514,7 +448,7 @@
 						<th><a href="${pageContext.request.contextPath}/TodoOrderingServlet?tHeaderParameter=updateDateTime&any_pushedCounta=<%=any_pushedCounta%>">更新日時<%if(any_pushedCounta==1 && tHeaderParameter.equals("updateDateTime")){%><span class="sort-arrow">↑</span><%}else if(any_pushedCounta==0 && tHeaderParameter.equals("updateDateTime")){%><span class="sort-arrow">↓</span><%} %></a></th>
 						<th><a href="${pageContext.request.contextPath}/TodoOrderingServlet?tHeaderParameter=creator&any_pushedCounta=<%=any_pushedCounta%>">作成者<%if(any_pushedCounta==1 && tHeaderParameter.equals("creator")){%><span class="sort-arrow">↑</span><%}else if(any_pushedCounta==0 && tHeaderParameter.equals("creator")){%><span class="sort-arrow">↓</span><%} %></a></th>
 						<th>削除</th>		
-						<th><a href="${pageContext.request.contextPath}/TodoOrderingServlet?tHeaderParameter=isFavorite&any_pushedCounta=<%=any_pushedCounta%>">お気に入り<%if(any_pushedCounta==1 && tHeaderParameter.equals("isFavorite")){%><span class="sort-arrow">↑</span><%}else if(any_pushedCounta==0 && tHeaderParameter.equals("isFavorite")){%><span class="sort-arrow">↓</span><%} %></a></th>		
+						<th><a href="${pageContext.request.contextPath}/TodoOrderingServlet?tHeaderParameter=isFavorite&any_pushedCounta=<%=any_pushedCounta%>">お気に入り<%if(any_pushedCounta==1 && tHeaderParameter.equals("isFavorite")){%><span class="sort-arrow">↑</span><%}else if(any_pushedCounta==0 && tHeaderParameter.equals("isFavorite")){%><span class="sort-arrow">↓</span><%} %></a><span class="kebab-menu"><button id="filtering-favorite">︙</button></span></th>	
 					</tr>
 					<tbody>
 						<!-- 以下、繰り返し表示 -->

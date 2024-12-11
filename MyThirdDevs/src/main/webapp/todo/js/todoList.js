@@ -234,3 +234,27 @@ document.addEventListener("DOMContentLoaded", function(){
 });
 
 
+
+//お気に入りのカバブアイコンを押下したときのモーダル表示
+document.addEventListener('DOMContentLoaded', () => {
+  const filtering_favorite = document.querySelector('#filtering-favorite');
+  const filtering_favoriteTask_modal = document.querySelector('#filtering-favoriteTask-modal');
+  const filtering_favoriteTask_modal_mask = document.querySelector('#filtering-favoriteTask-modal-mask');
+
+  const showKeyframes = {
+    opacity: [0, 1],
+    visibility: 'visible',
+  };
+  const options = {
+    duration: 200,
+    easing: 'ease',
+    fill: 'forwards',
+  };
+
+  // モーダルウィンドウを開く
+  filtering_favorite.addEventListener('click', () => {
+    filtering_favoriteTask_modal.animate(showKeyframes, options);
+    filtering_favoriteTask_modal_mask.animate(showKeyframes, options);
+  });
+});
+

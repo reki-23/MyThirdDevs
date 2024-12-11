@@ -58,10 +58,11 @@ public class TodoSearchServlet extends TodoServlet {
 					String errorMessage = prop.getProperty("notFound.error");
 					request.setAttribute("errorMessage", errorMessage);
 					pagingHandleOfAllTask(request, response);
+				}else {
+					pagingHandleOnlyMatchTask(request, response, searchedResultTask);
+					request.setAttribute("searchWord", searchWord);
 				}
-				pagingHandleOnlyMatchTask(request, response, searchedResultTask);
-				request.setAttribute("searchWord", searchWord);
-				forwardToTodoList(request, response);
+				forwardToTodoList(request, response);					
 			}
 		}catch(ManageException e) {
 			errorHandle(request, response, e);
