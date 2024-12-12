@@ -57,9 +57,14 @@ form{
 	height:0px;
 }
 
-form {
-    margin: 0;
-    padding: 0;
+/* お気に入りマークのスタイル */
+.favorite-mark{
+	display:inline;
+}
+
+/* 削除マークのスタイル */
+.delete-mark{
+	display:inline;
 }
 
 /*　タスク登録のスタイル　*/
@@ -333,13 +338,12 @@ input[type="file"]{
     border-collapse: collapse;
     font-family: Arial, sans-serif;
     margin:auto;
-    margin-top:20px;
+    margin-top:10px;
     width:90%;
 }
 
 .todo-list-table th, .todo-list-table td {
     border: 1px solid #ddd;
-    padding: 3px;
     text-align: center;
 }
 
@@ -372,11 +376,11 @@ input[type="file"]{
     line-height: 2em;
   }
 
-
 .todo-list-table td {
     color: #555;
     font-size:13px;
     overflow-wrap: break-word; /* 長い単語を分割して改行 */
+    vertical-align: center;
 }
 
 .todo-list-table td a{
@@ -387,6 +391,24 @@ input[type="file"]{
 .todo-list-table td a:hover{
 	opacity:0.5;
 	text-decoration:underline;
+}
+
+/* チェックボックスを隠す */
+.custom-checkbox input[type="checkbox"] {
+    display: none; /* チェックボックス自体を非表示 */
+}
+
+/* ゴミ箱アイコンのスタイル */
+.custom-checkbox i {
+    font-size: 15px;       /* アイコンサイズ */
+    color: #0e7fe3;           /* 通常時の色 */
+    cursor: pointer;       /* マウスカーソルをポインタに */
+    transition: color 0.3s; /* 色変更のアニメーション */
+}
+
+/* チェックされたときのスタイル */
+.custom-checkbox input[type="checkbox"]:checked + i {
+    color: red;            /* チェック時の色を変更 */
 }
 
 /* ソート時の矢印のスタイル */

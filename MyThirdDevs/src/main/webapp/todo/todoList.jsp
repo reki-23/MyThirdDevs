@@ -11,6 +11,7 @@
 	<head>
 		<meta charset="UTF-8">
 		<link rel="stylesheet" href="/MyThirdDevs/todo/css/todoList.css" type="text/css">
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 		<script src="/MyThirdDevs/todo/js/todoList.js"></script>
 		<title>TODOリスト</title>
 	</head>
@@ -25,7 +26,7 @@
 					<li><a href="${pageContext.request.contextPath}/todo/journalList.jsp">ジャーナル</a></li>
 					<li><a href="${pageContext.request.contextPath}/todo/logout.jsp">ログアウト</a></li>
 				</ul>
-			</nav>		
+			</nav>	
 		</header>
 		
 		<main>
@@ -467,13 +468,16 @@
 									<td><%= info.getCreator() %></td>
 									<td>
 										<!-- 個別削除ボタン＝削除識別子は一意であるタスクNoと同値とする -->
-										<form action="${pageContext.request.contextPath}/TodoDeleteServlet" method="POST">
-											<input type="checkbox" name="individualDeleteId" value="<%= info.getId() %>" onchange="submitFormOnCheck(this)">
-										</form>
+										<label class="custom-checkbox">
+											<form action="${pageContext.request.contextPath}/TodoDeleteServlet" class="delete-mark" method="POST">
+												<input type="checkbox" name="individualDeleteId" value="<%= info.getId() %>" onchange="submitFormOnCheck(this)">
+												<i class="far fa-trash-alt"></i>
+											</form>
+										</label>
 									</td>
 									<td>
 										<!-- お気に入り登録機能 -->
-										<form action="${pageContext.request.contextPath}/TodoFavoriteTaskRegisterServlet" method="POST">
+										<form action="${pageContext.request.contextPath}/TodoFavoriteTaskRegisterServlet" class="favorite-mark" method="POST">
 										<!-- あとで星マークに装飾 -->
 											<input type="checkbox" class="favorite-checkbox" data-task-id="<%=info.getId() %>" name="favoriteTaskId" value="<%= info.getId() %>" onclick="submitFormOnCheckOfFavorite(this)">
 											<input type="hidden" id="selectedFavIds" name="selectedFavIds" value="">
