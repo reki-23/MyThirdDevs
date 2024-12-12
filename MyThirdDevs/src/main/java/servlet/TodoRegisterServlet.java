@@ -55,7 +55,7 @@ public class TodoRegisterServlet extends TodoServlet{
 			String registerCancel = request.getParameter("register_cancel");
 			//一括登録ボタン押下で送信される値を取得
 			String bulkRegister = request.getParameter("bulk_register");
-		
+			
 			//一括登録
 			if(bulkRegister != null) {
 				bulkRegisterTask(request, response);

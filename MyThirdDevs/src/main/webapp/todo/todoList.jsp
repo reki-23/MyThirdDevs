@@ -95,7 +95,7 @@
 			
 			
 			<!--　タスク一括登録ボタン -->
-			<form action="${pageContext.request.contextPath}/TodoRegisterServlet" method="POST" enctype="multipart/form-data"　onsubmit="validateFileUpload();" >
+			<form action="${pageContext.request.contextPath}/TodoRegisterServlet" class="bulk-register-form" method="POST" enctype="multipart/form-data"　onsubmit="validateFileUpload();" >
 				<div class="bulk-register-list">
 					<input type="submit" id="bulk_register" name="bulk_register" value="一括登録" disabled>
 				</div>
@@ -431,7 +431,8 @@
 				<form action="${pageContext.request.contextPath}/TodoSearchServlet" method="POST">
 					<section id="filtering-favoriteTask-modal">
 						<h5>お気に入りで絞る</h5>
-						<input type="checkbox" name="filteringFavorite">
+						<input type="checkbox" name="filteringFavoriteCheck" onclick="submitFilteringFavoriteTask(this)">
+						<input type="hidden" id="filteringFavorite" name="filteringFavorite" value="">
 					</section>
 				</form>
 				<div id="filtering-favoriteTask-modal-mask"></div>

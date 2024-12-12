@@ -190,6 +190,25 @@ public class EditDataDao {
 	}
 	
 	
+	//お気に入りのタスクのみを取得
+	public static List<TodoInfo> getOnlyFavoriteTaskList() throws ManageException{
+		//お気に入りのタスクのみを保持するリスト
+		List<TodoInfo> onlyFavoriteTaskList = new ArrayList<>();
+		try(Connection con = dbc.getConnection();
+			PreparedStatement ps = con.prepareStatement(selectFavSql);
+			ResultSet rs = ps.executeQuery()){
+		
+			while(rs.next()) {
+				onlyFavoriteTaskList.add(mapResultSetToTodoInfo(rs));
+			}
+			
+		}catch(SQLException e) {
+			throw new ManageException("EM003", e);
+		}
+		return onlyFavoriteTaskList;
+	}
+	
+	
 	//タスク一括削除
 	public static boolean bulkDeleteTask() throws ManageException{
 		
@@ -445,11 +464,10 @@ public class EditDataDao {
 	//並べかえのクエリを生成する処理
 	private static void buildQuery(String queryBuilder, Connection con, List<TodoInfo> orderedTaskList) throws ManageException{
 		//TODO ここメソッド化する
-		try(PreparedStatement ps = con.prepareStatement(queryBuilder)){
-			try(ResultSet rs = ps.executeQuery()){			
-				while(rs.next()) {
-					orderedTaskList.add(mapResultSetToTodoInfo(rs));
-				}
+		try(PreparedStatement ps = con.prepareStatement(queryBuilder);
+			ResultSet rs = ps.executeQuery()){
+			while(rs.next()) {
+				orderedTaskList.add(mapResultSetToTodoInfo(rs));
 			}
 		}catch(SQLException e) {
 			throw new ManageException("EM003", e);

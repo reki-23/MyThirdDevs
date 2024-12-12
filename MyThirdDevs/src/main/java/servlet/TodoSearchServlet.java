@@ -29,6 +29,7 @@ public class TodoSearchServlet extends TodoServlet {
 		searchHandleTask(request, response);
 	}
 	
+	//検索機能
 	protected void searchHandleTask(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 		try {
 			request.setCharacterEncoding("UTF-8");
@@ -43,6 +44,15 @@ public class TodoSearchServlet extends TodoServlet {
 			String searchWord = request.getParameter("searchWord");
 			//並べかえの項目を取得
 			String tHeaderParameter = request.getParameter("tHeaderParameter");
+			//お気に入りで検索する際のフラグを取得
+			boolean filteringFavorite = Boolean.valueOf(request.getParameter("filteringFavorite"));
+			if(filteringFavorite) {
+				List<TodoInfo> onlyFavoriteTaskList = EditDataDao.getOnlyFavoriteTaskList();
+				request.setAttribute("todoList", onlyFavoriteTaskList);
+				pagingHandleOnlyMatchTask(request, response, onlyFavoriteTaskList);
+				forwardToTodoList(request, response);
+				return;
+			}
 			
 			//検索ワードがない場合、全件取得
 			if(searchWord == null || searchWord.isBlank()) {
@@ -70,7 +80,7 @@ public class TodoSearchServlet extends TodoServlet {
 	}
 	
 	
-	//検索結果を一覧に表示した際のページネーション生成
+	//何かしらの条件で絞られた一覧を表示する際にページネーションを生成するリスト
 	protected static void pagingHandleOnlyMatchTask(HttpServletRequest request, HttpServletResponse response, List<TodoInfo> resultTask) throws ServletException, IOException{
 		
 		//ページごとに表示するタスクを格納したリスト

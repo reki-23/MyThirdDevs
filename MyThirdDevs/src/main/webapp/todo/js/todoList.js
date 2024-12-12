@@ -100,7 +100,6 @@ document.addEventListener('DOMContentLoaded', () => {
 //一括削除か個別削除かを共通の削除確認モーダルのhiddenに設定し、モーダルを表示する
 function setDeleteTypeAndModalDisp(type){
 	document.getElementById('deleteType').value = type;
-	//alert('確認');
 	const bulk_submit = document.querySelector('#bulk_submit');
 	const indi_submit = document.querySelector('#indi_submit');
 	const delete_confirm_modal = document.querySelector('#delete_confirm_modal');
@@ -218,6 +217,18 @@ function submitFormOnCheckOfFavorite(checkbox){
 }
 
 
+/*お気に入りタスクを検索する際のチェックボックスを押下した際に即座にサーブレットに送信する処理*/
+function submitFilteringFavoriteTask(checkbox){
+	if(checkbox.checked){
+		document.getElementById("filteringFavorite").value = true;
+	}else{
+		document.getElementById("filteringFavorite").value = false;
+	}
+	document.getElementById("filteringFavorite").form.submit();
+	
+}
+
+
 //画面読み込み時にお気に入りタスクのidをJSON形式で取得
 document.addEventListener("DOMContentLoaded", function(){
 	const favoriteTaskIdListJson = document.getElementById('favoriteTaskData');
@@ -232,7 +243,6 @@ document.addEventListener("DOMContentLoaded", function(){
 			});
 		}	
 });
-
 
 
 //お気に入りのカバブアイコンを押下したときのモーダル表示
