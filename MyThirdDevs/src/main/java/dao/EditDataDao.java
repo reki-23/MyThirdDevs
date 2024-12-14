@@ -42,31 +42,9 @@ public class EditDataDao {
 		try(Connection con = dbc.getConnection();
 			PreparedStatement ps = con.prepareStatement(getSql);
 			ResultSet rs = ps.executeQuery()){
-			
 			//データ取得
 			while(rs.next()) {
-				int id = rs.getInt("id");
-				String status = rs.getString("status");
-				String classification = rs.getString("classification");
-				String task = rs.getString("task");
-				String description = rs.getString("description");
-				LocalDateTime createDateTime = rs.getTimestamp("createDateTime").toLocalDateTime();
-				LocalDateTime updateDateTime = rs.getTimestamp("updateDateTime").toLocalDateTime();
-				String creator = rs.getString("creator");
-				boolean isFavorite = rs.getBoolean("isFavorite");
-				
-				//データを追加
-				todoList.add(new TodoInfo.Builder().with(todo -> {
-					todo.id = id;
-					todo.status = status;
-					todo.classification = classification;
-					todo.task = task;
-					todo.description = description;
-					todo.createDateTime = createDateTime;
-					todo.updateDateTime = updateDateTime;
-					todo.creator = creator;
-					todo.isFavorite = isFavorite;
-				}).build());
+				todoList.add(mapResultSetToTodoInfo(rs));
 			}
 			return todoList;
 		}catch(SQLException e) {
@@ -396,7 +374,6 @@ public class EditDataDao {
 	
 	//DB内を検索し、インスタンスを返す
 	private static TodoInfo mapResultSetToTodoInfo(ResultSet rs) throws RuntimeException{
-		
 		return new TodoInfo.Builder().with(dbData -> {
 			try {
 				dbData.id = rs.getInt("id");
@@ -404,7 +381,8 @@ public class EditDataDao {
 				dbData.classification = rs.getString("classification");
 				dbData.task = rs.getString("task");
 				dbData.description = rs.getString("description");
-				dbData.createDateTime = rs.getTimestamp("createDateTime").toLocalDateTime();
+				dbData.createDateTime = LocalDateTime.parse(rs.getTimestamp("createDateTime").toLocalDateTime().format(formatter), formatter);
+				System.out.println(dbData.createDateTime.format(formatter));
 				dbData.updateDateTime = rs.getTimestamp("updateDateTime").toLocalDateTime();
 				dbData.creator = rs.getString("creator");
 				dbData.isFavorite = rs.getBoolean("isFavorite");

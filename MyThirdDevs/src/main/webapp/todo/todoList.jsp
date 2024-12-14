@@ -425,17 +425,19 @@
 					</ul>
 					<%} %>
 				<%} %>
-				<!-- お気に入りで絞るモーダル -->
 			</div>
-
-				<form action="${pageContext.request.contextPath}/TodoSearchServlet" method="POST">
-					<section id="filtering-favoriteTask-modal">
-						<h5>お気に入りで絞る</h5>
-						<input type="checkbox" name="filteringFavoriteCheck" onclick="submitFilteringFavoriteTask(this)">
-						<input type="hidden" id="filteringFavorite" name="filteringFavorite" value="">
-					</section>
-				</form>
-				<div id="filtering-favoriteTask-modal-mask"></div>
+			
+			<!-- お気に入りで絞るモーダル -->
+			<form action="${pageContext.request.contextPath}/TodoSearchServlet" method="POST">
+				<section id="filtering-favoriteTask-modal">
+					<h4>お気に入りタスクフィルタ</h4>
+					<input type="submit" name="filteringFavoriteCheckClear" value="フィルタをクリア" onclick="submitFilteringFavoriteTask(value)">
+					<input type="submit" name="filteringFavoriteCheck" value="フィルタをかける" onclick="submitFilteringFavoriteTask(value)">
+					<input type="hidden" id="filteringFavorite" name="filteringFavorite" value="">
+				</section>
+			</form>
+			<div id="filtering-favoriteTask-modal-mask"></div>
+			
 			
 			<!-- 一覧表示 -->
 			<table class="todo-list-table">

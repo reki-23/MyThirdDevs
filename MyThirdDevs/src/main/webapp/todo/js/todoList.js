@@ -218,8 +218,8 @@ function submitFormOnCheckOfFavorite(checkbox){
 
 
 /*お気に入りタスクを検索する際のチェックボックスを押下した際に即座にサーブレットに送信する処理*/
-function submitFilteringFavoriteTask(checkbox){
-	if(checkbox.checked){
+function submitFilteringFavoriteTask(value){
+	if(value=="フィルタをかける"){
 		document.getElementById("filteringFavorite").value = true;
 	}else{
 		document.getElementById("filteringFavorite").value = false;
@@ -247,24 +247,19 @@ document.addEventListener("DOMContentLoaded", function(){
 
 //お気に入りのカバブアイコンを押下したときのモーダル表示
 document.addEventListener('DOMContentLoaded', () => {
-  const filtering_favorite = document.querySelector('#filtering-favorite');
+  const filtering_favorite_icon = document.querySelector('#filtering-favorite'); // カバブアイコン
   const filtering_favoriteTask_modal = document.querySelector('#filtering-favoriteTask-modal');
   const filtering_favoriteTask_modal_mask = document.querySelector('#filtering-favoriteTask-modal-mask');
 
-  const showKeyframes = {
-    opacity: [0, 1],
-    visibility: 'visible',
-  };
-  const options = {
-    duration: 200,
-    easing: 'ease',
-    fill: 'forwards',
-  };
+  filtering_favorite_icon.addEventListener('click', () => {
+    filtering_favoriteTask_modal.style.display = 'block';
+    filtering_favoriteTask_modal.style.opacity = '1';
+    filtering_favoriteTask_modal.style.visibility = 'visible';
 
-  // モーダルウィンドウを開く
-  filtering_favorite.addEventListener('click', () => {
-    filtering_favoriteTask_modal.animate(showKeyframes, options);
-    filtering_favoriteTask_modal_mask.animate(showKeyframes, options);
+    filtering_favoriteTask_modal_mask.style.display = 'block';
+    filtering_favoriteTask_modal_mask.style.opacity = '1';
+    filtering_favoriteTask_modal_mask.style.visibility = 'visible';
   });
 });
+
 

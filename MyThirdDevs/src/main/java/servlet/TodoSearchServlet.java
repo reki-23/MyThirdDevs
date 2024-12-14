@@ -46,9 +46,11 @@ public class TodoSearchServlet extends TodoServlet {
 			String tHeaderParameter = request.getParameter("tHeaderParameter");
 			//お気に入りで検索する際のフラグを取得
 			boolean filteringFavorite = Boolean.valueOf(request.getParameter("filteringFavorite"));
+			//お気に入りで検索をかけた場合、それだけを取得
 			if(filteringFavorite) {
 				List<TodoInfo> onlyFavoriteTaskList = EditDataDao.getOnlyFavoriteTaskList();
 				request.setAttribute("todoList", onlyFavoriteTaskList);
+				request.setAttribute("isFilteringFavorite", true);
 				pagingHandleOnlyMatchTask(request, response, onlyFavoriteTaskList);
 				forwardToTodoList(request, response);
 				return;

@@ -36,7 +36,6 @@ public class TodoServlet extends HttpServlet{
 				//読み込み失敗時
 				throw new ManageException("EM001", new PropertiesFileNotFoundException());
 			}
-			
 			try(InputStreamReader reader = new InputStreamReader(input, "UTF-8")){
 				prop.load(reader);
 			}
