@@ -32,7 +32,7 @@ public class EditDataDao {
 	private static final int invalidId = -1;
 	private static final LocalDateTime invalidCreateDateTime = LocalDateTime.MIN;
 	private static final LocalDateTime invalidUpdateDateTime = LocalDateTime.MIN;
-	private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+	private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("y/M/d H:mm:ss");
 	
 	
 	//タスク取得
@@ -89,9 +89,8 @@ public class EditDataDao {
 					ps.addBatch();
 				}
 				//一括実行（登録）
-					return ps.executeBatch().length;					
+				return ps.executeBatch().length;					
 			}
-		
 		//整合性制約違反
 		}catch(SQLIntegrityConstraintViolationException | BatchUpdateException e) {
 			throw new ManageException("EM009", e);
@@ -381,8 +380,7 @@ public class EditDataDao {
 				dbData.classification = rs.getString("classification");
 				dbData.task = rs.getString("task");
 				dbData.description = rs.getString("description");
-				dbData.createDateTime = LocalDateTime.parse(rs.getTimestamp("createDateTime").toLocalDateTime().format(formatter), formatter);
-				System.out.println(dbData.createDateTime.format(formatter));
+				dbData.createDateTime = rs.getTimestamp("createDateTime").toLocalDateTime();
 				dbData.updateDateTime = rs.getTimestamp("updateDateTime").toLocalDateTime();
 				dbData.creator = rs.getString("creator");
 				dbData.isFavorite = rs.getBoolean("isFavorite");

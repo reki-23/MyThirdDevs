@@ -13,7 +13,6 @@
 		<meta charset="UTF-8">
 		<link rel="stylesheet" href="/MyThirdDevs/todo/css/todoList.css" type="text/css">
 		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
 		<script src="/MyThirdDevs/todo/js/todoList.js"></script>
 		<title>TODOリスト</title>
 	</head>
@@ -32,168 +31,10 @@
 		</header>
 		
 		<main>
-			
-			<!-- メッセージ表示箇所 -->
-			<!-- 削除に成功した場合 -->
-			<%
-	        Boolean deleteJudge = (Boolean)request.getAttribute("deleteJudge");
-	        %>
-	        <%
-	        if(deleteJudge != null && deleteJudge){
-	        %>
-	        	<div class = "delete-success">
-	         		<h4>正常に削除されました。</h4>	
-	        	</div>
-	    	<%
-	    	}else if(deleteJudge != null && !deleteJudge){
-	    	%>
-		        <div class = "delete-failure">
-		        	<h4>削除するデータがありません。</h4>
-		        </div>
-	        <%
-	        }
-	        %>
-			
-			<!-- タスク登録完了メッセージ表示 -->
-			<%if(request.getAttribute("registerMessage") != null){%>
-				<div class="register-submit-message">
-					<h4><%=request.getAttribute("registerMessage")%></h4>
-				</div>
-			<%}%>
-			
-			
-			<!-- お気に入り登録完了メッセージ表示 -->
-			<%if(request.getAttribute("favoriteSubmitMessage") != null){%>
-				<div class="register-submit-message">
-					<h4><%=(String)request.getAttribute("favoriteSubmitMessage")%></h4>
-				</div>
-			<%}%>
-			
-			
-			<!-- お気に入りから削除した際のメッセージ -->
-			<%if(request.getAttribute("favoriteCancelMessage") != null){ %>
-				<div class="register-faliure-message">
-					<h4><%=(String)request.getAttribute("favoriteCancelMessage") %></h4>
-				</div>
-			<%} %>
-			
-			
-	  		<!-- タスク登録失敗メッセージ表示 -->
-			<%if(request.getAttribute("errorMessageList") != null){ %>	
-				<%for(String errMsg : (List<String>)request.getAttribute("errorMessageList")){ %>
-					<div class="register-faliure-message">
-						<h4><%= errMsg %></h4>
-					</div>
-				<%} %>
-			<%} %>
-			
-			
-			<!-- 共通のエラーメッセージ表示 -->
-			<%if(request.getAttribute("errorMessage") != null){ %>
-				<div class="common-error-message">
-					<h4><%=request.getAttribute("errorMessage")%></h4>
-				</div>
-			<%} %>
-			
-			
-			<!--　タスク一括登録ボタン -->
-			<form action="${pageContext.request.contextPath}/TodoRegisterServlet" class="bulk-register-form" method="POST" enctype="multipart/form-data"　onsubmit="validateFileUpload();" >
-				<div class="bulk-register-list">
-					<input type="submit" id="bulk_register" name="bulk_register" value="一括登録" disabled>
-				</div>
-				<input type="file" id ="csvFile" name="csvFile" accept=".csv" onchange="validateForm()">
-				<input type="hidden" id="fileName" name="fileName" value="">
-			</form>
-	
-			
-			<!-- 個別登録ボタン -->
-			<div class="register-list">
-				<button id="register-button">個別登録</button>
-			</div>
-			
-			
-			<!-- タスクエクスポートボタン -->
-			<form action="${pageContext.request.contextPath}/TodoExportServlet" method="POST">
-				<div class="export-csvfile">
-					<input type="submit" value="CSV出力">
-					<input type="hidden" id="export-csv" name="export-csv">
-				</div>
-			</form>
-			
-			
-			<!-- タスクフィルター付きエクスポートボタン -->
-			<div class="export-filter-csv">
-				<button id="export-filter-csv-button">フィルターをかけて出力</button>			
-			</div>
-			
-			
-			<!-- タスクフィルターモーダル -->
-			<form action="${pageContext.request.contextPath}/TodoExportServlet" method = "POST">
-				<section id = "export-csv-filter">
-		   			<h1>フィルターをかけたいデータを入力してください。</h1>
-		   			id:<input type = "text" name = "filter_id" id="filter_id"><br>
-		   			ステータス:<select id="status" name="status">
-		   					<option value=""></option>
-					        <option value="未着手">未着手</option>
-					        <option value="対応中">対応中</option>
-					        <option value="完了">完了</option>
-					        <option value="取下げ">取下げ</option>
-					        <option value="保留">保留</option>
-					    	</select><br>
-		   			種類:<input type = "text" name = "classification"><br>
-		   			タスク名:<input type = "text" name = "task"><br>
-		   			タスク詳細:<input type = "text" name = "description"><br>
-		   			作成日時:<input type = "text" name = "createDateTime"><br>
-		   			更新日時<input type = "text" name = "updateDateTime"><br>
-		   			作成者:<input type = "text" name = "creator"><br>
-		   			お気に入り:<input type= "checkbox" name = "isFavorite"><br>
-		   			<input type = "submit" id = "filter_submit" name = "filter_submit" value = "CSV出力する" onclick="hiddenFilterModal()">
-					<input type = "submit" id = "filter_cancel" name = "filter_cancel" value = "キャンセル">
-		   		</section>
-			</form>
-			<div id="export-csv-filter-mask"></div>
-			
-			
-			<!-- タスク登録モーダル -->
-			<form action="${pageContext.request.contextPath}/TodoRegisterServlet" method = "POST">
-		   		<section id = "register_task">
-		   			<h1>登録したいタスクの詳細を入力してください。</h1>
-		   			id:<input type = "text" name = "id" id="id"><br>
-		   			ステータス:<select id="status" name="status">
-		   					<option value=""></option>
-					        <option value="未着手">未着手</option>
-					        <option value="対応中">対応中</option>
-					        <option value="完了">完了</option>
-					        <option value="取下げ">取下げ</option>
-					        <option value="保留">保留</option>
-					    	</select><br>
-		   			種類:<input type = "text" name = "classification"><br>
-		   			タスク名:<input type = "text" name = "task"><br>
-		   			タスク詳細:<input type = "text" name = "description"><br>
-		   			作成者:<input type = "text" name = "creator"><br>
-		   			<input type = "submit" id = "register_cancel" name = "register_cancel" value = "キャンセル">
-					<input type = "submit" id = "register_submit" name = "register_submit" value = "登録する">
-		   		</section>
-			</form>
-			<div id="register_mask"></div>
-			
-			
-			<!-- 個別削除ボタン -->
-			<div class="delete-individual-list">
-				<input type="submit" id="indi_submit" value="選択したタスクを削除する" onclick="setDeleteTypeAndModalDisp('individual');" disabled>
-			</div>
-			
-			
-			<!-- 一括削除ボタン -->
-			<div class="delete-bulk-list">
-				<input type="submit" id="bulk_submit" value="一括削除する" onclick="setDeleteTypeAndModalDisp('bulk');">
-			</div>
-			
-			
 			<!-- 共通の削除確認モーダル -->
 			<form action="${pageContext.request.contextPath}/TodoDeleteServlet" method="POST">
 				<section id="delete_confirm_modal">
-					<h3>削除しますか？</h3>
+					<h3>完全に削除しますか？</h3>
 					<input type="submit" id="delCancel" name="delCancel" value="キャンセル" onclick="closeModal();">
 					<input type="submit" id="delSubmit" name="delSubmit" value="決定">
 					<input type="hidden" id="deleteType" name="deleteType" value="">
@@ -440,21 +281,6 @@
 			</form>
 			<div id="filtering-favoriteTask-modal-mask"></div>
 			
-			
-			<!-- 設定ボタン -->
-			<div class="setting-button-container">
-				<button id="setting-button" onclick="submitSetting()"><i class="fa-solid fa-gear"></i></button>
-			</div>
-			
-			
-			<!-- 設定ボタンを押下した際のコンテキストメニュー -->
-			<div class="setting-context-menu">
-				<ul id="context-menu" class="context-menu">
-					<li id="menu-option-1">ゴミ箱を開く</li>
-					<li id="menu-option-2">ゴミ箱内を削除する</li>
-					<li id="menu-option-3">閉じる</li>
-				</ul>
-			</div>
 			
 			<!-- 一覧表示 -->
 			<table class="todo-list-table">

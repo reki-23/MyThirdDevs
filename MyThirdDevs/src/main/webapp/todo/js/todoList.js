@@ -263,3 +263,10 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
+//設定ボタン押下後のコンテクストメニュー表示制御
+function submitSetting(){
+	alert('ボタンが押された');
+	//以下、できてない
+	document.querySelector("context-menu").display = 'visible';
+}
+
