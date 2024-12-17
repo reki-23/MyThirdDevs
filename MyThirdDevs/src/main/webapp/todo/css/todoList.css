@@ -418,13 +418,13 @@ input[type="file"]{
   cursor: pointer;
   border: none;
   background-color: transparent;
-  z-index: 10; /* テーブルより前面に表示 */
+  z-index: 20; /* テーブルより前面に表示 */
   color:gray;
 }
 
 /* カスタムコンテキストメニューのスタイル */
 .context-menu {
-    display: none;/* 初期状態では非表示 */
+    visibility:hidden;/* 初期状態では非表示 */
     position: absolute;
     list-style: none;
     margin: 0;
@@ -432,8 +432,9 @@ input[type="file"]{
     background-color: white;
     border: 1px solid #ccc;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
+    z-index: 20;
     font-size:12px;
+    left: 90%; /* お気に入り列の位置に合わせる */
 }
 
 .context-menu li {
