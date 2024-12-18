@@ -21,10 +21,12 @@ public class EditDataDao {
 	private static final DBConnection dbc = new DBConnection();
 	private static final String insertSql = "INSERT INTO todolist VALUES(?,?,?,?,?,?,?,?,?)";
 	private static final String insertCashSql = "INSERT INTO todocashlist SELECT * FROM todolist WHERE id = ?";
+	private static final String insertAllCashSql = "INSERT INTO todocashlist SELECT * FROM todolist";
 	private static final String selectIdSql = "SELECT * FROM todolist WHERE id = ?";
 	private static final String selectFavIdSql = "SELECT isFavorite FROM todolist WHERE id = ?";
 	private static final String selectFavSql = "SELECT * FROM todolist WHERE isFavorite = 1";
 	private static final String deleteSql = "DELETE FROM todolist";
+	private static final String deleteCashSql = "DELETE FROM todocashlist";
 	private static final String getSql = "SELECT * FROM todolist";
 	private static final String getCashSql = "SELECT * FROM todocashlist";
 	private static final String updateFavFlgSql = "UPDATE todolist SET isFavorite = ? WHERE id = ?";
@@ -188,11 +190,17 @@ public class EditDataDao {
 	}
 	
 	
-	//タスク一括削除
+	//todolistでのタスク一括削除＝ゴミ箱への登録
 	public static boolean bulkDeleteTask() throws ManageException{
 		
 		try(Connection con = dbc.getConnection();
-			PreparedStatement ps = con.prepareStatement(deleteSql)){
+			PreparedStatement ps = con.prepareStatement(deleteSql);
+			PreparedStatement insertCashSqlPs = con.prepareStatement(insertAllCashSql)){
+			
+			//todolistで削除されるタスクをキャッシュリストに保存
+			insertCashSqlPs.addBatch();
+			insertCashSqlPs.executeBatch();
+			
 			//削除件数
 			int deleteCount = ps.executeUpdate();
 			if(deleteCount > 0) {
@@ -209,7 +217,7 @@ public class EditDataDao {
 	}
 	
 	
-	//タスク個別削除
+	//todolistでのタスク個別削除＝ゴミ箱への登録
 	public static boolean individualDeleteTask(List<Integer> deletedIdList) throws ManageException{
 		
 		try(Connection con = dbc.getConnection();
@@ -238,6 +246,27 @@ public class EditDataDao {
 		}catch(SQLException e) {
 			//あとでかく
 			e.printStackTrace();	
+			throw new ManageException("EM003", e);
+		}
+	}
+	
+	
+	//ゴミ箱内を一括削除＝完全に削除
+	public static boolean bulkDeleteCashListTask() throws ManageException{
+		try(Connection con = dbc.getConnection();
+			PreparedStatement ps = con.prepareStatement(deleteCashSql)){
+			
+			//削除件数
+			int deleteCount = ps.executeUpdate();
+			if(deleteCount > 0) {
+				//trueなら削除成功
+				return true;
+			}else {
+				//falseなら削除失敗
+				return false;				
+			}
+			
+		}catch(SQLException e) {
 			throw new ManageException("EM003", e);
 		}
 	}

@@ -61,107 +61,32 @@ form{
 	height:30px;
 }
 
-/* お気に入りマークのスタイル */
-.favorite-mark{
-	display:inline;
-}
 
-/* 削除マークのスタイル */
-.delete-mark{
-	display:inline;
-}
-
-
-.favorite-checkbox {
-   -webkit-appearance: none; /* Safari/Chrome */
-   appearance: none; /* 標準的な外観をリセット */
-   width: 25px;
-   height: 25px;
-   color: #595c5a;
-   background-color: #ddd;
-   border: 2px solid #aaa;
-   clip-path: polygon(
-     50% 0%,
-     61% 35%,
-     98% 35%,
-     68% 57%,
-     79% 91%,
-     50% 70%,
-     21% 91%,
-     32% 57%,
-     2% 35%,
-     39% 35%
-   ); /* 星の形を定義 */
-   cursor: pointer;
-}
-
-/* お気に入りフィルタ時のモーダルのスタイル */
-#filtering-favoriteTask-modal{
- 	position: fixed;
-	width: 350px;
-	padding: 20px;
-	margin: auto;
-	  padding: 20px;
-	  top: 50%;
-	  left: 50%;
-	  background-color: #f9f9f9;
-	  border: 1px solid #ddd;
-	  border-radius: 8px;
-	  transform: translate(-50%, -50%);
-	  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-	  font-family: Arial, sans-serif;
-	  z-index:20;
-	  visibility:hidden;	
-}
- 
-#filtering-favoriteTask-modal h4{
-    color: #333;
-    margin-bottom: 15px;
-    text-align: center;
-}
-
-#filtering-favoriteTask-modal input[type="submit"] {
-  padding: 8px 16px;
-  margin: 10px;
-  margin-left:50px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 15px;
-  width:100px;
-}
-
-#filtering-favoriteTask-modal-mask{
-	position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color:rgba(0, 0, 0, 0.5);
-    z-index:10;
-    visibility:hidden;
-}
-
-#filtering-favoriteTask-modal input[name="filteringFavoriteCheckClear"] {
-  background-color: #f5f5f5;
-  color: #333;
-  font-size:10px;
-}
-
-#filtering-favoriteTask-modal input[name="filteringFavoriteCheckClear"]:hover {
-  background-color: #e0e0e0;
-}
-
-/* 決定ボタン */
-#filtering-favoriteTask-modal input[name="filteringFavoriteCheck"] {
-    background-color: #007BFF;
+.previous-todolist-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 13px;
     color: #fff;
-	font-size:10px;
+    text-decoration: none;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    text-align: center;
+    margin-left:20px;
 }
 
-#filtering-favoriteTask-modal input[name="filteringFavoriteCheck"]:hover {
-  background-color: #0056b3;
+.previous-todolist-btn:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
 }
+
+.previous-todolist-btn:active {
+    background-color: #004080;
+    transform: scale(0.95);
+}
+
+
 
 /*　削除確認モーダルのスタイル　*/
 #delete_confirm_modal{

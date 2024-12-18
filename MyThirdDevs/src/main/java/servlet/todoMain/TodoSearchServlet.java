@@ -83,7 +83,7 @@ public class TodoSearchServlet extends TodoServlet {
 	
 	
 	//何かしらの条件で絞られた一覧を表示する際にページネーションを生成するリスト
-	protected static void pagingHandleOnlyMatchTask(HttpServletRequest request, HttpServletResponse response, List<TodoInfo> resultTask) throws ServletException, IOException{
+	public static void pagingHandleOnlyMatchTask(HttpServletRequest request, HttpServletResponse response, List<TodoInfo> resultTask) throws ServletException, IOException{
 		
 		//ページごとに表示するタスクを格納したリスト
 		List<TodoInfo> pageByPageTaskList = new ArrayList<>();

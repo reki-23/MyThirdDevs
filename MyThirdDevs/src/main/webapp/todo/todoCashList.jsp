@@ -45,6 +45,10 @@
 			<div id="del_mask"></div>
 			
 			
+			<!-- タスク一覧へ戻る -->
+			<a href="${pageContext.request.contextPath}/TopPageServlet" class="previous-todolist-btn">タスク一覧へ戻る</a>
+			
+			
 			<!-- 検索機能 -->
 			<div class="search-task">
 				<form action="${pageContext.request.contextPath}/TodoSearchServlet" method="POST">
@@ -105,14 +109,14 @@
 			<table class="todo-list-table">
 				<thead>
 					<tr>
-						<th><a href="${pageContext.request.contextPath}/TodoOrderingServlet?tHeaderParameter=id&any_pushedCounta=<%=any_pushedCounta%>">No<%if(any_pushedCounta==1 && tHeaderParameter.equals("id")){%><span class="sort-arrow">↑</span><%}else if(any_pushedCounta==0 && tHeaderParameter.equals("id")){%><span class="sort-arrow">↓</span><%} %></a></th>
-						<th><a href="${pageContext.request.contextPath}/TodoOrderingServlet?tHeaderParameter=status&any_pushedCounta=<%=any_pushedCounta%>">ステータス<%if(any_pushedCounta==1 && tHeaderParameter.equals("status")){%><span class="sort-arrow">↑</span><%}else if(any_pushedCounta==0 && tHeaderParameter.equals("status")){%><span class="sort-arrow">↓</span><%} %></a></th>
-						<th><a href="${pageContext.request.contextPath}/TodoOrderingServlet?tHeaderParameter=classification&any_pushedCounta=<%=any_pushedCounta%>">分類<%if(any_pushedCounta==1 && tHeaderParameter.equals("classification")){%><span class="sort-arrow">↑</span><%}else if(any_pushedCounta==0 && tHeaderParameter.equals("classification")){%><span class="sort-arrow">↓</span><%} %></a></th>
-						<th><a href="${pageContext.request.contextPath}/TodoOrderingServlet?tHeaderParameter=task&any_pushedCounta=<%=any_pushedCounta%>">タスク名<%if(any_pushedCounta==1 && tHeaderParameter.equals("task")){%><span class="sort-arrow">↑</span><%}else if(any_pushedCounta==0 && tHeaderParameter.equals("task")){%><span class="sort-arrow">↓</span><%} %></a></th>
-						<th><a href="${pageContext.request.contextPath}/TodoOrderingServlet?tHeaderParameter=description&any_pushedCounta=<%=any_pushedCounta%>">タスク概要<%if(any_pushedCounta==1 && tHeaderParameter.equals("description")){%><span class="sort-arrow">↑</span><%}else if(any_pushedCounta==0 && tHeaderParameter.equals("description")){%><span class="sort-arrow">↓</span><%} %></a></th>
-						<th><a href="${pageContext.request.contextPath}/TodoOrderingServlet?tHeaderParameter=createDateTime&any_pushedCounta=<%=any_pushedCounta%>">作成日時<%if(any_pushedCounta==1 && tHeaderParameter.equals("createDateTime")){%><span class="sort-arrow">↑</span><%}else if(any_pushedCounta==0 && tHeaderParameter.equals("createDateTime")){%><span class="sort-arrow">↓</span><%} %></a></th>
-						<th><a href="${pageContext.request.contextPath}/TodoOrderingServlet?tHeaderParameter=updateDateTime&any_pushedCounta=<%=any_pushedCounta%>">更新日時<%if(any_pushedCounta==1 && tHeaderParameter.equals("updateDateTime")){%><span class="sort-arrow">↑</span><%}else if(any_pushedCounta==0 && tHeaderParameter.equals("updateDateTime")){%><span class="sort-arrow">↓</span><%} %></a></th>
-						<th><a href="${pageContext.request.contextPath}/TodoOrderingServlet?tHeaderParameter=creator&any_pushedCounta=<%=any_pushedCounta%>">作成者<%if(any_pushedCounta==1 && tHeaderParameter.equals("creator")){%><span class="sort-arrow">↑</span><%}else if(any_pushedCounta==0 && tHeaderParameter.equals("creator")){%><span class="sort-arrow">↓</span><%} %></a></th>
+						<th><a href="${pageContext.request.contextPath}/TodoCashOrderingServlet?tHeaderParameter=id&any_pushedCounta=<%=any_pushedCounta%>">No<%if(any_pushedCounta==1 && tHeaderParameter.equals("id")){%><span class="sort-arrow">↑</span><%}else if(any_pushedCounta==0 && tHeaderParameter.equals("id")){%><span class="sort-arrow">↓</span><%} %></a></th>
+						<th><a href="${pageContext.request.contextPath}/TodoCashOrderingServlet?tHeaderParameter=status&any_pushedCounta=<%=any_pushedCounta%>">ステータス<%if(any_pushedCounta==1 && tHeaderParameter.equals("status")){%><span class="sort-arrow">↑</span><%}else if(any_pushedCounta==0 && tHeaderParameter.equals("status")){%><span class="sort-arrow">↓</span><%} %></a></th>
+						<th><a href="${pageContext.request.contextPath}/TodoCashOrderingServlet?tHeaderParameter=classification&any_pushedCounta=<%=any_pushedCounta%>">分類<%if(any_pushedCounta==1 && tHeaderParameter.equals("classification")){%><span class="sort-arrow">↑</span><%}else if(any_pushedCounta==0 && tHeaderParameter.equals("classification")){%><span class="sort-arrow">↓</span><%} %></a></th>
+						<th><a href="${pageContext.request.contextPath}/TodoCashOrderingServlet?tHeaderParameter=task&any_pushedCounta=<%=any_pushedCounta%>">タスク名<%if(any_pushedCounta==1 && tHeaderParameter.equals("task")){%><span class="sort-arrow">↑</span><%}else if(any_pushedCounta==0 && tHeaderParameter.equals("task")){%><span class="sort-arrow">↓</span><%} %></a></th>
+						<th><a href="${pageContext.request.contextPath}/TodoCashOrderingServlet?tHeaderParameter=description&any_pushedCounta=<%=any_pushedCounta%>">タスク概要<%if(any_pushedCounta==1 && tHeaderParameter.equals("description")){%><span class="sort-arrow">↑</span><%}else if(any_pushedCounta==0 && tHeaderParameter.equals("description")){%><span class="sort-arrow">↓</span><%} %></a></th>
+						<th><a href="${pageContext.request.contextPath}/TodoCashOrderingServlet?tHeaderParameter=createDateTime&any_pushedCounta=<%=any_pushedCounta%>">作成日時<%if(any_pushedCounta==1 && tHeaderParameter.equals("createDateTime")){%><span class="sort-arrow">↑</span><%}else if(any_pushedCounta==0 && tHeaderParameter.equals("createDateTime")){%><span class="sort-arrow">↓</span><%} %></a></th>
+						<th><a href="${pageContext.request.contextPath}/TodoCashOrderingServlet?tHeaderParameter=updateDateTime&any_pushedCounta=<%=any_pushedCounta%>">更新日時<%if(any_pushedCounta==1 && tHeaderParameter.equals("updateDateTime")){%><span class="sort-arrow">↑</span><%}else if(any_pushedCounta==0 && tHeaderParameter.equals("updateDateTime")){%><span class="sort-arrow">↓</span><%} %></a></th>
+						<th><a href="${pageContext.request.contextPath}/TodoCashOrderingServlet?tHeaderParameter=creator&any_pushedCounta=<%=any_pushedCounta%>">作成者<%if(any_pushedCounta==1 && tHeaderParameter.equals("creator")){%><span class="sort-arrow">↑</span><%}else if(any_pushedCounta==0 && tHeaderParameter.equals("creator")){%><span class="sort-arrow">↓</span><%} %></a></th>
 					</tr>
 					<tbody>
 						<!-- 以下、繰り返し表示 -->

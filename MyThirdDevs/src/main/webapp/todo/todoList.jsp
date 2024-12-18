@@ -452,7 +452,7 @@
 				<ul id="context-menu" class="context-menu">
 					<li id="menu-option-1"><a href="${pageContext.request.contextPath}/TodoCashServlet?menu-option=menu-option-1">ゴミ箱を開く</a></li>
 					<li id="menu-option-2"><a href="${pageContext.request.contextPath}/TodoCashServlet?menu-option=menu-option-2">ゴミ箱内を削除する</a></li>
-					<li id="menu-option-3"><a href="${pageContext.request.contextPath}/TodoCashServlet?menu-option=menu-option-3">閉じる</a></li>
+					<li id="menu-option-3"><a href="#" onclick="submitHiddenContextMenu()">閉じる</a></li>
 				</ul>
 			</div>
 			

@@ -1,4 +1,4 @@
-package servlet.todoMain;
+package servlet.user;
 
 import java.io.IOException;
 import java.io.InputStream;

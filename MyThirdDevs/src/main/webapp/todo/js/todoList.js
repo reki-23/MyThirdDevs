@@ -265,7 +265,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
 //設定ボタン押下後のコンテクストメニュー表示制御
 function submitSetting(){
-	/*alert('ボタンが押された');*/
 	document.querySelector('#context-menu').style.visibility = 'visible';
+}
+
+//コンテキストメニューで閉じるを押下した場合、コンテキストメニューを非表示にする
+function submitHiddenContextMenu(){
+	document.querySelector('#context-menu').style.visibility = 'hidden';
 }
 
