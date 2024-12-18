@@ -1,4 +1,4 @@
-package servlet;
+package servlet.todoMain;
 
 import java.io.IOException;
 import java.util.Arrays;

@@ -20,11 +20,13 @@ public class EditDataDao {
 	
 	private static final DBConnection dbc = new DBConnection();
 	private static final String insertSql = "INSERT INTO todolist VALUES(?,?,?,?,?,?,?,?,?)";
+	private static final String insertCashSql = "INSERT INTO todocashlist SELECT * FROM todolist WHERE id = ?";
 	private static final String selectIdSql = "SELECT * FROM todolist WHERE id = ?";
 	private static final String selectFavIdSql = "SELECT isFavorite FROM todolist WHERE id = ?";
 	private static final String selectFavSql = "SELECT * FROM todolist WHERE isFavorite = 1";
 	private static final String deleteSql = "DELETE FROM todolist";
 	private static final String getSql = "SELECT * FROM todolist";
+	private static final String getCashSql = "SELECT * FROM todocashlist";
 	private static final String updateFavFlgSql = "UPDATE todolist SET isFavorite = ? WHERE id = ?";
 	private static final String individualDeleteSql = "DELETE FROM todolist WHERE id = ?";
 	private static final String getLimitOffsetQuery = "SELECT * FROM todolist LIMIT 50 OFFSET ?";
@@ -211,8 +213,16 @@ public class EditDataDao {
 	public static boolean individualDeleteTask(List<Integer> deletedIdList) throws ManageException{
 		
 		try(Connection con = dbc.getConnection();
-			PreparedStatement ps = con.prepareStatement(individualDeleteSql)){
-				
+			PreparedStatement ps = con.prepareStatement(individualDeleteSql);
+			PreparedStatement insertCashSqlPs = con.prepareStatement(insertCashSql)){
+			
+			//todolist削除されるタスクをキャッシュリストに保存
+			for(Integer deleteId : deletedIdList) {
+				insertCashSqlPs.setInt(1, deleteId);
+				insertCashSqlPs.addBatch();
+			}
+			insertCashSqlPs.executeBatch();
+			
 			//押下されたタスクのIDを受取り削除する処理
 			for(Integer deletedId : deletedIdList) {
 				ps.setInt(1, deletedId);
@@ -227,6 +237,24 @@ public class EditDataDao {
 			}
 		}catch(SQLException e) {
 			//あとでかく
+			e.printStackTrace();	
+			throw new ManageException("EM003", e);
+		}
+	}
+	
+	
+	//ゴミ箱の中身を取得
+	public static List<TodoInfo> getCashedTask() throws ManageException{
+		List<TodoInfo> todoCashList = new ArrayList<>();
+		try(Connection con = dbc.getConnection();
+			PreparedStatement ps = con.prepareStatement(getCashSql);
+			ResultSet rs = ps.executeQuery()){
+			//データ取得
+			while(rs.next()) {
+				todoCashList.add(mapResultSetToTodoInfo(rs));
+			}
+			return todoCashList;
+		}catch(SQLException e) {
 			throw new ManageException("EM003", e);
 		}
 	}

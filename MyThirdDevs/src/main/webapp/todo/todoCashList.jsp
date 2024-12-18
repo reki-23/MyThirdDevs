@@ -11,9 +11,9 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<link rel="stylesheet" href="/MyThirdDevs/todo/css/todoList.css" type="text/css">
+		<link rel="stylesheet" href="/MyThirdDevs/todo/css/todoCashList.css" type="text/css">
 		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-		<script src="/MyThirdDevs/todo/js/todoList.js"></script>
+		<script src="/MyThirdDevs/todo/js/todoCashList.js"></script>
 		<title>TODOリスト</title>
 	</head>
 	<body>
@@ -101,187 +101,6 @@
 				}
 			%>
 			
-			<!-- ページネーション -->
-			<div class="main-wrapper-pagination">
-				<!-- ページ総数が3以下の場合 -->
-				<%if(totalPageCount <= 3){ %>
-					<!-- ページ総数が1ページの場合＝常に1ページ目 -->
-					<% if(totalPageCount == 1){ %>
-						<ul>
-							<li class="current-page">&emsp;1&emsp;</li>
-						</ul>
-					<% }
-					//ページ総数がNページの場合で、現在のページが1ページ目 -->
-					else if(currentPage == 1){ %>
-						<ul>
-							<li class="current-page">&emsp;1&emsp;</li>
-							<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage+1%>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=currentPage+1 %>&emsp;</a></li>
-							<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage+2%>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=currentPage+2 %>&emsp;</a></li>
-						</ul>
-					<% }
-					//ページ総数がNページの場合で、現在のページがNページ目
-					else if(currentPage == totalPageCount){ %>
-						<ul>
-							<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=1&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;1&emsp;</a></li>
-							<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage-1%>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=currentPage-1 %>&emsp;</a></li>
-							<li class="current-page">&emsp;<%=currentPage %>&emsp;</li>
-						</ul>
-					<% }
-					//上記以外の場合
-					else{%>
-						<ul>
-							<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage-1%>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=currentPage-1 %>&emsp;</a></li>
-							<li class="current-page">&emsp;<%=currentPage %>&emsp;</li>
-							<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage+1%>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=currentPage+1 %>&emsp;</a></li>
-						</ul>
-					<% }
-				}
-				//ページ総数が3より大きい場合
-				else if(totalPageCount >= 6){
-					if(currentPage == 1){%>
-					<ul>
-						<li class="current-page"><%=currentPage %></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage+1 %>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=currentPage+1 %>&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage+2%>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;...&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=totalPageCount %>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=totalPageCount %>&emsp;</a></li>
-					</ul>
-					<%} else if(currentPage == totalPageCount){%>
-					<ul>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=1&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;1&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage-2%>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;...&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage-1 %>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=currentPage-1 %>&emsp;</a></li>
-						<li class="current-page"><%=currentPage %></li>
-					</ul>
-					<%} else if(currentPage == totalPageCount - 1){%>
-					<ul>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=1&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;1&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage-2%>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;...&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage-1%>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=currentPage-1 %>&emsp;</a></li>
-						<li class="current-page"><%=currentPage %></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=totalPageCount %>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=totalPageCount %>&emsp;</a></li>
-					</ul>
-					<%} else if(currentPage == totalPageCount - 2){%>
-					<ul>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=1&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;1&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage-2%>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;...&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage-1%>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=currentPage-1 %>&emsp;</a></li>
-						<li class="current-page"><%=currentPage %></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage+1 %>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=currentPage+1 %>&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=totalPageCount %>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=totalPageCount %>&emsp;</a></li>
-					</ul>
-					<%} else if(currentPage == 2){%>
-					<ul>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=1&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;1&emsp;</a></li>
-						<li class="current-page"><%=currentPage %></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage+1 %>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=currentPage+1 %>&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage+2%>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;...&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=totalPageCount %>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=totalPageCount %>&emsp;</a></li>
-					</ul>
-					<%} else if(currentPage == 3){%>
-					<ul>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=1&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;1&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage-1%>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=currentPage-1 %>&emsp;</a></li>
-						<li class="current-page"><%=currentPage %></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage+1 %>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=currentPage+1 %>&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage+2%>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;...&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=totalPageCount %>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=totalPageCount %>&emsp;</a></li>
-					</ul>
-					<%} else{%>
-					<ul>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=1&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;1&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage-2%>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;...&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage-1%>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=currentPage-1 %>&emsp;</a></li>
-						<li class="current-page"><%=currentPage %></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage+1 %>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=currentPage+1 %>&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage+2%>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;...&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=totalPageCount %>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=totalPageCount %>&emsp;</a></li>
-					</ul>
-					<%} %> 
-				<%}else if(totalPageCount == 4){
-					if(currentPage == 1){%>
-					<ul>
-						<li class="current-page"><%=currentPage %></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage+1 %>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=currentPage+1 %>&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage+2%>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;...&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=totalPageCount %>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=totalPageCount %>&emsp;</a></li>
-					</ul>
-					<%} else if(currentPage == totalPageCount){%>
-					<ul>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=1&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;1&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage-2%>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;...&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage-1 %>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=currentPage-1 %>&emsp;</a></li>
-						<li class="current-page"><%=currentPage %></li>
-					</ul>
-					<%}else if(currentPage == 3){ %>
-					<ul>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=1&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;1&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage-1 %>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=currentPage-1 %>&emsp;</a></li>
-						<li class="current-page"><%=currentPage %></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage+1 %>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=currentPage+1 %>&emsp;</a></li>
-					</ul>
-					<%} else if(currentPage == 2){%>
-					<ul>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage-1 %>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=currentPage-1 %>&emsp;</a></li>
-						<li class="current-page"><%=currentPage %></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage+1 %>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=currentPage+1 %>&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=totalPageCount %>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=totalPageCount %>&emsp;</a></li>
-					</ul>
-					<%} %>
-				<%} else if(totalPageCount == 5){
-					if(currentPage == 1){%>
-					<ul>
-						<li class="current-page"><%=currentPage %></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage+1 %>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=currentPage+1 %>&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage+2%>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;...&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=totalPageCount %>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=totalPageCount %>&emsp;</a></li>
-					</ul>
-					<%} else if(currentPage == totalPageCount){%>
-					<ul>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=1&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;1&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage-2%>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;...&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage-1 %>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=currentPage-1 %>&emsp;</a></li>
-						<li class="current-page"><%=currentPage %></li>
-					</ul>
-					<%}else if(currentPage == 4){ %>
-					<ul>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=1&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;1&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage-2%>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;...&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage-1 %>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=currentPage-1 %>&emsp;</a></li>
-						<li class="current-page"><%=currentPage %></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage+1 %>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=currentPage+1 %>&emsp;</a></li>
-					</ul>
-					<%} else if(currentPage == 2){%>
-					<ul>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage-1 %>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=currentPage-1 %>&emsp;</a></li>
-						<li class="current-page"><%=currentPage %></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage+1 %>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=currentPage+1 %>&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage+2%>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;...&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=totalPageCount %>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=totalPageCount %>&emsp;</a></li>
-					</ul>
-					<%} else{%>
-					<ul>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=1&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;1&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage-1 %>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=currentPage-1 %>&emsp;</a></li>
-						<li class="current-page"><%=currentPage %></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage+1 %>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=currentPage+1 %>&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=totalPageCount %>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=totalPageCount %>&emsp;</a></li>
-					</ul>
-					<%} %>
-				<%} %>
-			</div>
-			
-			<!-- お気に入りで絞るモーダル -->
-			<form action="${pageContext.request.contextPath}/TodoSearchServlet" method="POST">
-				<section id="filtering-favoriteTask-modal">
-					<h4>お気に入りタスクフィルタ</h4>
-					<input type="submit" name="filteringFavoriteCheckClear" value="フィルタをクリア" onclick="submitFilteringFavoriteTask(value)">
-					<input type="submit" name="filteringFavoriteCheck" value="フィルタをかける" onclick="submitFilteringFavoriteTask(value)">
-					<input type="hidden" id="filteringFavorite" name="filteringFavorite" value="">
-				</section>
-			</form>
-			<div id="filtering-favoriteTask-modal-mask"></div>
-			
-			
 			<!-- 一覧表示 -->
 			<table class="todo-list-table">
 				<thead>
@@ -294,14 +113,12 @@
 						<th><a href="${pageContext.request.contextPath}/TodoOrderingServlet?tHeaderParameter=createDateTime&any_pushedCounta=<%=any_pushedCounta%>">作成日時<%if(any_pushedCounta==1 && tHeaderParameter.equals("createDateTime")){%><span class="sort-arrow">↑</span><%}else if(any_pushedCounta==0 && tHeaderParameter.equals("createDateTime")){%><span class="sort-arrow">↓</span><%} %></a></th>
 						<th><a href="${pageContext.request.contextPath}/TodoOrderingServlet?tHeaderParameter=updateDateTime&any_pushedCounta=<%=any_pushedCounta%>">更新日時<%if(any_pushedCounta==1 && tHeaderParameter.equals("updateDateTime")){%><span class="sort-arrow">↑</span><%}else if(any_pushedCounta==0 && tHeaderParameter.equals("updateDateTime")){%><span class="sort-arrow">↓</span><%} %></a></th>
 						<th><a href="${pageContext.request.contextPath}/TodoOrderingServlet?tHeaderParameter=creator&any_pushedCounta=<%=any_pushedCounta%>">作成者<%if(any_pushedCounta==1 && tHeaderParameter.equals("creator")){%><span class="sort-arrow">↑</span><%}else if(any_pushedCounta==0 && tHeaderParameter.equals("creator")){%><span class="sort-arrow">↓</span><%} %></a></th>
-						<th>削除</th>		
-						<th><a href="${pageContext.request.contextPath}/TodoOrderingServlet?tHeaderParameter=isFavorite&any_pushedCounta=<%=any_pushedCounta%>">お気に入り<%if(any_pushedCounta==1 && tHeaderParameter.equals("isFavorite")){%><span class="sort-arrow">↑</span><%}else if(any_pushedCounta==0 && tHeaderParameter.equals("isFavorite")){%><span class="sort-arrow">↓</span><%} %></a><span class="kebab-menu"><button id="filtering-favorite">︙</button></span></th>	
 					</tr>
 					<tbody>
 						<!-- 以下、繰り返し表示 -->
-						<% List<TodoInfo> todoList = (List<TodoInfo>)request.getAttribute("todoList");
-							if(todoList != null){
-								for(TodoInfo info : todoList){
+						<% List<TodoInfo> todoCashList = (List<TodoInfo>)request.getAttribute("todoCashList");
+							if(todoCashList != null){
+								for(TodoInfo info : todoCashList){
 						%>
 								<tr>
 								   	<td><a href="${pageContext.request.contextPath}/todo/todoDetail.jsp"><%= info.getId() %></a></td> <!-- 押下するとそのタスクだけが表示されるタスク詳細画面へ遷移する -->
@@ -312,217 +129,14 @@
 									<td><%= info.getCreateDateTime().format(DateTimeFormatter.ofPattern("y/M/d H:mm:ss")) %></td>
 									<td><%= info.getUpdateDateTime().format(DateTimeFormatter.ofPattern("y/M/d H:mm:ss")) %></td>
 									<td><%= info.getCreator() %></td>
-									<td>
-										<!-- 個別削除ボタン＝削除識別子は一意であるタスクNoと同値とする -->
-										<label class="custom-checkbox">
-											<form action="${pageContext.request.contextPath}/TodoDeleteServlet" class="delete-mark" method="POST">
-												<input type="checkbox" name="individualDeleteId" value="<%= info.getId() %>" onchange="submitFormOnCheck(this)">
-												<i class="far fa-trash-alt"></i>
-											</form>
-										</label>
-									</td>
-									<td>
-										<!-- お気に入り登録機能 -->
-										<form action="${pageContext.request.contextPath}/TodoFavoriteTaskRegisterServlet" class="favorite-mark" method="POST">
-										<!-- あとで星マークに装飾 -->
-											<input type="checkbox" class="favorite-checkbox" data-task-id="<%=info.getId() %>" name="favoriteTaskId" value="<%= info.getId() %>" onclick="submitFormOnCheckOfFavorite(this)">
-											<input type="hidden" id="selectedFavIds" name="selectedFavIds" value="">
-										</form>
-									</td>
 								</tr>
 						<%
 								}
 						   }
 						%>
-						<%
-							//取得したidをJSON形式で、JavaScriptに渡す
-							if(request.getAttribute("favoriteTaskIdList") != null){
-								StringBuilder jsonBuilder = new StringBuilder("[");
-								List<Integer> favoriteTaskIdList = (List<Integer>)request.getAttribute("favoriteTaskIdList");
-							    for (int i = 0; i < favoriteTaskIdList.size(); i++) {
-							        jsonBuilder.append(favoriteTaskIdList.get(i));
-							        if (i < favoriteTaskIdList.size() - 1) {
-							            jsonBuilder.append(",");
-							        }
-							    }
-							    jsonBuilder.append("]");
-							    String favoriteTaskIdListJson = jsonBuilder.toString();
-						 %>
-								<div id="favoriteTaskData" data-tasks="<%= favoriteTaskIdListJson%>"></div>
-						<%} %>
 					</tbody>
 				</thead>
 			</table>
-			
-
-			<!-- ページネーション -->
-			<div class="main-wrapper-pagination">
-				<!-- ページ総数が3以下の場合 -->
-				<%if(totalPageCount <= 3){ %>
-					<!-- ページ総数が1ページの場合＝常に1ページ目 -->
-					<% if(totalPageCount == 1){ %>
-						<ul>
-							<li class="current-page">&emsp;1&emsp;</li>
-						</ul>
-					<% }
-					//ページ総数がNページの場合で、現在のページが1ページ目 -->
-					else if(currentPage == 1){ %>
-						<ul>
-							<li class="current-page">&emsp;1&emsp;</li>
-							<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage+1%>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=currentPage+1 %>&emsp;</a></li>
-							<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage+2%>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=currentPage+2 %>&emsp;</a></li>
-						</ul>
-					<% }
-					//ページ総数がNページの場合で、現在のページがNページ目
-					else if(currentPage == totalPageCount){ %>
-						<ul>
-							<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=1&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;1&emsp;</a></li>
-							<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage-1%>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=currentPage-1 %>&emsp;</a></li>
-							<li class="current-page">&emsp;<%=currentPage %>&emsp;</li>
-						</ul>
-					<% }
-					//上記以外の場合
-					else{%>
-						<ul>
-							<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage-1%>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=currentPage-1 %>&emsp;</a></li>
-							<li class="current-page">&emsp;<%=currentPage %>&emsp;</li>
-							<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage+1%>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=currentPage+1 %>&emsp;</a></li>
-						</ul>
-					<% }
-				}
-				//ページ総数が3より大きい場合
-				else if(totalPageCount >= 6){
-					if(currentPage == 1){%>
-					<ul>
-						<li class="current-page"><%=currentPage %></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage+1 %>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=currentPage+1 %>&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage+2%>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;...&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=totalPageCount %>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=totalPageCount %>&emsp;</a></li>
-					</ul>
-					<%} else if(currentPage == totalPageCount){%>
-					<ul>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=1&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;1&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage-2%>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;...&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage-1 %>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=currentPage-1 %>&emsp;</a></li>
-						<li class="current-page"><%=currentPage %></li>
-					</ul>
-					<%} else if(currentPage == totalPageCount - 1){%>
-					<ul>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=1&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;1&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage-2%>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;...&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage-1%>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=currentPage-1 %>&emsp;</a></li>
-						<li class="current-page"><%=currentPage %></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=totalPageCount %>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=totalPageCount %>&emsp;</a></li>
-					</ul>
-					<%} else if(currentPage == totalPageCount - 2){%>
-					<ul>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=1&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;1&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage-2%>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;...&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage-1%>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=currentPage-1 %>&emsp;</a></li>
-						<li class="current-page"><%=currentPage %></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage+1 %>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=currentPage+1 %>&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=totalPageCount %>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=totalPageCount %>&emsp;</a></li>
-					</ul>
-					<%} else if(currentPage == 2){%>
-					<ul>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=1&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;1&emsp;</a></li>
-						<li class="current-page"><%=currentPage %></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage+1 %>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=currentPage+1 %>&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage+2%>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;...&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=totalPageCount %>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=totalPageCount %>&emsp;</a></li>
-					</ul>
-					<%} else if(currentPage == 3){%>
-					<ul>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=1&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;1&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage-1%>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=currentPage-1 %>&emsp;</a></li>
-						<li class="current-page"><%=currentPage %></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage+1 %>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=currentPage+1 %>&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage+2%>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;...&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=totalPageCount %>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=totalPageCount %>&emsp;</a></li>
-					</ul>
-					<%} else{%>
-					<ul>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=1&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;1&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage-2%>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;...&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage-1%>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=currentPage-1 %>&emsp;</a></li>
-						<li class="current-page"><%=currentPage %></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage+1 %>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=currentPage+1 %>&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage+2%>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;...&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=totalPageCount %>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=totalPageCount %>&emsp;</a></li>
-					</ul>
-					<%} %> 
-				<%}else if(totalPageCount == 4){
-					if(currentPage == 1){%>
-					<ul>
-						<li class="current-page"><%=currentPage %></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage+1 %>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=currentPage+1 %>&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage+2%>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;...&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=totalPageCount %>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=totalPageCount %>&emsp;</a></li>
-					</ul>
-					<%} else if(currentPage == totalPageCount){%>
-					<ul>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=1&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;1&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage-2%>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;...&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage-1 %>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=currentPage-1 %>&emsp;</a></li>
-						<li class="current-page"><%=currentPage %></li>
-					</ul>
-					<%}else if(currentPage == 3){ %>
-					<ul>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=1&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;1&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage-1 %>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=currentPage-1 %>&emsp;</a></li>
-						<li class="current-page"><%=currentPage %></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage+1 %>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=currentPage+1 %>&emsp;</a></li>
-					</ul>
-					<%} else if(currentPage == 2){%>
-					<ul>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage-1 %>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=currentPage-1 %>&emsp;</a></li>
-						<li class="current-page"><%=currentPage %></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage+1 %>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=currentPage+1 %>&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=totalPageCount %>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=totalPageCount %>&emsp;</a></li>
-					</ul>
-					<%} %>
-				<%} else if(totalPageCount == 5){
-					if(currentPage == 1){%>
-					<ul>
-						<li class="current-page"><%=currentPage %></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage+1 %>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=currentPage+1 %>&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage+2%>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;...&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=totalPageCount %>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=totalPageCount %>&emsp;</a></li>
-					</ul>
-					<%} else if(currentPage == totalPageCount){%>
-					<ul>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=1&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;1&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage-2%>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;...&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage-1 %>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=currentPage-1 %>&emsp;</a></li>
-						<li class="current-page"><%=currentPage %></li>
-					</ul>
-					<%}else if(currentPage == 4){ %>
-					<ul>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=1&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;1&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage-2%>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;...&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage-1 %>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=currentPage-1 %>&emsp;</a></li>
-						<li class="current-page"><%=currentPage %></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage+1 %>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=currentPage+1 %>&emsp;</a></li>
-					</ul>
-					<%} else if(currentPage == 2){%>
-					<ul>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage-1 %>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=currentPage-1 %>&emsp;</a></li>
-						<li class="current-page"><%=currentPage %></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage+1 %>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=currentPage+1 %>&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage+2%>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;...&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=totalPageCount %>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=totalPageCount %>&emsp;</a></li>
-					</ul>
-					<%} else{%>
-					<ul>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=1&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;1&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage-1 %>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=currentPage-1 %>&emsp;</a></li>
-						<li class="current-page"><%=currentPage %></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=currentPage+1 %>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=currentPage+1 %>&emsp;</a></li>
-						<li><a href="${pageContext.request.contextPath}/TodoSearchServlet?pageNum=<%=totalPageCount %>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=totalPageCount %>&emsp;</a></li>
-					</ul>
-					<%} %>
-				<%} %>
-			</div>
 		</main>
 		<footer class="footer">
 			<div class="wrapper">

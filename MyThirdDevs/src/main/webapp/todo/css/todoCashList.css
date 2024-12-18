@@ -71,96 +71,13 @@ form{
 	display:inline;
 }
 
-/*　タスク登録のスタイル　*/
-.bulk-register-list input[type="submit"] {
-    background-color: #138201; 
-    color: white;              
-    padding: 8px 13px;
-    width: 150px;  
-    font-size: 13px;           
-    border: none;              
-    border-radius: 10px;       
-    cursor: pointer;
-    margin-left:10px;
-}
-
-.bulk-register-list input[type="submit"]:hover {
-    opacity: 0.7;
-}
-
-input[type="file"]{
-	margin-left: 170px;
-	position: relative;
-	top: -30px;
-	font-size: 12px;
-}
-
-/* 個別登録のスタイル */
-.register-list button{
-	background-color: #20d404; 
-    color: white;              
-    padding: 8px 13px;
-    width: 150px;  
-    font-size: 13px;           
-    border: none;              
-    border-radius: 10px;       
-    cursor: pointer;
-    margin-left:10px;
-}
-
-.register-list button:hover{
-	opacity: 0.7;
-}
-
-.register-list{
-	margin-top: 15px;
-	width: 295px;
-	display: inline-block; /* 横並びにする */
-    vertical-align: middle; /* 上下中央に揃える */
-}
-
-/* 削除ボタンのスタイル */
-.delete-bulk-list{
-	width:100%;
-}
-
-
-.delete-bulk-list #bulk_submit, .delete-individual-list #indi_submit{
-	background-color: red; 
-    color: white;              
-    padding: 8px 13px;
-    width: 180px;  
-    font-size: 13px;           
-    border: none;              
-    border-radius: 10px;       
-    cursor: pointer;
-    margin-right:10px;
-}
-
-.delete-bulk-list input[type="submit"]:hover, .delete-individual-list input[type="submit"]:hover{
-	opacity: 0.7;
-}
-
-.delete-bulk-list{
-	display:flex;
-	justify-content:flex-end;
-	margin-top: -60px;
-	margin-bottom:20px;
-}
-
-.delete-individual-list{
-	display:flex;
-	justify-content:flex-end;
-	margin-top: -110px;
-	margin-bottom:80px;
-}
 
 .favorite-checkbox {
    -webkit-appearance: none; /* Safari/Chrome */
    appearance: none; /* 標準的な外観をリセット */
    width: 25px;
    height: 25px;
-   color:gray;
+   color: #595c5a;
    background-color: #ddd;
    border: 2px solid #aaa;
    clip-path: polygon(
@@ -176,11 +93,6 @@ input[type="file"]{
      39% 35%
    ); /* 星の形を定義 */
    cursor: pointer;
-}
-
-.favorite{
-	background-color: #e3c709; /* チェック時の色 */
-	border-color:#f5e890;
 }
 
 /* お気に入りフィルタ時のモーダルのスタイル */
@@ -320,143 +232,12 @@ input[type="file"]{
     visibility:hidden;
 }
 
-
-/* CSV出力スタイル */
-.export-csvfile input[type="submit"]{
-	background-color: #833efa; 
-    color: white;              
-    padding: 8px 13px;
-    width: 150px;  
-    font-size: 13px;           
-    border: none;              
-    border-radius: 10px;       
-    cursor: pointer;
-    margin-left:10px;
-}
-
-.export-filter-csv button{
-	background-color: #3c02a1; 
-    color: white;              
-    padding: 8px 13px;
-    width: 170px;  
-    font-size: 13px;           
-    border: none;              
-    border-radius: 10px;       
-    cursor: pointer;
-    margin-left:10px;
-    margin-top:25px;
-}
-
-.export-csvfile input[type="submit"]:hover{
-	opacity: 0.7;
-}
-
-.export-filter-csv button:hover{
-	opacity: 0.7;
-}
-
-.export-csvfile{
-	margin-top: 5px;
-	width: 295px;
-	display: inline-block; /* 横並びにする */
-    vertical-align: middle; /* 上下中央に揃える */
-}
-
-.export-filter-csv{
-	margin-top:-20px;
-	margin-left:170px;
-	width: 295px;
-}
-
-/* 失敗メッセージ用のスタイル */
-.delete-failure, .register-faliure-message, .common-error-message{
-	display: flex;
-    justify-content: center; /* 水平方向に中央揃え */
-    align-items: center; /* 垂直方向に中央揃え */
-    background-color: red; /* 背景を赤に */
-    width: 600px; /* 幅を指定 */
-    height: 3.5vh; /* 高さを指定 */
-    border-radius: 7px; /* 角を丸く */
-    margin: 0 auto; /* ページ全体の中央に配置 */
-}
-
-.register-faliure-message{
-	margin-bottom:10px;
-}
-
-/*成功メッセージ用のスタイル*/
-.register-submit-message, .delete-success{
-	display: flex;
-    justify-content: center; /* 水平方向に中央揃え */
-    align-items: center; /* 垂直方向に中央揃え */
-    background-color: #0324ff; /* 背景を赤に */
-    width: 600px; /* 幅を指定 */
-    height: 3.5vh; /* 高さを指定 */
-    border-radius: 7px; /* 角を丸く */
-    margin: 0 auto; /* ページ全体の中央に配置 */
-}
-
-.delete-failure h4, .delete-success h4, 
-.register-faliure-message h4, .register-submit-message h4, .common-error-message h4{
-	color: white;
-    font-size: 15px;
-    margin:auto;
-    text-align: center; /* テキストを中央揃え */
-}
-
-.setting-button-container {
-  position: relative; /* ボタンの基準位置 */
-}
-
-/* 設定ボタンのスタイル */
-#setting-button {
-  position: absolute;
-  left: 94%; /* お気に入り列の位置に合わせる */
-  top: -36px; /* ヘッダーの真上に表示 */
-  transform: translateX(-50%); /* ボタンを中央揃え */
-  font-size: 22px; /* アイコンサイズ */
-  cursor: pointer;
-  border: none;
-  background-color: transparent;
-  z-index: 20; /* テーブルより前面に表示 */
-  color:gray;
-}
-
-/* カスタムコンテキストメニューのスタイル */
-.context-menu {
-    visibility:hidden;/* 初期状態では非表示 */
-    position: absolute;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    background-color: white;
-    border: 1px solid #ccc;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    z-index: 20;
-    font-size:12px;
-    left: 90%; /* お気に入り列の位置に合わせる */
-}
-
-.context-menu li {
-    padding: 8px 12px;
-    cursor: pointer;
-}
-
-.context-menu li a{	
-    text-decoration: none;
-    color:black;
-}
-
-.context-menu li:hover {
-    background-color: #f0f0f0;
-}
-
-
+/* テーブル内のスタイル */
 .todo-list-table {
     border-collapse: collapse;
     font-family: Arial, sans-serif;
     margin:auto;
-    margin-top:10px;
+    margin-top:50px;
     width:90%;
 }
 
@@ -575,86 +356,6 @@ input[type="file"]{
 .search-task input[type="submit"]:hover{
 	opacity: 0.5;
 }
-
-
-/*タスク登録モーダル ・　フィルタ―CSV出力モーダル*/
-#register_task, #export-csv-filter {
-    position: fixed;
-    width: 650px;
-    padding: 20px;
-    margin: auto;
-    padding: 20px;
-    top: 50%;
-    left: 50%;
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    transform: translate(-50%, -50%);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    font-family: Arial, sans-serif;
-    z-index:20;
-    visibility:hidden;
-}
-
-#register_task h1, #export-csv-filter h1{
-    font-size: 17px;
-    color: #333;
-    margin-bottom: 15px;
-    text-align: center;
-}
-
-#register_task #id, #export-csv-filter #filter_id{
-	width:100px;
-}
-
-#register_task input[type="text"],
-#export-csv-filter input[type="text"]{
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-}
-
-#register_task input[type="submit"],
-#export-csv-filter input[type="submit"]{
-    width: 100%;
-    padding: 8px;
-    margin: 5px 1%;
-    border: none;
-    border-radius: 4px;
-    font-weight: bold;
-    color: #fff;
-    cursor: pointer;
-}
-
-#register_task #register_cancel,
-#export-csv-filter #filter_cancel{
-    background-color: #d9534f;
-}
-
-#register_task #register_submit,
-#export-csv-filter #filter_submit{
-    background-color: #21aaff;
-}
-
-#register_task input[type="submit"]:hover,
-#export-csv-filter input[type="submit"]:hover{
-    opacity: 0.7;
-}
-
-#register_mask, #export-csv-filter-mask{
-	position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color:rgba(0, 0, 0, 0.5);
-    z-index:10;
-    visibility:hidden;
-}
-
 
 /*　ページネーションのスタイル　*/
 .main-wrapper-pagination {
