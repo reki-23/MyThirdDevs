@@ -3,7 +3,7 @@
     pageEncoding="UTF-8"%>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
-<%@ page import="common.TodoInfo" %>
+<%@ page import="model.common.TodoInfo" %>
 <%@ page import="java.lang.StringBuilder" %>
 <%@ page import="java.time.format.DateTimeFormatter" %>
  

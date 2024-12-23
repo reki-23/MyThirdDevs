@@ -1,41 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
-                    
+                            
+    
+    
     
     
     
     <wb-module deploy-name="MyThirdDevs">
-                                        
+                                                        
+        
+        
         
         
         
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
-                                        
+                                                
         
         
-        
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
-                                
         
         
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/resources"/>
+                        
+        
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/lib/apache-poi-src-5.3.0-20240625/poi"/>
+                        
+        
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/lib/apache-poi-src-5.3.0-20240625/poi-ooxml"/>
-                                        
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
+                                                        
+        
+        
         
         
         
         <property name="context-root" value="MyThirdDevs"/>
-                                        
+                                                        
+        
+        
         
         
         
         <property name="java-output-path" value="/MyThirdDevs/build/classes"/>
-                                    
+                                                    
+    
+    
     
     
     
     </wb-module>
-                
+                        
+
+
 
 
 
