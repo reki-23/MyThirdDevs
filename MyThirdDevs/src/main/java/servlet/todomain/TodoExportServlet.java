@@ -18,6 +18,7 @@ import model.common.TodoInfo;
 import model.exception.ManageException;
 import model.todomain.WriteToFile;
 import model.validation.DataValidator;
+import servlet.TodoServlet;
 
 /**
  * Servlet implementation class TodoExportServlet
@@ -41,8 +42,6 @@ public class TodoExportServlet extends TodoServlet {
 			String export_csv = request.getParameter("export-csv");
 			//フィルタ―ありのときの値を取得
 			String filter_submit = request.getParameter("filter_submit");
-			//フィルタ―キャンセルの場合の値を取得
-			String filter_cancel = request.getParameter("filter_cancel");
 			
 			//ファイルへの書き込みクラスのインスタンス生成
 			WriteToFile writter = new WriteToFile();
@@ -81,7 +80,7 @@ public class TodoExportServlet extends TodoServlet {
 				LocalDateTime updateDateTime = DataValidator.returnValidDateTime(tmpUpdateDateTime);
 				boolean isFavorite = DataValidator.returnValidFavoriteFlg(tmpIsFavorite);
 				
-				//TODO　受取ったパラメータをリストに格納 = 右辺を共通のmodelのスーパークラスにメソッド化
+				//受取ったパラメータをリストに格納
 				TodoInfo filteredTask = new TodoInfo.Builder().with(todo -> {
 					todo.id = id;
 					todo.status = status;
@@ -98,14 +97,9 @@ public class TodoExportServlet extends TodoServlet {
 				String downloadFileToPath =  writter.exportCsvFileWithFilter(writter, downloadDir, filteredTask);
 				//ダウンロード処理
 				downloadHandling(request, response, downloadFileToPath, filter_submit);
-
 			}
-			
-			//TODO キャンセルの場合=JavaScriptで制御
-			if(filter_cancel != null) {
-				pagingHandleOfAllTask(request, response);
-				forwardToTodoList(request, response);
-			}
+//			pagingHandleOfAllTask(request, response);
+//			forwardToTodoList(request, response);
 		}catch(Exception e) {
 			e.printStackTrace();
 		}		

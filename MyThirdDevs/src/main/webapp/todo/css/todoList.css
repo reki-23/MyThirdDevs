@@ -618,7 +618,8 @@ input[type="file"]{
 }
 
 #register_task input[type="submit"],
-#export-csv-filter input[type="submit"]{
+#export-csv-filter input[type="submit"],
+#filter_cancel{
     width: 100%;
     padding: 8px;
     margin: 5px 1%;
@@ -640,7 +641,8 @@ input[type="file"]{
 }
 
 #register_task input[type="submit"]:hover,
-#export-csv-filter input[type="submit"]:hover{
+#export-csv-filter input[type="submit"]:hover,
+#filter_cancel:hover{
     opacity: 0.7;
 }
 

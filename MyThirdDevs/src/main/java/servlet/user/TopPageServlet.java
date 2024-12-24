@@ -7,7 +7,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import servlet.todomain.TodoServlet;
+import servlet.TodoServlet;
 
 /**
  * Servlet implementation class TodoServlet

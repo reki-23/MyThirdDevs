@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +15,7 @@ import model.common.ReadPropertiesFile;
 import model.common.TodoInfo;
 import model.dao.EditDataDao;
 import model.exception.ManageException;
+import servlet.TodoServlet;
 
 /**
  * Servlet implementation class TodoExportServlet
@@ -21,8 +23,6 @@ import model.exception.ManageException;
 @WebServlet("/TodoSearchServlet")
 public class TodoSearchServlet extends TodoServlet {
 	private static final long serialVersionUID = 1L;
-	//ページごとに表示するタスクを格納したリスト
-	static List<TodoInfo> pageByPageTaskList = new ArrayList<>();
     
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		searchHandleTask(request, response);			
@@ -55,19 +55,18 @@ public class TodoSearchServlet extends TodoServlet {
 				List<TodoInfo> onlyFavoriteTaskList = EditDataDao.getOnlyFavoriteTaskList();
 				request.setAttribute("todoList", onlyFavoriteTaskList);
 				request.setAttribute("isFilteringFavorite", true);
-				commonPagingProcess(request, response, onlyFavoriteTaskList);
+				pagingHandleOfSpecificTask(request, response, onlyFavoriteTaskList);
 				forwardToTodoList(request, response);
 				return;
 			}
 			
 			//検索ワードがない場合、全件取得
 			if(searchWord == null || searchWord.isBlank()) {
-				//TODO サーブレットのインスタンスは基本作らないので削除
-				TodoOrderingServlet t = new TodoOrderingServlet();
-				t.getOrderedHandleTask(request, response, tHeaderParameter);
-				forwardToTodoList(request, response);
+				request.setAttribute("tHeaderParameter", tHeaderParameter);
+				RequestDispatcher dispatcher = request.getRequestDispatcher("/TodoOrderingServlet");
+				dispatcher.forward(request, response);
 			}else {
-				// TODO　検索の場合、検索結果に該当するリストを取得した後にページング処理を行う必要がある
+				//検索結果を格納するリスト
 				List<TodoInfo> searchedResultTask = new ArrayList<TodoInfo>();
 				//検索に一致したタスクを取得
 				searchedResultTask = EditDataDao.getSearchedTask(searchWord);
@@ -76,8 +75,9 @@ public class TodoSearchServlet extends TodoServlet {
 					String errorMessage = prop.getProperty("notFound.error");
 					request.setAttribute("errorMessage", errorMessage);
 					pagingHandleOfAllTask(request, response);
+				//検索結果があった場合、その結果をもとに生成するページネーション処理を行う
 				}else {
-					commonPagingProcess(request, response, searchedResultTask);
+					pagingHandleOfSpecificTask(request, response, searchedResultTask);
 					request.setAttribute("searchWord", searchWord);
 				}
 				forwardToTodoList(request, response);					

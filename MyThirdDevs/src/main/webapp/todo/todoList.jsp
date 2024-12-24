@@ -172,7 +172,7 @@
 		   			作成者:<input type = "text" name = "creator"><br>
 		   			お気に入り:<input type= "checkbox" name = "isFavorite"><br>
 		   			<input type = "submit" id = "filter_submit" name = "filter_submit" value = "CSV出力する" onclick="hiddenFilterModal()">
-					<input type = "submit" id = "filter_cancel" name = "filter_cancel" value = "キャンセル">
+					<button type="button" id = "filter_cancel" onclick="hiddenFilterModalOnCancel()">キャンセル</button>
 		   		</section>
 			</form>
 			<div id="export-csv-filter-mask"></div>

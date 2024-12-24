@@ -3,7 +3,6 @@ package servlet.todosubmain;
 import java.io.IOException;
 import java.util.List;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -14,7 +13,7 @@ import model.common.TodoPagingInfo;
 import model.dao.EditDataDao;
 import model.exception.ManageException;
 import model.todomain.TodopagingProcess;
-import servlet.todomain.TodoServlet;
+import servlet.TodoServlet;
 
 /**
  * Servlet implementation class TodoCashServlet
@@ -27,8 +26,7 @@ public class TodoCashOrderingServlet extends TodoServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String tHeaderParameter = request.getParameter("tHeaderParameter");
 		getOrderedHandleTask(request, response, tHeaderParameter);
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/todo/todoCashList.jsp");
-		dispatcher.forward(request, response);
+		forwardTodoCashList(request, response);
 	}
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -40,7 +38,6 @@ public class TodoCashOrderingServlet extends TodoServlet {
 	
 	//TODO 名前要変更　ゴミ箱内のデータでページネーションを生成する
 	protected void pagingHandleOfAllCashTask(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-		
 		try {
 			//現在のページ番号を取得
 			String tmpPageNum = request.getParameter("pageNum");
@@ -80,7 +77,7 @@ public class TodoCashOrderingServlet extends TodoServlet {
 			
 			request.setAttribute("any_pushedCounta", any_pushedCounta);
 			request.setAttribute("tHeaderParameter", tHeaderParameter);
-			commonPagingProcess(request, response, orderedTaskList);
+			pagingHandleOfSpecificTask(request, response, orderedTaskList);
 			
 		}catch(ManageException e) {
 			errorHandle(request, response, e);

@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import model.common.TodoInfo;
 import model.dao.EditDataDao;
 import model.exception.ManageException;
-import servlet.todomain.TodoServlet;
+import servlet.TodoServlet;
 
 /**
  * Servlet implementation class TodoCashServlet

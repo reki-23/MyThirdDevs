@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import model.common.TodoInfo;
 import model.dao.EditDataDao;
 import model.exception.ManageException;
+import servlet.TodoServlet;
 
 /**
  * Servlet implementation class TodoServlet
@@ -29,6 +30,7 @@ public class TodoOrderingServlet extends TodoServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String tHeaderParameter = request.getParameter("tHeaderParameter");
 		getOrderedHandleTask(request, response, tHeaderParameter);
+		forwardToTodoList(request, response);
 	}
 	
 	//並べかえするメソッド
@@ -56,7 +58,7 @@ public class TodoOrderingServlet extends TodoServlet {
 			
 			request.setAttribute("any_pushedCounta", any_pushedCounta);
 			request.setAttribute("tHeaderParameter", tHeaderParameter);
-			commonPagingProcess(request, response, orderedTaskList);
+			pagingHandleOfSpecificTask(request, response, orderedTaskList);
 			
 		}catch(ManageException e) {
 			errorHandle(request, response, e);

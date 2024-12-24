@@ -174,6 +174,11 @@ function hiddenFilterModal(){
  	
 }
 
+//キャンセルボタンを押下したらタスクフィルターモーダルを非表示にする
+function hiddenFilterModalOnCancel(){
+	document.querySelector("#export-csv-filter").style.visibility = 'hidden';
+}
+
 
 //タスク個別削除時のチェックボックスの制御
 let selectedTaskIds = [];

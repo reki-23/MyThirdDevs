@@ -1,4 +1,4 @@
-package servlet.todomain;
+package servlet;
 
 import java.io.IOException;
 import java.util.List;
@@ -27,7 +27,6 @@ public class TodoServlet extends HttpServlet{
 	private static final long serialVersionUID = 1L;
 	
 	//エラーハンドリング処理
-	//ManageExceptionがcatchされた場合の処理
 	protected void errorHandle(HttpServletRequest request, HttpServletResponse response, ManageException e) throws ServletException, IOException {
 		//エラーか例外が発生した際に処理を行うクラスのインスタンス		
 		ErrorHandle errorHandle = new ErrorHandle();
@@ -54,8 +53,8 @@ public class TodoServlet extends HttpServlet{
 		}
 	}
 	
-	//TODO 名前要変更　特定の条件で絞られたデータに対してページング処理を行う
-	protected void commonPagingProcess(HttpServletRequest request, HttpServletResponse response, List<TodoInfo> resultTask) throws ServletException, IOException{
+	//特定の条件で絞られたデータに対してページング処理を行う
+	protected void pagingHandleOfSpecificTask(HttpServletRequest request, HttpServletResponse response, List<TodoInfo> resultTask) throws ServletException, IOException{
 		//現在のページ番号を取得
 		String tmpPageNum = request.getParameter("pageNum");
 		//ページング処理クラスのインスタンス
@@ -66,7 +65,7 @@ public class TodoServlet extends HttpServlet{
 		request.setAttribute("todoList", todoPagingInfo.getPageByPageListData());
 	}
 	
-	//フォワード
+	//todoList.jspへフォワード
 	protected void forwardToTodoList(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 		try {
 			List<Integer> favoriteTaskIdList = EditDataDao.getFavoriteTaskId();
@@ -76,5 +75,11 @@ public class TodoServlet extends HttpServlet{
 		}catch(ManageException e) {
 			errorHandle(request, response, e);
 		}
+	}
+	
+	//todoCashList.jspへフォワード
+	protected void forwardTodoCashList(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+		RequestDispatcher dispatcher = request.getRequestDispatcher("todo/todoCashList.jsp");
+		dispatcher.forward(request, response);
 	}
 }
