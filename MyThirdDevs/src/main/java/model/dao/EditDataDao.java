@@ -176,7 +176,6 @@ public class EditDataDao {
 	
 	//todolistでのタスク一括削除＝ゴミ箱への登録
 	public static boolean bulkDeleteTask() throws ManageException{
-		
 		try(Connection con = dbc.getConnection();
 			PreparedStatement ps = con.prepareStatement(TaskQueries.deleteSql);
 			PreparedStatement insertCashSqlPs = con.prepareStatement(TaskQueries.insertAllCashSql)){
@@ -194,8 +193,8 @@ public class EditDataDao {
 				//falseなら削除失敗
 				return false;				
 			}
-			
 		}catch(SQLException e) {
+			e.printStackTrace();
 			throw new ManageException("EM003", e);
 		}
 	}
@@ -203,7 +202,6 @@ public class EditDataDao {
 	
 	//todolistでのタスク個別削除＝ゴミ箱への登録
 	public static boolean individualDeleteTask(List<Integer> deletedIdList) throws ManageException{
-		
 		try(Connection con = dbc.getConnection();
 			PreparedStatement ps = con.prepareStatement(TaskQueries.individualDeleteSql);
 			PreparedStatement insertCashSqlPs = con.prepareStatement(TaskQueries.insertCashSql)){

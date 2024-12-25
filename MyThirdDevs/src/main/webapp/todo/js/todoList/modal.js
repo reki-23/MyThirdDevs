@@ -1,31 +1,3 @@
-//選択したファイル名をid="fileName"のvalue属性にセット
-function validateFileUpload(){
-	var fileInput = document.getElementById("csvFile");
-	if(fileInput.files.length > 0){
-		var fileName = fileInput.files[0].name;
-		//ファイルが選択されていればファイル名をvalueに渡す
-		document.getElementById("fileName").value = fileName;
-	}else{
-		//ファイルが選択されていない場合空文字をvalueに渡す
-		document.getElementById("fileName").value = "";		
-	}
-}
-
-
-//一括登録のボタンの活性・非活性を操作
-function validateForm(){
-	var fileInput = document.getElementById("csvFile");
-	if(fileInput.files.length > 0){
-		//ファイル選択時、一括登録ボタンを活性
-		document.getElementById("bulk_register").disabled = false;
-	}else{
-		//ファイル未選択時、一括登録ボタンを非活性
-		document.getElementById("bulk_register").disabled = true; 
-	}
-}
-
-
-
 //タスク登録モーダル
 document.addEventListener('DOMContentLoaded', () => {
   const register_button = document.querySelector('#register-button');
@@ -178,76 +150,6 @@ function hiddenFilterModal(){
 function hiddenFilterModalOnCancel(){
 	document.querySelector("#export-csv-filter").style.visibility = 'hidden';
 }
-
-
-//タスク個別削除時のチェックボックスの制御
-let selectedTaskIds = [];
-//チェックボックスの状態を切り替え
-function submitFormOnCheck(checkbox){
-	const taskId = checkbox.value;
-	//チェックされたとき、そのタスクNoを追加し、個別削除ボタンを活性化
-	if(checkbox.checked){
-		selectedTaskIds.push(taskId);
-	}else{
-		//チェックが外れた場合はidを削除
-		selectedTaskIds = selectedTaskIds.filter(id => id !== taskId);
-	}
-	//hiddenに選択されたタスクidのリストをセット
-	document.getElementById("selectedIds").value = selectedTaskIds;
-	
-	//チェックされてれば個別削除ボタンを活性
-	if(selectedTaskIds.length == 0){
-		document.getElementById("indi_submit").disabled = true;
-	}else{
-		document.getElementById("indi_submit").disabled = false;
-	}
-}
-
-
-/* タスクお気に入り登録時 */
-let selectedTaskIdsOfFavorite = 0;
-//チェックボックスの状態を切り替え
-function submitFormOnCheckOfFavorite(checkbox){
-	const taskId = checkbox.value;
-	//チェックされたとき、そのタスクNoを保持
-	if(checkbox.checked){
-		selectedTaskIdsOfFavorite = taskId;
-		
-	}else{
-		selectedTaskIdsOfFavorite = taskId;
-	}
-	//hiddenに選択されたタスクNoをvalueにセット
-	document.getElementById("selectedFavIds").value = selectedTaskIdsOfFavorite;
-	document.getElementById("selectedFavIds").form.submit();
-}
-
-
-/*お気に入りタスクを検索する際のチェックボックスを押下した際に即座にサーブレットに送信する処理*/
-function submitFilteringFavoriteTask(value){
-	if(value=="フィルタをかける"){
-		document.getElementById("filteringFavorite").value = true;
-	}else{
-		document.getElementById("filteringFavorite").value = false;
-	}
-	document.getElementById("filteringFavorite").form.submit();
-	
-}
-
-
-//画面読み込み時にお気に入りタスクのidをJSON形式で取得
-document.addEventListener("DOMContentLoaded", function(){
-	const favoriteTaskIdListJson = document.getElementById('favoriteTaskData');
-		if(favoriteTaskIdListJson){
-			const favoriteTaskIdList = JSON.parse(favoriteTaskIdListJson.dataset.tasks);
-			//上記で取得したidに対して、CSSを適用する
-			favoriteTaskIdList.forEach(taskId => {
-				const checkbox = document.querySelector(`.favorite-checkbox[data-task-id="${taskId}"]`);
-				if(checkbox){
-					checkbox.classList.add('favorite');
-				}
-			});
-		}	
-});
 
 
 //お気に入りのカバブアイコンを押下したときのモーダル表示

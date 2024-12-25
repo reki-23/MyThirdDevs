@@ -6,19 +6,19 @@ package model.dao;
  */
 public class TaskQueries {
 	
-	public TaskQueries() {
+	private TaskQueries() {
 		//外部からインスタンス化できないようにする
 	}
 	static final String insertSql = "INSERT INTO todolist VALUES(?,?,?,?,?,?,?,?,?)";
-	static final String insertCashSql = "INSERT INTO todocashlist SELECT * FROM todolist WHERE id = ?";
-	static final String insertAllCashSql = "INSERT INTO todocashlist SELECT * FROM todolist";
+	static final String insertCashSql = "INSERT INTO todocashlist (id,status,classification,task,description,createDateTime,updateDateTime,creator,isFavorite) SELECT * FROM todolist WHERE id = ? ORDER BY id ASC";
+	static final String insertAllCashSql = "INSERT INTO todocashlist (id,status,classification,task,description,createDateTime,updateDateTime,creator,isFavorite) SELECT * FROM todolist ORDER BY id ASC";
 	static final String selectIdSql = "SELECT * FROM todolist WHERE id = ?";
 	static final String selectFavIdSql = "SELECT isFavorite FROM todolist WHERE id = ?";
 	static final String selectFavSql = "SELECT * FROM todolist WHERE isFavorite = 1";
 	static final String deleteSql = "DELETE FROM todolist";
 	static final String deleteCashSql = "DELETE FROM todocashlist";
 	static final String getSql = "SELECT * FROM todolist";
-	static final String getCashSql = "SELECT * FROM todocashlist";
+	static final String getCashSql = "SELECT * FROM todocashlist ORDER BY id ASC";
 	static final String updateFavFlgSql = "UPDATE todolist SET isFavorite = ? WHERE id = ?";
 	static final String individualDeleteSql = "DELETE FROM todolist WHERE id = ?";
 	static final String getLimitOffsetQuery = "SELECT * FROM todolist LIMIT 50 OFFSET ?";

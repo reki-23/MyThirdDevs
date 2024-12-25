@@ -98,8 +98,6 @@ public class TodoExportServlet extends TodoServlet {
 				//ダウンロード処理
 				downloadHandling(request, response, downloadFileToPath, filter_submit);
 			}
-//			pagingHandleOfAllTask(request, response);
-//			forwardToTodoList(request, response);
 		}catch(Exception e) {
 			e.printStackTrace();
 		}		

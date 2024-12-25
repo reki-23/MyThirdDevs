@@ -14,7 +14,11 @@
 		<link rel="stylesheet" href="/MyThirdDevs/todo/css/todoList.css" type="text/css">
 		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
-		<script src="/MyThirdDevs/todo/js/todoList.js"></script>
+		<script src="/MyThirdDevs/todo/js/todoList/delete.js"></script>
+		<script src="/MyThirdDevs/todo/js/todoList/favorites.js"></script>
+		<script src="/MyThirdDevs/todo/js/todoList/modal.js"></script>
+		<script src="/MyThirdDevs/todo/js/todoList/register.js"></script>
+		<script src="/MyThirdDevs/todo/js/todoList/utils.js"></script>
 		<title>TODOリスト</title>
 	</head>
 	<body>
