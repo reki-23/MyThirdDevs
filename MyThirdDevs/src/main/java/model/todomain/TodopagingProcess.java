@@ -74,10 +74,10 @@ public class TodopagingProcess {
 		//そのページに表示する最初の行番号を取得
 		int start = (pageNum - 1) * solidTaskCount;
 		//そのページに表示する最後の行番号を取得
-		//この2つのうち最小のほうがそのページに表示するリストの数となる
+		//この2つのうち最小のほうがそのページに表示するデータの数となる
 		//第一引数はそのページの要素数に限らず、+51ずつの値となるが、第二引数はそのページに表示するデータの要素数を表す
 		//例えば、120件取得した場合、第一引数は151、第二引数は120を取得する
-		int end = Math.min(pageNum * solidTaskCount - 1, resultTask.size());
+		int end = Math.min(pageNum * solidTaskCount, resultTask.size());
 		
 		//検索結果が保存されているリストを取得
 		pageByPageTaskList = resultTask.subList(start, end);
@@ -86,7 +86,7 @@ public class TodopagingProcess {
 	}
 	
 	
-//	ゴミ箱テーブル内のデータを取得しページング処理を行うクラス
+    //ゴミ箱テーブル内のデータを取得しページング処理を行うクラス
 	public TodoPagingInfo<TodoInfo> pagingHandleOfAllCashTask(String tmpPageNum) throws ManageException{
 		
 		//ページごとに表示するタスクを格納したリスト

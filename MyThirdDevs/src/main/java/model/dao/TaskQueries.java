@@ -15,13 +15,14 @@ public class TaskQueries {
 	static final String selectIdSql = "SELECT * FROM todolist WHERE id = ?";
 	static final String selectFavIdSql = "SELECT isFavorite FROM todolist WHERE id = ?";
 	static final String selectFavSql = "SELECT * FROM todolist WHERE isFavorite = 1";
-	static final String deleteSql = "DELETE FROM todolist";
-	static final String deleteCashSql = "DELETE FROM todocashlist";
+	static final String deleteSql = "TRUNCATE TABLE todolist";
+	static final String deleteCashSql = "TRUNCATE TABLE todocashlist";
 	static final String getSql = "SELECT * FROM todolist";
 	static final String getCashSql = "SELECT * FROM todocashlist ORDER BY id ASC";
 	static final String updateFavFlgSql = "UPDATE todolist SET isFavorite = ? WHERE id = ?";
 	static final String individualDeleteSql = "DELETE FROM todolist WHERE id = ?";
 	static final String getLimitOffsetQuery = "SELECT * FROM todolist LIMIT 50 OFFSET ?";
-	static final String getCashLimitOffsetQuery = "SELECT * FROM todocashlist LIMIT 50 OFFSET ?";
+	static final String getCashLimitOffsetQuery = "SELECT * FROM todocashlist ORDER BY id ASC LIMIT 50 OFFSET ?";
 	static String dynamicQuery = "SELECT * FROM todolist WHERE 1=1";
+	static String dynamicCashedQuery = "SELECT * FROM todocashlist WHERE 1=1";
 }

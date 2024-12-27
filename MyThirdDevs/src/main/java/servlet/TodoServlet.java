@@ -65,6 +65,37 @@ public class TodoServlet extends HttpServlet{
 		request.setAttribute("todoList", todoPagingInfo.getPageByPageListData());
 	}
 	
+	
+	//ゴミ箱内のデータでページネーションを生成する
+	protected void pagingHandleOfAllCashTask(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+		try {
+			//現在のページ番号を取得
+			String tmpPageNum = request.getParameter("pageNum");
+			//ページング処理を行うクラスのインスタンス
+			TodopagingProcess todopagingPro = new TodopagingProcess();
+			TodoPagingInfo<TodoInfo> todoPagingInfo = todopagingPro.pagingHandleOfAllCashTask(tmpPageNum);
+			request.setAttribute("todoCashList", todoPagingInfo.getPageByPageListData());
+			request.setAttribute("totalPageCount", todoPagingInfo.getTotalPageCount());
+			request.setAttribute("currentPage", todoPagingInfo.getCurrentPage());
+		}catch(ManageException e) {
+			errorHandle(request, response, e);
+		}
+	}
+	
+	
+	//ゴミ箱内で特定の条件で絞られたデータに対してページング処理を行う
+	protected void pagingHandleOfSpecificCashTask(HttpServletRequest request, HttpServletResponse response, List<TodoInfo> resultTask) throws ServletException, IOException{
+		//現在のページ番号を取得
+		String tmpPageNum = request.getParameter("pageNum");
+		//ページング処理クラスのインスタンス
+		TodopagingProcess todopagingPro = new TodopagingProcess();
+		TodoPagingInfo<TodoInfo> todoPagingInfo = todopagingPro.pagingHandleOfSpecificTask(tmpPageNum, resultTask);
+		request.setAttribute("totalPageCount", todoPagingInfo.getTotalPageCount());
+		request.setAttribute("currentPage", todoPagingInfo.getCurrentPage());
+		request.setAttribute("todoCashList", todoPagingInfo.getPageByPageListData());
+	}
+	
+	
 	//todoList.jspへフォワード
 	protected void forwardToTodoList(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 		try {

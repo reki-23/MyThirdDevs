@@ -18,7 +18,7 @@
 		<script src="/MyThirdDevs/todo/js/todoList/favorites.js"></script>
 		<script src="/MyThirdDevs/todo/js/todoList/modal.js"></script>
 		<script src="/MyThirdDevs/todo/js/todoList/register.js"></script>
-		<script src="/MyThirdDevs/todo/js/todoList/utils.js"></script>
+		<script src="/MyThirdDevs/todo/js/utils.js"></script>
 		<title>TODOリスト</title>
 	</head>
 	<body>

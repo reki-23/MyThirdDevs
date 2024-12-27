@@ -14,8 +14,8 @@ import servlet.TodoServlet;
 /**
  * Servlet implementation class TodoCashServlet
  */
-@WebServlet("/TodoCashServlet")
-public class TodoCashServlet extends TodoServlet {
+@WebServlet("/TodoCashDeleteRestoreServlet")
+public class TodoCashDeleteRestoreServlet extends TodoServlet {
 	private static final long serialVersionUID = 1L;
        
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -25,20 +25,22 @@ public class TodoCashServlet extends TodoServlet {
 			response.setCharacterEncoding("UTF-8");
 			response.setContentType("text/html; charset=UTF-8");
 			
-			//コンテキストメニューで押下したURLパラメータを取得
 			String menu_option = request.getParameter("menu-option");
-			
-			//ゴミ箱を開く処理
 			if(menu_option.equals("menu-option-1")) {
-				pagingHandleOfAllCashTask(request, response);
-				forwardTodoCashList(request, response);
-			//ゴミ箱内を一括で削除する処理
+				//復元処理
+				//TODO 復元の場合は、ゴミ箱内のデータを削除しタスク一覧をロールバックする方式
+				//TODO ゴミ箱内のデータはunique_noという主キーをもつので、タスク一覧とのテーブル定義が異なるため副問い合わせでINSERTできない
+				System.out.println("通過確認");
 			}else if(menu_option.equals("menu-option-2")) {
-				request.setAttribute("deleteJudge", EditDataDao.bulkDeleteCashListTask());
-				pagingHandleOfAllTask(request, response);
-				forwardToTodoList(request, response);
+				//削除処理
+				boolean bulkDeleteJudge = EditDataDao.bulkDeleteCashListTask();
+				System.out.println(bulkDeleteJudge);
+				request.setAttribute("deleteJudge", bulkDeleteJudge);
 			}
+			pagingHandleOfAllCashTask(request, response);
+			forwardTodoCashList(request, response);
 		}catch(ManageException e) {
+			e.printStackTrace();
 			errorHandle(request, response, e);
 		}
 	}
@@ -50,9 +52,5 @@ public class TodoCashServlet extends TodoServlet {
 		request.setCharacterEncoding("UTF-8");
 		response.setCharacterEncoding("UTF-8");
 		response.setContentType("text/html; charset=UTF-8");
-		//ゴミ箱内のページネーションを生成する処理呼ぶ
-		pagingHandleOfAllCashTask(request, response);
-		
-		
 	}
 }

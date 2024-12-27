@@ -239,7 +239,9 @@ public class EditDataDao {
 			PreparedStatement ps = con.prepareStatement(TaskQueries.deleteCashSql)){
 			
 			//削除件数
-			int deleteCount = ps.executeUpdate();
+			ps.addBatch();
+			int deleteCount = ps.executeBatch().length;
+			System.out.println(deleteCount);
 			if(deleteCount > 0) {
 				//trueなら削除成功
 				return true;
@@ -249,6 +251,7 @@ public class EditDataDao {
 			}
 			
 		}catch(SQLException e) {
+			e.printStackTrace();
 			throw new ManageException("EM003", e);
 		}
 	}
@@ -272,8 +275,7 @@ public class EditDataDao {
 	
 	
 	//タスク検索
-	public static List<TodoInfo> getSearchedTask(String keyWord) throws ManageException{
-		
+	public static List<TodoInfo> getSearchedTask(String keyWord) throws ManageException{	
 		//TODO 検索ワードが"時刻のとき"で分岐する必要がある
 		List<TodoInfo> searchedResultTask = new ArrayList<>();
 		StringBuilder queryBuilder = new StringBuilder(TaskQueries.dynamicQuery);
@@ -329,6 +331,63 @@ public class EditDataDao {
 			throw new ManageException("EM003", e);
 		}
 	}
+	
+	
+	
+	//ゴミ箱内のタスク検索
+	public static List<TodoInfo> getSearchedCashTask(String keyWord) throws ManageException{	
+		//TODO 検索ワードが"時刻のとき"で分岐する必要がある
+		List<TodoInfo> searchedResultTask = new ArrayList<>();
+		StringBuilder queryBuilder = new StringBuilder(TaskQueries.dynamicCashedQuery);
+		
+		//時刻かどうかを判定するフラグ
+		boolean isDateTime = false;
+		
+		//検索ワードをformatterの形式に変換できれば、日付けを含んだクエリを生成する
+		try {
+			LocalDateTime.parse(keyWord, DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"));
+			isDateTime = true;
+		}catch(Exception e) {
+			isDateTime = false;
+		}
+		
+		//時刻が含まれている場合は、時刻を含んだクエリを生成する
+		if(isDateTime) {
+			queryBuilder.append(" AND id = ?").append(" OR status = ?").append(" OR classification = ?")
+						.append(" OR task = ?").append(" OR description = ?").append(" OR createDateTime = ?")
+						.append(" OR updateDateTime = ?").append(" OR creator = ?");
+		//検索ワードが時刻出ない場合、時刻は検索対象外
+		}else {
+			queryBuilder.append(" AND id = ?").append(" OR status = ?").append(" OR classification = ?")
+						.append(" OR task = ?").append(" OR description = ?").append(" OR creator = ?");
+		}
+		
+		try(Connection con = dbc.getConnection();
+			PreparedStatement ps = con.prepareStatement(queryBuilder.toString())){
+			//検索ワードを各パラメータにセット(クエリ内のパラメータの数だけ繰り返し処理)
+			if(isDateTime) {
+				for(int i = 0; i < 8; i++) {
+					ps.setObject(i + 1, keyWord);
+				}
+			}else {
+				for(int i = 0; i < 6; i++) {
+					ps.setObject(i + 1, keyWord);
+				}
+			}
+			
+			//DBからデータを取得
+			try(ResultSet rs = ps.executeQuery()) {
+				while(rs.next()) {
+					searchedResultTask.add(mapResultSetToTodoInfo(rs));
+				}				
+			}
+			return searchedResultTask;
+		}catch(SQLException e) {
+			e.printStackTrace();
+			throw new ManageException("EM003", e);
+		}
+	}
+	
 	
 	
 	//フィルターをかけて一覧取得
