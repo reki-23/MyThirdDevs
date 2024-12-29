@@ -28,19 +28,17 @@ public class TodoCashDeleteRestoreServlet extends TodoServlet {
 			String menu_option = request.getParameter("menu-option");
 			if(menu_option.equals("menu-option-1")) {
 				//復元処理
-				//TODO 復元の場合は、ゴミ箱内のデータを削除しタスク一覧をロールバックする方式
-				//TODO ゴミ箱内のデータはunique_noという主キーをもつので、タスク一覧とのテーブル定義が異なるため副問い合わせでINSERTできない
-				System.out.println("通過確認");
+				//TODO 復元の際は、ゴミ箱のNoとタスク一覧のNoが重複してしまう事象があるので、復元の時は、タスクNoはもとのタスクNoで復元させずに今のタスク一覧のNoの最大値+1のNoとして登録するようにする
+				boolean bulkRestoreJudge = EditDataDao.bulkRestoreCashList();
+				request.setAttribute("restoreJudge", bulkRestoreJudge);
 			}else if(menu_option.equals("menu-option-2")) {
 				//削除処理
-				boolean bulkDeleteJudge = EditDataDao.bulkDeleteCashListTask();
-				System.out.println(bulkDeleteJudge);
+				boolean bulkDeleteJudge = EditDataDao.bulkDeleteCashList();
 				request.setAttribute("deleteJudge", bulkDeleteJudge);
 			}
 			pagingHandleOfAllCashTask(request, response);
 			forwardTodoCashList(request, response);
 		}catch(ManageException e) {
-			e.printStackTrace();
 			errorHandle(request, response, e);
 		}
 	}

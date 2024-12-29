@@ -44,9 +44,10 @@
 			}
 			%>
 			
-			<!-- 削除に成功した場合 -->
+			<!-- 削除、復元に成功した場合 -->
 			<%
 			Boolean deleteJudge = (Boolean)request.getAttribute("deleteJudge");
+			Boolean restoreJudge = (Boolean)request.getAttribute("restoreJudge");
 			%>
 	        <%
 	        if(deleteJudge != null && deleteJudge){
@@ -62,7 +63,18 @@
 		        </div>
 	        <%
 	        }
-	        %>
+	        if(restoreJudge != null && restoreJudge){%>
+	        	<div class = "restore-success">
+         			<h4>正常に復元されました。</h4>
+					<br><h4 style="margin-top: 10px;">※復元後のタスクはタスク一覧の最後尾に保存されます。</h4>
+        		</div>
+	        <%
+	        }else if(restoreJudge != null && !restoreJudge){%>
+	        	<div class = "restore-failure">
+	        		<h4>復元するデータがありません。</h4>
+	        	</div>
+	        <%}%>
+	        
 			
 		
 			<!-- 共通の削除確認モーダル -->
@@ -156,20 +168,18 @@
 					<%
 					}
 					//ページ総数がNページの場合で、現在のページが1ページ目 -->
-					else if(currentPage == 1){
+					else if(currentPage == 1 && totalPageCount == 2){
 					%>
 						<ul>
 							<li class="current-page">&emsp;1&emsp;</li>
 							<li><a href="${pageContext.request.contextPath}/TodoCashSearchServlet?pageNum=<%=currentPage+1%>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=currentPage+1%>&emsp;</a></li>
-							<li><a href="${pageContext.request.contextPath}/TodoCashSearchServlet?pageNum=<%=currentPage+2%>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=currentPage+2%>&emsp;</a></li>
 						</ul>
 					<%
 					}
 					//ページ総数がNページの場合で、現在のページがNページ目
-					else if(currentPage == totalPageCount){
+					else if(currentPage == totalPageCount && totalPageCount == 2){
 					%>
 						<ul>
-							<li><a href="${pageContext.request.contextPath}/TodoCashSearchServlet?pageNum=1&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;1&emsp;</a></li>
 							<li><a href="${pageContext.request.contextPath}/TodoCashSearchServlet?pageNum=<%=currentPage-1%>&searchWord=<%=searchWord %>&tHeaderParameter=<%=tHeaderParameter%>">&emsp;<%=currentPage-1%>&emsp;</a></li>
 							<li class="current-page">&emsp;<%=currentPage%>&emsp;</li>
 						</ul>
@@ -185,7 +195,7 @@
 						</ul>
 					<%
 					}
-							}
+				}
 					//ページ総数が3より大きい場合
 					else if(totalPageCount >= 6){
 						if(currentPage == 1){

@@ -186,7 +186,7 @@ public class EditDataDao {
 			
 			//削除件数
 			int deleteCount = ps.executeUpdate();
-			if(deleteCount > 0) {
+			if(deleteCount != 0) {
 				//trueなら削除成功
 				return true;
 			}else {
@@ -194,7 +194,6 @@ public class EditDataDao {
 				return false;				
 			}
 		}catch(SQLException e) {
-			e.printStackTrace();
 			throw new ManageException("EM003", e);
 		}
 	}
@@ -227,21 +226,19 @@ public class EditDataDao {
 			}
 		}catch(SQLException e) {
 			//あとでかく
-			e.printStackTrace();	
 			throw new ManageException("EM003", e);
 		}
 	}
 	
 	
 	//ゴミ箱内を一括削除＝完全に削除
-	public static boolean bulkDeleteCashListTask() throws ManageException{
+	public static boolean bulkDeleteCashList() throws ManageException{
 		try(Connection con = dbc.getConnection();
 			PreparedStatement ps = con.prepareStatement(TaskQueries.deleteCashSql)){
 			
 			//削除件数
 			ps.addBatch();
 			int deleteCount = ps.executeBatch().length;
-			System.out.println(deleteCount);
 			if(deleteCount > 0) {
 				//trueなら削除成功
 				return true;
@@ -250,6 +247,32 @@ public class EditDataDao {
 				return false;				
 			}
 			
+		}catch(SQLException e) {
+			e.printStackTrace();
+			throw new ManageException("EM003", e);
+		}
+	}
+	
+	
+	//ゴミ箱内のデータを完全に復元
+	public static boolean bulkRestoreCashList() throws ManageException{
+		try(Connection con = dbc.getConnection();
+			PreparedStatement ps = con.prepareStatement(TaskQueries.restoreToQuery);
+			PreparedStatement trancateCashPs = con.prepareStatement(TaskQueries.deleteCashSql)){
+			
+			//復元件数
+			ps.addBatch();
+			int restoreCount = ps.executeBatch().length;
+			if(restoreCount > 0) {
+				//trueなら復元成功
+				//ゴミ箱内のデータは削除する
+				trancateCashPs.addBatch();
+				trancateCashPs.executeBatch();
+				return true;
+			}else {
+				//falseなら復元失敗
+				return false;				
+			}
 		}catch(SQLException e) {
 			e.printStackTrace();
 			throw new ManageException("EM003", e);

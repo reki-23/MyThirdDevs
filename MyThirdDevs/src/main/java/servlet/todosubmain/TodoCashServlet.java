@@ -34,7 +34,7 @@ public class TodoCashServlet extends TodoServlet {
 				forwardTodoCashList(request, response);
 			//ゴミ箱内を一括で削除する処理
 			}else if(menu_option.equals("menu-option-2")) {
-				request.setAttribute("deleteJudge", EditDataDao.bulkDeleteCashListTask());
+				request.setAttribute("deleteJudge", EditDataDao.bulkDeleteCashList());
 				pagingHandleOfAllTask(request, response);
 				forwardToTodoList(request, response);
 			}

@@ -89,7 +89,7 @@ form{
 
 
 /*成功メッセージ用のスタイル*/
-.delete-success{
+.delete-success, .restore-success{
 	display: flex;
     justify-content: center; /* 水平方向に中央揃え */
     align-items: center; /* 垂直方向に中央揃え */
@@ -101,7 +101,7 @@ form{
 }
 
 /* 失敗メッセージ用のスタイル */
-.common-error-message, .delete-failure{
+.common-error-message, .delete-failure, .restore-failure{
 	display: flex;
     justify-content: center; /* 水平方向に中央揃え */
     align-items: center; /* 垂直方向に中央揃え */
@@ -113,10 +113,10 @@ form{
 }
 
 /*メッセージの共通スタイル*/
-.common-error-message h4, .delete-failure h4, .delete-success h4{
+.common-error-message h4, .delete-failure h4, .delete-success h4, .restore-success h4, .restore-failure h4{
 	color: white;
     font-size: 15px;
-    margin:auto;
+    margin:10px 0px;
     text-align: center; /* テキストを中央揃え */
 }
 
