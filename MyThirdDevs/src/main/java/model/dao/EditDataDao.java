@@ -9,6 +9,7 @@ import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -219,7 +220,7 @@ public class EditDataDao {
 			}
 			//一括削除
 			int[] indiDelCount = ps.executeBatch();
-			if(indiDelCount.length > 0) {
+			if(indiDelCount.length != 0) {
 				return true;
 			}else {
 				return false;
@@ -234,21 +235,26 @@ public class EditDataDao {
 	//ゴミ箱内を一括削除＝完全に削除
 	public static boolean bulkDeleteCashList() throws ManageException{
 		try(Connection con = dbc.getConnection();
-			PreparedStatement ps = con.prepareStatement(TaskQueries.deleteCashSql)){
-			
-			//削除件数
-			ps.addBatch();
-			int deleteCount = ps.executeBatch().length;
-			if(deleteCount > 0) {
-				//trueなら削除成功
-				return true;
-			}else {
-				//falseなら削除失敗
-				return false;				
+			PreparedStatement ps = con.prepareStatement(TaskQueries.truncateCashSql);
+			PreparedStatement getCashCountSql = con.prepareStatement(TaskQueries.getCashCountSql)){
+						
+			//削除するデータがあるかを事前に確認
+			try(ResultSet rs = getCashCountSql.executeQuery()){
+				if(rs.next() && rs.getInt(1) == 0) {
+					return false;
+				}
 			}
 			
+			//削除
+			ps.executeUpdate();
+			//復元後にデータがあるかどうかを確認
+			try(ResultSet rs = getCashCountSql.executeQuery()){
+				if(rs.next() && rs.getInt(1) == 0) {
+					return true;
+				}
+			}
+			return false;
 		}catch(SQLException e) {
-			e.printStackTrace();
 			throw new ManageException("EM003", e);
 		}
 	}
@@ -258,22 +264,53 @@ public class EditDataDao {
 	public static boolean bulkRestoreCashList() throws ManageException{
 		try(Connection con = dbc.getConnection();
 			PreparedStatement ps = con.prepareStatement(TaskQueries.restoreToQuery);
-			PreparedStatement trancateCashPs = con.prepareStatement(TaskQueries.deleteCashSql)){
+			PreparedStatement trancateCashPs = con.prepareStatement(TaskQueries.truncateCashSql)){
 			
 			//復元件数
-			ps.addBatch();
-			int restoreCount = ps.executeBatch().length;
-			if(restoreCount > 0) {
+			int restoreCount = ps.executeUpdate();
+			if(restoreCount != 0) {
 				//trueなら復元成功
 				//ゴミ箱内のデータは削除する
-				trancateCashPs.addBatch();
-				trancateCashPs.executeBatch();
+				trancateCashPs.executeUpdate();
 				return true;
 			}else {
 				//falseなら復元失敗
 				return false;				
 			}
 		}catch(SQLException e) {
+			e.printStackTrace();
+			throw new ManageException("EM003", e);
+		}
+	}
+	
+	
+	//ゴミ箱内のデータを個別に復元
+	public static boolean individualRestoreTask(List<Integer> selectedRestoreTaskIdList) throws ManageException{
+		try(Connection con = dbc.getConnection();
+			PreparedStatement truncateIdCashPs = con.prepareStatement(TaskQueries.deleteIdCashSql);
+			PreparedStatement insertCashSqlPs = con.prepareStatement(TaskQueries.restoreToQuery_2)){
+			
+			//todolist削除されるタスクをキャッシュリストに保存
+			for(Integer deleteId : selectedRestoreTaskIdList) {
+				insertCashSqlPs.setInt(1, deleteId);
+				insertCashSqlPs.addBatch();
+			}
+			insertCashSqlPs.executeBatch();
+			
+			//押下されたタスクのIDを受取りゴミ箱から削除する処理
+			for(Integer deletedId : selectedRestoreTaskIdList) {
+				truncateIdCashPs.setInt(1, deletedId);
+				truncateIdCashPs.addBatch();
+			}
+			//一括削除
+			int[] indiDelCount = truncateIdCashPs.executeBatch();
+			if(indiDelCount.length > 0) {
+				return true;
+			}else {
+				return false;
+			}
+		}catch(SQLException e) {
+			//あとでかく
 			e.printStackTrace();
 			throw new ManageException("EM003", e);
 		}
@@ -310,7 +347,7 @@ public class EditDataDao {
 		try {
 			LocalDateTime.parse(keyWord, DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"));
 			isDateTime = true;
-		}catch(Exception e) {
+		}catch(DateTimeParseException e) {
 			isDateTime = false;
 		}
 		
@@ -370,7 +407,7 @@ public class EditDataDao {
 		try {
 			LocalDateTime.parse(keyWord, DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"));
 			isDateTime = true;
-		}catch(Exception e) {
+		}catch(DateTimeParseException e) {
 			isDateTime = false;
 		}
 		

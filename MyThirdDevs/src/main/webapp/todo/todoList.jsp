@@ -208,7 +208,7 @@
 			
 			<!-- 個別削除ボタン -->
 			<div class="delete-individual-list">
-				<input type="submit" id="indi_submit" value="選択したタスクを削除する" onclick="setDeleteTypeAndModalDisp('individual');" disabled>
+				<input type="submit" id="indi_submit" value="選択したタスクを削除する" onclick="setDeleteTypeAndModalDisp('individual');">
 			</div>
 			
 			
@@ -594,10 +594,10 @@
 						%></a></th>
 						<th>削除</th>		
 						<th><a href="${pageContext.request.contextPath}/TodoOrderingServlet?tHeaderParameter=isFavorite&any_pushedCounta=<%=any_pushedCounta%>">お気に入り<%
-								if(any_pushedCounta==1 && tHeaderParameter.equals("isFavorite")){
-								%><span class="sort-arrow">↑</span><%
-								}else if(any_pushedCounta==0 && tHeaderParameter.equals("isFavorite")){
-								%><span class="sort-arrow">↓</span><%} %></a><span class="kebab-menu"><button id="filtering-favorite">︙</button></span></th>	
+						if(any_pushedCounta==1 && tHeaderParameter.equals("isFavorite")){
+						%><span class="sort-arrow">↑</span><%
+						}else if(any_pushedCounta==0 && tHeaderParameter.equals("isFavorite")){
+						%><span class="sort-arrow">↓</span><%} %></a><span class="kebab-menu"><button id="filtering-favorite">︙</button></span></th>	
 					</tr>
 					<tbody>
 						<!-- 以下、繰り返し表示 -->

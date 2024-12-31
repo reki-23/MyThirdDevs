@@ -22,7 +22,7 @@ public class TodopagingProcess {
 		//ページごとに表示するタスクを格納したリスト
 		List<TodoInfo> pageByPageTaskList = new ArrayList<>();
 		//1ページに表示するタスク数
-		final int solidTaskCount = 50;
+		final int solidTaskCount = 30;
 		//デフォルトのページ番号
 		int pageNum = 1;
 		//現在のページ番号を取得
@@ -53,7 +53,7 @@ public class TodopagingProcess {
 		//ページごとに表示するタスクを格納したリスト
 		List<TodoInfo> pageByPageTaskList = new ArrayList<>();
 		//1ページに表示するタスク数
-		final int solidTaskCount = 50;
+		final int solidTaskCount = 30;
 		//デフォルトのページ番号
 		int pageNum = 1;
 		//現在のページ番号を取得				
@@ -74,9 +74,6 @@ public class TodopagingProcess {
 		//そのページに表示する最初の行番号を取得
 		int start = (pageNum - 1) * solidTaskCount;
 		//そのページに表示する最後の行番号を取得
-		//この2つのうち最小のほうがそのページに表示するデータの数となる
-		//第一引数はそのページの要素数に限らず、+51ずつの値となるが、第二引数はそのページに表示するデータの要素数を表す
-		//例えば、120件取得した場合、第一引数は151、第二引数は120を取得する
 		int end = Math.min(pageNum * solidTaskCount, resultTask.size());
 		
 		//検索結果が保存されているリストを取得
@@ -92,7 +89,7 @@ public class TodopagingProcess {
 		//ページごとに表示するタスクを格納したリスト
 		List<TodoInfo> pageByPageTaskList = new ArrayList<>();
 		//1ページに表示するタスク数
-		final int solidTaskCount = 50;
+		final int solidTaskCount = 30;
 		//デフォルトのページ番号
 		int pageNum = 1;
 		//現在のページ番号を取得			

@@ -102,28 +102,6 @@ function setDeleteTypeAndModalDisp(type){
 }
 
 
-//削除確認モーダルでキャンセルを押下した場合、モーダルを非表示にする
-function closeModal(){
-	const delete_confirm_modal = document.querySelector('#delete_confirm_modal');
-	const del_mask = document.querySelector('#del_mask');
-
-	const hideKeyframes = {
-	    opacity: [1, 0],
-	    visibility: 'hidden',
- 	};
-
-	const options = {
-	   	duration: 100,
-	    easing: 'ease',
-	   	fill: 'forwards',
-	};
-
-	// モーダルウィンドウを非表示にする
-	delete_confirm_modal.animate(hideKeyframes, options);
-	del_mask.animate(hideKeyframes, options);
-}
-
-
 //CSV出力ボタンを押下したらタスクフィルターモーダルを非表示にする
 function hiddenFilterModal(){
 	const export_csv_filter = document.querySelector('#export-csv-filter');

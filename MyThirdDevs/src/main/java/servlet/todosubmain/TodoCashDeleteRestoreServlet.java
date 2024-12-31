@@ -1,6 +1,9 @@
 package servlet.todosubmain;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -25,10 +28,11 @@ public class TodoCashDeleteRestoreServlet extends TodoServlet {
 			response.setCharacterEncoding("UTF-8");
 			response.setContentType("text/html; charset=UTF-8");
 			
-			String menu_option = request.getParameter("menu-option");
+			//クリックしたリンクの値を取得
+			String menu_option = request.getParameter("menu-option");			
+
 			if(menu_option.equals("menu-option-1")) {
-				//復元処理
-				//TODO 復元の際は、ゴミ箱のNoとタスク一覧のNoが重複してしまう事象があるので、復元の時は、タスクNoはもとのタスクNoで復元させずに今のタスク一覧のNoの最大値+1のNoとして登録するようにする
+				//一括復元処理
 				boolean bulkRestoreJudge = EditDataDao.bulkRestoreCashList();
 				request.setAttribute("restoreJudge", bulkRestoreJudge);
 			}else if(menu_option.equals("menu-option-2")) {
@@ -39,6 +43,7 @@ public class TodoCashDeleteRestoreServlet extends TodoServlet {
 			pagingHandleOfAllCashTask(request, response);
 			forwardTodoCashList(request, response);
 		}catch(ManageException e) {
+			e.printStackTrace();
 			errorHandle(request, response, e);
 		}
 	}
@@ -46,9 +51,33 @@ public class TodoCashDeleteRestoreServlet extends TodoServlet {
 
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		try {
+			request.setCharacterEncoding("UTF-8");
+			response.setCharacterEncoding("UTF-8");
+			response.setContentType("text/html; charset=UTF-8");
 			
-		request.setCharacterEncoding("UTF-8");
-		response.setCharacterEncoding("UTF-8");
-		response.setContentType("text/html; charset=UTF-8");
+			//クリックしたボタン(個別復元か個別削除か)の値を取得
+			String menu_option = request.getParameter("menu-option");
+			String restore_cancel = request.getParameter("restore_cancel");
+			
+			if(menu_option.equals("menu-option-3") && restore_cancel == null) {
+				//個別復元処理
+				//個別復元するidを取得
+				String[] selectedRestoreTaskIds = request.getParameterValues("selectedRestoreIds");
+				List<Integer> selectedRestoreTaskIdList = Arrays
+						.stream(selectedRestoreTaskIds)
+						.flatMap(id -> Arrays.stream(id.split(",")))
+						.map(Integer::valueOf)
+						.collect(Collectors.toList());
+				//個別復元するidをListとしてDAOに送信
+				boolean individualRestoreJudge = EditDataDao.individualRestoreTask(selectedRestoreTaskIdList);
+				request.setAttribute("restoreJudge", individualRestoreJudge);
+			}
+			pagingHandleOfAllCashTask(request, response);
+			forwardTodoCashList(request, response);
+		}catch(ManageException e) {
+			errorHandle(request, response, e);
+		}
 	}
 }

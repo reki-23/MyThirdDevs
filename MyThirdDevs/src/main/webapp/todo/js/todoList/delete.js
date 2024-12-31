@@ -28,8 +28,9 @@ function submitFormOnCheck(checkbox){
 	
 	//チェックされてれば個別削除ボタンを活性
 	if(selectedTaskIds.length == 0){
-		document.getElementById("indi_submit").disabled = true;
+		document.querySelector('.delete-individual-list').style.visibility = 'hidden';
 	}else{
-		document.getElementById("indi_submit").disabled = false;
+		alert(selectedTaskIds.length);
+		document.querySelector('.delete-individual-list').style.visibility = 'visible';
 	}
 }

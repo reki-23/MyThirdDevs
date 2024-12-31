@@ -15,6 +15,8 @@
 		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
 		<script src="/MyThirdDevs/todo/js/utils.js"></script>
+		<script src="/MyThirdDevs/todo/js/todoCashList/restore.js"></script>
+		<script src="/MyThirdDevs/todo/js/todoCashList/modal.js"></script>
 		<title>TODOリスト</title>
 	</head>
 	<body>
@@ -76,23 +78,12 @@
 	        <%}%>
 	        
 			
-		
-			<!-- 共通の削除確認モーダル -->
-			<form action="${pageContext.request.contextPath}/TodoDeleteServlet" method="POST">
-				<section id="delete_confirm_modal">
-					<h3>完全に削除しますか？</h3>
-					<input type="submit" id="delCancel" name="delCancel" value="キャンセル" onclick="closeModal();">
-					<input type="submit" id="delSubmit" name="delSubmit" value="決定">
-					<input type="hidden" id="deleteType" name="deleteType" value="">
-					<!-- 選択されたチェックボックスのタスクidをこの削除ボタンが押されたときにサーブレットに送信する -->
-					<input type="hidden" id="selectedIds" name="selectedIds" value="">
-				</section>
-			</form>
-			<div id="del_mask"></div>
-			
-			
 			<!-- タスク一覧へ戻る -->
 			<a href="${pageContext.request.contextPath}/TopPageServlet" class="previous-todolist-btn">タスク一覧へ戻る</a>
+			
+			
+			<!-- 復元ボタン -->
+			<button id="restore-button">選択したタスクを復元する</button>
 			
 			
 			<!-- 検索機能 -->
@@ -196,9 +187,9 @@
 					<%
 					}
 				}
-					//ページ総数が3より大きい場合
-					else if(totalPageCount >= 6){
-						if(currentPage == 1){
+				//ページ総数が6より大きい場合
+				else if(totalPageCount >= 6){
+					if(currentPage == 1){
 					%>
 					<ul>
 						<li class="current-page"><%=currentPage%></li>
@@ -370,6 +361,18 @@
 			</div>
 			
 			
+			<!-- 復元時モーダル -->
+			<form action="${pageContext.request.contextPath}/TodoCashDeleteRestoreServlet?menu-option=menu-option-3" method="POST">
+				<section id="restore_confirm_modal">
+					<h3>復元しますか？</h3>
+					<input type="submit" name="restore_submit" value="決定">
+					<input type="submit" name="restore_cancel" value="キャンセル" onclick="closeRestoreConfirmModal()">
+					<input type="hidden" id="selectedRestoreIds" name="selectedRestoreIds" value="">
+				</section>			
+			</form>
+			<div id="res-mask"></div>
+			
+			
 			<!-- 設定ボタン -->
 			<div class="setting-button-container">
 				<button id="setting-button" onclick="submitSetting()"><i class="fa-solid fa-gear"></i></button>
@@ -398,6 +401,7 @@
 						<th><a href="${pageContext.request.contextPath}/TodoCashOrderingServlet?tHeaderParameter=createDateTime&any_pushedCounta=<%=any_pushedCounta%>">作成日時<%if(any_pushedCounta==1 && tHeaderParameter.equals("createDateTime")){%><span class="sort-arrow">↑</span><%}else if(any_pushedCounta==0 && tHeaderParameter.equals("createDateTime")){%><span class="sort-arrow">↓</span><%} %></a></th>
 						<th><a href="${pageContext.request.contextPath}/TodoCashOrderingServlet?tHeaderParameter=updateDateTime&any_pushedCounta=<%=any_pushedCounta%>">更新日時<%if(any_pushedCounta==1 && tHeaderParameter.equals("updateDateTime")){%><span class="sort-arrow">↑</span><%}else if(any_pushedCounta==0 && tHeaderParameter.equals("updateDateTime")){%><span class="sort-arrow">↓</span><%} %></a></th>
 						<th><a href="${pageContext.request.contextPath}/TodoCashOrderingServlet?tHeaderParameter=creator&any_pushedCounta=<%=any_pushedCounta%>">作成者<%if(any_pushedCounta==1 && tHeaderParameter.equals("creator")){%><span class="sort-arrow">↑</span><%}else if(any_pushedCounta==0 && tHeaderParameter.equals("creator")){%><span class="sort-arrow">↓</span><%} %></a></th>
+						<th>復元</th>
 					</tr>
 					<tbody>
 						<!-- 以下、繰り返し表示 -->
@@ -414,6 +418,12 @@
 									<td><%= info.getCreateDateTime().format(DateTimeFormatter.ofPattern("y/M/d H:mm:ss")) %></td>
 									<td><%= info.getUpdateDateTime().format(DateTimeFormatter.ofPattern("y/M/d H:mm:ss")) %></td>
 									<td><%= info.getCreator() %></td>
+									<td>
+										<!-- 個別復元ボタン＝復元識別子は一意であるタスクNoと同値とする -->
+										<form action="${pageContext.request.contextPath}/TodoCashDeleteRestoreServlet" class="restore-mark" method="POST">
+											<input type="checkbox" name="individualRestoreId" value="<%= info.getId() %>" onchange="submitFormOnCheck(this)">
+										</form>
+									</td>
 								</tr>
 						<%
 								}

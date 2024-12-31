@@ -31,6 +31,8 @@ public class CommonMessage {
 		 * SQLException時のメッセージ
 		 */
 		commonMessages.put("EM003", "ID003:エラーが発生しました。管理者に連絡して下さい。");
+		commonMessages.put("EM017", "ID017:削除に失敗しました。管理者に連絡してください。");
+		commonMessages.put("EM018", "ID018:復元に失敗しました。管理者に連絡してください。");
 		
 		/*
 		 * InvalidExistsException時のメッセージ

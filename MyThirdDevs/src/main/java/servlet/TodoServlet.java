@@ -18,8 +18,8 @@ import model.todomain.TodopagingProcess;
 
 /**
  * 
- * @see全てのサーブレットクラスのスーパークラス
- * @see共通処理のエラーハンドリング処理とタスク一覧取得処理をもつ
+ * @memo全てのサーブレットクラスのスーパークラス
+ * @memo共通処理のエラーハンドリング処理とタスク一覧取得処理をもつ
  * 
  */
 
@@ -32,11 +32,11 @@ public class TodoServlet extends HttpServlet{
 		ErrorHandle errorHandle = new ErrorHandle();
 		String errorMessage = errorHandle.errorHandle(e);
 		request.setAttribute("errorMessage", errorMessage);
-		pagingHandleOfAllTask(request, response);
+		//TODO エラー専用ページへ遷移
 	}
 	
 	
-	//TODO 名称変更すべき　ページネーションを生成する
+	//全タスクのページネーションを生成する
 	protected void pagingHandleOfAllTask(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 		try {
 			//ページング処理を行うクラスのインスタンスを生成
@@ -99,6 +99,7 @@ public class TodoServlet extends HttpServlet{
 	//todoList.jspへフォワード
 	protected void forwardToTodoList(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 		try {
+			//お気に入りタスクのidを取得した結果を保持するリスト
 			List<Integer> favoriteTaskIdList = EditDataDao.getFavoriteTaskId();
 			request.setAttribute("favoriteTaskIdList", favoriteTaskIdList);
 			RequestDispatcher dispatcher = request.getRequestDispatcher("todo/todoList.jsp");
