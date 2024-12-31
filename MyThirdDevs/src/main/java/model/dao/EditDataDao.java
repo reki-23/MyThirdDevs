@@ -1,5 +1,9 @@
 package model.dao;
 
+/**
+ * @throws ManageException, RuntimeException 
+ */
+
 import java.sql.BatchUpdateException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;

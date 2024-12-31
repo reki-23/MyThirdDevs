@@ -30,7 +30,6 @@ function submitFormOnCheck(checkbox){
 	if(selectedTaskIds.length == 0){
 		document.querySelector('.delete-individual-list').style.visibility = 'hidden';
 	}else{
-		alert(selectedTaskIds.length);
 		document.querySelector('.delete-individual-list').style.visibility = 'visible';
 	}
 }

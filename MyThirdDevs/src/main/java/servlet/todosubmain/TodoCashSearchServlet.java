@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -44,10 +45,18 @@ public class TodoCashSearchServlet extends TodoServlet {
 			rpf.getPropertiesFileInfo(request, response, prop);
 			
 			//検索ワードを取得
-			String searchWord = request.getParameter("searchWord");			
+			String searchWord = request.getParameter("searchWord");
 			
-			//検索ワードがない場合、全件取得
-			if(searchWord == null || searchWord.isBlank()) {
+			//並べかえ時のワードを取得
+			String tHeaderParameter = request.getParameter("tHeaderParameter");
+			
+			//検索ワードがなく並べかえ時のワードがある場合
+			if((searchWord == null || searchWord.isBlank()) && tHeaderParameter != null && !tHeaderParameter.isBlank()) {
+				request.setAttribute("tHeaderParameter", tHeaderParameter);
+				RequestDispatcher dispatcher = request.getRequestDispatcher("TodoCashOrderingServlet");
+				dispatcher.forward(request, response);
+			}else if(searchWord == null || searchWord.isBlank()) {
+				//並べ替えをせずに、検索ワードがない場合
 				pagingHandleOfAllCashTask(request, response);
 				forwardTodoCashList(request, response);
 			}else {

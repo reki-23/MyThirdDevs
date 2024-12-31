@@ -33,11 +33,7 @@ public class TodoCashOrderingServlet extends TodoServlet {
 		getOrderedHandleTask(request, response, tHeaderParameter);
 	}
 	
-	
-	
-	//ゴミ箱内のデータを
-	
-	
+		
 	//ゴミ箱内のデータを並べかえするメソッド
 	protected void getOrderedHandleTask(HttpServletRequest request, HttpServletResponse response, String tHeaderParameter) throws ServletException, IOException{
 		try {
@@ -60,7 +56,6 @@ public class TodoCashOrderingServlet extends TodoServlet {
 			}
 			
 			//ページごとに表示するタスクを格納したリスト
-			//TODO 2つ目の引数である数字をどう表現するか
 			List<TodoInfo> orderedTaskList = EditDataDao.getCashListOrderByParameters(tHeaderParameter, any_pushedCounta);
 			
 			request.setAttribute("any_pushedCounta", any_pushedCounta);
